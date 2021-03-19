@@ -1,0 +1,93 @@
+#
+# Copyright (c) 2021 Cisco Systems, Inc and its affiliates
+# All Rights reserved
+#
+---
+# Metadata for the service to be deployed consisting of name, description, version, and type of service.
+Name: "helloworldservice"
+Description: "Hello World service with support for multiple languages."
+Version: "1.0.0"
+Type: Internal
+
+# Wrapper for containers making up the service to be deployed.  Each service must have at least one container section
+# which describes the Docker image to be used for the service.
+Containers:
+  - Name: "helloworldservice"
+    Version: "1.0.0"
+    Artifact: "helloworldservice-1.0.0.tar.gz"
+    Port: 9515 #Service listening Port
+    ContextPath: /helloworldservice # Context path to configure the application routing with
+
+    # Collection of tags which will be inserted into Consul.  These tags can be used to query and offer specific functionality
+    # to the service.  Certain (required) tags are automatically appended by the deployment process.  Others are highly
+    # recommended and required if services need to show inside the MSX UI.  Here are some of the tags that you should consider
+    # including:
+    #      - "buildNumber=1.0.19"
+    #      - "instanceUuid=45b40541-35c2-4c47-9f14-5ec511b7c365"
+    #      - "buildDateTime=2020-10-10T17:51:34.965122Z"
+    #      - "componentAttributes=serviceName:testservice~context:test~name:Test Service~description:Test Service~parent:platform~type:platform"
+    #      - "swaggerPath=/swagger/"
+    #      - "name=Test Service"
+    #      - "version=1.0.19"
+    Tags:
+      - "3.10.0"
+      - "managedMicroservice"
+      - "buildNumber=1.0.0"
+      - "name=helloworldservice"
+      - "version=1.0.0"
+      - "swaggerPath=/"
+      - "buildDateTime=@timestamp@"
+      - "application=helloworldservice"
+      - "componentAttributes=serviceName:helloworldservice~context:/helloworldservice~name:helloworldservice~description:Hello World service with support for multiple languages."
+
+
+    # Health check configurations.  Each container needs 1 health endpoint configured.  If a service has a specific
+    # health endpoint implemented, please use the Http configuration along with the common health check section.  Otherwise,
+    # for services that don't have a dedicated health endpoint implemented please configure the Tcp block and the host
+    # will be pinged by the health checks instead.
+    Check:
+      Http:
+        Scheme: "http"
+        Host: "127.0.0.1" #FQDN or IP of service host if internal can be 127.0.0.1
+        Path: "/helloworldservice"
+      IntervalSec: 30 # how often (in seconds) should the system check if your service is up
+      InitialDelaySec: 30 # initialization delay - how many seconds should the system wait after application is started before firing off the first health check request
+      TimeoutSec: 30
+      Port: 9515 # port to use for health checks if different from application's default listening port
+
+    # In this section you need to specify the hardware requirements for your application.
+    Limits:
+      Memory: "384Mi"  # amount of memory/RAM that the application needs.  In this case the example asks for 512MB of RAM.  You should specify what your application needs based on your profiling findings.
+      CPU: "1"  # number of virtual CPUs that the application needs
+
+    # Command to use to start the application.
+    Command:
+      - "/service/dockerlaunch.sh"
+
+
+# [Optional] Configuration section for infrastructure needs such as database for your application.
+# List of required infra services required all are optional
+# Consul and Vault access granted by default restricted to /<servicename> path in KV
+# Population of Env defaults (e.g. cassandra address) will be done by onboarding service
+Infrastructure:
+  # Database configuration section.  The details for the account that was created for your service can be retrieved from Consul.
+  # If your application needs Cassandra, the following configurations can be retrieved from Consul at startup/runtime:
+  # - db.cassandra.username
+  # - db.cassandra.password
+  # - db.cassandra.keyspaceName
+  #
+  # If your application needs CockroachDB, the following configurations can be retrieved from Consul at startup/runtime:
+  # - db.cockroach.username
+  # - db.cockroach.password
+  # - db.cockroach.databaseName
+  Database:
+    Type: Cockroach
+    Name: "helloworldservice"
+
+
+# [Optional] General configuration section for your application for values to be stored in Consul and be available to your application
+# during startup and runtime.  The service configurations are in a sandbox with restricted access. Multiple name:value
+# pairs can be specified.
+ConsulKeys:
+  - Name: "public.security.clientId" # DO NOT CHANGE THIS
+    Value: "hello-world-service-public-client"

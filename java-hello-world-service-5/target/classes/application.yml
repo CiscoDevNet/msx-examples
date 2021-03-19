@@ -1,0 +1,75 @@
+#
+# Copyright (c) 2021 Cisco Systems, Inc and its affiliates
+# All Rights reserved
+#
+debug: false
+
+db:
+  cockroach:
+    databaseName: ${spring.datasource.name}
+    username: root
+    password:
+    host: localhost
+    port: 26257
+    sslmode: require
+
+spring:
+  datasource:
+    hikari:
+      auto-commit: false
+      connection-timeout: 30000
+      idle-timeout: 600000
+      leak-detection-threshold: 30000
+      max-lifetime: 1800000
+      maximum-pool-size: 50
+      minimum-idle: 25
+      pool-name: ServiceConfigManagerHikariPool
+      data-source-properties:
+        sslmode: ${db.cockroach.sslmode}
+        sslfactory: org.postgresql.ssl.DefaultJavaSSLFactory
+    name: helloworldservice
+    type: com.zaxxer.hikari.HikariDataSource
+    url: jdbc:postgresql://${db.cockroach.host}:${db.cockroach.port}/${spring.datasource.name}
+    username: ${db.cockroach.username}
+    password: ${db.cockroach.password}
+
+  jackson:
+    date-format: com.example.helloworldservice.RFC3339DateFormat
+    serialization:
+      WRITE_DATES_AS_TIMESTAMPS: false
+
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQL95Dialect
+    database: POSTGRESQL
+    show-sql: false
+    properties:
+      hibernate.connection.provider_disables_autocommit: false
+      hibernate.cache.use_second_level_cache: false
+      hibernate.cache.use_query_cache: false
+      hibernate.generate_statistics: false
+      javax.persistence.validation.mode: none # skip validation in JPA on saving - double validation since already validated in controller/service
+      hibernate.hbm2ddl.auto: update
+      hibernate.id.new_generator_mappings: true
+      hibernate.jdbc.batch_size: 128
+      # added per https://github.com/spring-projects/spring-boot/issues/12007#issuecomment-369388646
+      hibernate.jdbc.lob.non_contextual_creation: true
+      hibernate.order_inserts: true
+      hiberante.order_updates: true
+
+public:
+  security:
+    # The public client identifier for the service.
+    clientId: hello-world-service-public-client
+
+swagger:
+  security:
+    sso:
+      clientId: ${public.security.clientId}
+
+security:
+  resources:
+    rules:
+      -
+        # "/v2/api-docs" required for Swagger documentation.
+        patterns: "/v2/api-docs"
+        expr: "hasRole('ROLE_CLIENT') and hasAuthority('SCOPE_read') and hasAuthority('SCOPE_write')"

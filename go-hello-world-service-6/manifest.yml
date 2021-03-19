@@ -1,0 +1,49 @@
+#
+# Copyright (c) 2021 Cisco Systems, Inc and its affiliates
+# All Rights reserved
+#
+---
+Name: "helloworldservice"
+Description: "Hello World service with support for multiple languages."
+Version: "1.0.0"
+Type: Internal
+
+Infrastructure:
+  Database:
+    Type: Cockroach
+    Name: "helloworld"
+
+ConfigFiles:
+  - Name: "helloworld.yml"
+    MountTo:
+      Container: "helloworldservice"
+      Path: "/helloworld.yml"
+
+ConsulKeys:
+  - Name: "public.security.clientId"
+    Value: "hello-world-service-public-client"
+
+Containers:
+  - Name: "helloworldservice"
+    Version: "1.0.0"
+    Artifact: "helloworldservice-1.0.0.tar.gz"
+    Port: 8080
+    ContextPath: "/helloworld"
+    Tags:
+      - "3.10.0"
+      - "managedMicroservice"
+      - "name=Hello World Service"
+      - "componentAttributes=serviceName:helloworldservice~serviceName:helloworldservice~context:helloworld~name:Hello World Service~description:Hello World service with support for multiple languages."
+    Check:
+      Http:
+        Scheme: "http"
+        Host: "127.0.0.1"
+        Path: "/helloworld/api/v1/items"
+      IntervalSec: 60
+      InitialDelaySec: 30
+      TimeoutSec: 30
+    Limits:
+      Memory: "256Mi"
+      CPU: "1"
+    Command:
+      - "/helloworld"

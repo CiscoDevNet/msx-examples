@@ -1,0 +1,40 @@
+#
+# Copyright (c) 2021 Cisco Systems, Inc
+# All Rights reserved
+#
+---
+Name: "reactssosdkdemo"
+Description: "React application to illustrate MSX SSO and SDK."
+Version: "1.0.0"
+Type: Internal
+Containers:
+  - Name: "reactssosdkdemo"
+    Version: "1.0.0"
+    Artifact: "reactssosdkdemo-1.0.0.tar.gz"
+    Port: 4200
+    ContextPath: "/reactSsoSdkDemo"
+    Tags:
+      - "managedMicroservice"
+      - "buildNumber=1.0.0"
+      - "instanceUuid=8ff1acd8-c516-42f0-bb73-8d1632f1c722"
+      - "buildDateTime=2020-11-04T17:51:34.965122Z"
+      - "name=React SSO SDK Demo"
+      - "version=1.0.0"
+    Check:
+      Http:
+        Host: "127.0.0.1"
+        Scheme: "http"
+        Path: "/reactSsoSdkDemo"
+      IntervalSec: 60
+      InitialDelaySec: 30
+      TimeoutSec: 30
+    Limits:
+      Memory: "256Mi"
+      CPU: "1"
+    Command:
+      - "/docker-entrypoint.sh"
+      - "nginx"
+      - "-g"
+      - "daemon off;"
+    Endpoints:
+      - "/reactSsoSdkDemo/"
