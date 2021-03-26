@@ -40,7 +40,7 @@ func main() {
 	response, _, err := client.SecurityApi.GetAccessToken(nil).Authorization(basicAuthorization).GrantType("password").Username(myUsername).Password(myPassword).Execute()
 
     // Print the user details and access token.
-	if err.Error() == "" {
+	if err == nil || err.Error() == "" {
 		fmt.Printf("First Name: " + *response.FirstName + "\n")
 		fmt.Printf("Last Name: " + *response.LastName + "\n")
 		fmt.Printf("Email: " + *response.Email + "\n")
