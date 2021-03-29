@@ -9,7 +9,7 @@ const dev = {
   sso: {
     clientId: 'my-public-client',
     ssoBaseUrl: 'https://dev-plt-aio1.lab.ciscomsx.com/idm',
-    redirectUrl: 'https://192.168.0.15:4200/reactSsoSdkDemo/callback',
+    redirectUrl: 'https://192.168.0.13:4200/reactSsoSdkDemo/callback',
     scope: 'openid email profile read write'
   },
   msxApi: {
