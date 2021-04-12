@@ -154,7 +154,7 @@
     <orderEntry type="library" scope="RUNTIME" name="Maven: org.checkerframework:checker-qual:3.5.0" level="project" />
     <orderEntry type="library" name="Maven: com.zaxxer:HikariCP:3.4.5" level="project" />
     <orderEntry type="library" name="Maven: javax.validation:validation-api:2.0.1.Final" level="project" />
-    <orderEntry type="library" name="Maven: org.projectlombok:lombok:1.18.12" level="project" />
+    <orderEntry type="library" name="Maven: org.projectlombok:lombok:1.18.20" level="project" />
     <orderEntry type="library" name="Maven: com.github.ciscodevnet:java-msx-swagger:v1.0.0" level="project" />
     <orderEntry type="library" name="Maven: io.swagger:swagger-annotations:1.6.2" level="project" />
     <orderEntry type="library" name="Maven: io.springfox:springfox-swagger2:3.0.0" level="project" />
