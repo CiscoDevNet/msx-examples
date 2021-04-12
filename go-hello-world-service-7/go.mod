@@ -2,7 +2,7 @@
 // Copyright (c) 2021 Cisco Systems, Inc and its affiliates
 // All Rights reserved
 //
-module github.com/CiscoDevNet/msx-examples/go-hello-world-service-7
+gmodule github.com/CiscoDevNet/msx-examples/go-hello-world-service-7
 
 go 1.13
 

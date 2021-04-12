@@ -33,12 +33,8 @@ cloud.google.com/go/storage v1.10.0/go.mod h1:FLPqc6j+Ki4BU591ie1oL6qBQGu2Bl/tZ9
 dmitri.shuralyov.com/gpu/mtl v0.0.0-20190408044501-666a987793e9/go.mod h1:H6x//7gZCb22OMCxBHrMx7a5I7Hp++hsVxbQ4BYO7hU=
 github.com/BurntSushi/toml v0.3.1/go.mod h1:xHWCNGjB5oqiDr8zfno3MHue2Ht5sIBksp03qcyfWMU=
 github.com/BurntSushi/xgb v0.0.0-20160522181843-27f122750802/go.mod h1:IVnqGOEym/WlBOVXweHU+Q+/VP0lqqI8lqeDx9IjBqo=
-github.com/CiscoDevNet/go-msx-sdk v1.0.0 h1:3GrFMhzlMDhYsNiBjDpxLKnzc9hwAtijKbj7teTqhsA=
-github.com/CiscoDevNet/go-msx-sdk v1.0.0/go.mod h1:hBUy5Lj7k4hU2UxUdX9LED4AcVLqaei8wdOLYogpVk4=
-github.com/CiscoDevNet/go-msx-sdk v1.0.1-0.20210326192709-7a2201ef2266 h1:eFbu5tqRgDyNzKHy28zf8uf7OqWw+wUM80vaUgGpp9s=
-github.com/CiscoDevNet/go-msx-sdk v1.0.1-0.20210326192709-7a2201ef2266/go.mod h1:UWxZlqFk9TQ7wTqvFBHVbOe9WNboRB4SecVVmT4A29E=
-github.com/CiscoDevNet/go-msx-sdk v1.0.1 h1:pwvRFpDVlNhAVHYIguwMGmmd+FMmRSbPV/hfDOwdJkY=
-github.com/CiscoDevNet/go-msx-sdk v1.0.1/go.mod h1:UWxZlqFk9TQ7wTqvFBHVbOe9WNboRB4SecVVmT4A29E=
+github.com/CiscoDevNet/go-msx-sdk v1.0.2 h1:/NdcrnRQKWJqcYOW5JK7UPbfwVYDlVYBzet/zdYAIek=
+github.com/CiscoDevNet/go-msx-sdk v1.0.2/go.mod h1:UWxZlqFk9TQ7wTqvFBHVbOe9WNboRB4SecVVmT4A29E=
 github.com/census-instrumentation/opencensus-proto v0.2.1/go.mod h1:f6KPmirojxKA12rnyqOA5BBL4O983OfeGPqjHWSTneU=
 github.com/chzyer/logex v1.1.10/go.mod h1:+Ywpsq7O8HXn0nuIou7OrIPyXbp3wmkHB+jjWRnGsAI=
 github.com/chzyer/readline v0.0.0-20180603132655-2972be24d48e/go.mod h1:nSuG5e5PlCu98SY8svDHJxuZscDgtXS6KTTbou5AhLI=
