@@ -1,6 +1,3 @@
-import pprint
-
-
 class Language:
 	def __init__(self, id=None, name=None, description=None):
 		self._id = id
@@ -13,9 +10,3 @@ class Language:
 			"name": self._name,
 			"description": self._description
 		}
-
-	def to_str(self):
-		return pprint.pformat(self.to_dict())
-
-	def __repr__(self):
-		return self.to_str()

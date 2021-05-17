@@ -1,6 +1,6 @@
 from flask_restplus import Resource
+from models.item import Item
 
-from item import Item
 
 HELLO_WORLD_ENGLISH = Item(
     id="68963944-a88c-4e39-98fd-d77878231d81",
@@ -19,16 +19,16 @@ class ItemsApi(Resource):
     def get(self):
         return [HELLO_WORLD_ENGLISH.to_dict(), HELLO_WORLD_RUSSIAN.to_dict()], 200
 
-    def post(self, body):
+    def post(self):
         return HELLO_WORLD_ENGLISH.to_dict(), 201
 
 
 class ItemApi(Resource):
-    def get(self, id_):
+    def get(self, id):
         return HELLO_WORLD_ENGLISH.to_dict(), 200
 
-    def put(self, id_):
+    def put(self, id):
         return HELLO_WORLD_ENGLISH.to_dict(), 200
 
-    def delete(self, id_):
+    def delete(self, id):
         return "", 204

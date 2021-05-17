@@ -1,5 +1,6 @@
 from flask_restplus import Resource
-from language import Language
+from models.language import Language
+
 
 LANGUAGE_ENGLISH = Language(
     id="01f643a5-7e34-4366-af1a-9cce5e5c68e8",
@@ -22,11 +23,11 @@ class LanguagesApi(Resource):
 
 
 class LanguageApi(Resource):
-    def get(self, id_):
+    def get(self, id):
         return LANGUAGE_ENGLISH.to_dict(), 200
 
-    def put(self, id_):
+    def put(self, id):
         return LANGUAGE_ENGLISH.to_dict(), 200
 
-    def delete(self, id_):
+    def delete(self, id):
         return "", 204

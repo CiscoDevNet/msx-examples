@@ -1,7 +1,3 @@
-#
-# Copyright (c) 2021 Cisco Systems, Inc and its affiliates
-# All Rights reserved
-#
 ---
 Name: "helloworldservice"
 Description: "Hello World service with support for multiple languages."
@@ -32,6 +28,9 @@ Containers:
       Memory: "1500Mi"
       CPU: "2"
     Command:
-      - "/usr/local/bin/python3"
-      - "server.py"
-      - "-m"
+      - "/usr/local/bin/flask"
+      - "run"
+      - "--host"
+      - "0.0.0.0"
+      - "--port"
+      - "8082"
