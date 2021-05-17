@@ -8,6 +8,5 @@ COPY src/items_controller.py items_controller.py
 COPY swagger.json swagger.json
 COPY requirements.txt requirements.txt
 RUN pip3 install -r requirements.txt
-RUN pip3 install https://
 EXPOSE 8082
 ENTRYPOINT ["python", "server.py", "-m"]

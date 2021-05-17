@@ -2,5 +2,5 @@ Flask==1.1.2
 Flask-Cors==3.0.10
 flask-restplus==0.13.0
 Werkzeug==0.16.1
-msxswagger @ git+https://github.com/hagraham/python-msx-swagger@v0.2.0#egg=msxswagger
+msxswagger @ git+https://github.com/hagraham/python-msx-swagger@v0.3.0#egg=msxswagger
 
