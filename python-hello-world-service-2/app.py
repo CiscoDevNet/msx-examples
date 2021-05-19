@@ -1,6 +1,6 @@
 #
 # Copyright (c) 2021 Cisco Systems, Inc and its affiliates
-# All Rights reserved
+# All rights reserved
 #
 from flask import Flask
 from flask_restplus import Api
