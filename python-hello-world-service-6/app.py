@@ -1,3 +1,7 @@
+#
+# Copyright (c) 2021 Cisco Systems, Inc and its affiliates
+# All Rights reserved
+#
 from flask import Flask, Response
 from flask_restplus import Api
 from msxswagger import MSXSwaggerConfig, Security, DocumentationConfig

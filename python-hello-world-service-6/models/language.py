@@ -1,3 +1,7 @@
+#
+# Copyright (c) 2021 Cisco Systems, Inc and its affiliates
+# All Rights reserved
+#
 class Language:
 	def __init__(self, id=None, name=None, description=None):
 		self._id = id

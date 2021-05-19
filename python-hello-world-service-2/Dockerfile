@@ -1,3 +1,7 @@
+#
+# Copyright (c) 2021 Cisco Systems, Inc and its affiliates
+# All Rights reserved
+#
 FROM python:3-alpine3.12
 COPY requirements.txt requirements.txt
 COPY app.py app.py

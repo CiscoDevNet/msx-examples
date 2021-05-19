@@ -1,3 +1,7 @@
+#
+# Copyright (c) 2021 Cisco Systems, Inc and its affiliates
+# All Rights reserved
+#
 from flask import Flask
 from flask_restplus import Api
 from controllers.items_controller import ItemsApi, ItemApi
