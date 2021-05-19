@@ -1,0 +1,5 @@
+Flask==1.1.2
+Flask-Cors==3.0.10
+flask-restplus==0.13.0
+Werkzeug==0.16.1
+msxswagger @ git+https://github.com/CiscoDevNet/python-msx-swagger@v0.5.0#egg=msxswagger
