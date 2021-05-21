@@ -12,7 +12,7 @@ import (
 )
 
 func main() {
-	log.Printf("Server started")
+	log.Printf("Hello World - Server Started")
 
 	ItemsApiService := openapi.NewItemsApiService()
 	ItemsApiController := openapi.NewItemsApiController(ItemsApiService)

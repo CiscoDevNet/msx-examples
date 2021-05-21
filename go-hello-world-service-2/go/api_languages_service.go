@@ -11,6 +11,7 @@ package openapi
 
 import (
 	"context"
+	"log"
 	"net/http"
 	"errors"
 )
@@ -35,6 +36,8 @@ func NewLanguagesApiService() LanguagesApiServicer {
 
 // CreateLanguage - Creates a new langauge.
 func (s *LanguagesApiService) CreateLanguage(ctx context.Context, language Language) (ImplResponse, error) {
+	log.Printf("Hello World - Create Language")
+
 	// TODO - update CreateLanguage with the required logic for this service method.
 	// Add api_languages_service.go to the .openapi-generator-ignore to avoid overwriting this service implementation when updating open api generation.
 
@@ -61,6 +64,8 @@ func (s *LanguagesApiService) CreateLanguage(ctx context.Context, language Langu
 
 // DeleteLanguage - Deletes a langauge.
 func (s *LanguagesApiService) DeleteLanguage(ctx context.Context, id string) (ImplResponse, error) {
+	log.Printf("Hello World - Delete Language")
+
 	// TODO - update DeleteLanguage with the required logic for this service method.
 	// Add api_languages_service.go to the .openapi-generator-ignore to avoid overwriting this service implementation when updating open api generation.
 
@@ -87,6 +92,8 @@ func (s *LanguagesApiService) DeleteLanguage(ctx context.Context, id string) (Im
 
 // GetLanguage - Returns a language.
 func (s *LanguagesApiService) GetLanguage(ctx context.Context, id string) (ImplResponse, error) {
+	log.Printf("Hello World - Get Language")
+
 	// TODO - update GetLanguage with the required logic for this service method.
 	// Add api_languages_service.go to the .openapi-generator-ignore to avoid overwriting this service implementation when updating open api generation.
 
@@ -113,6 +120,8 @@ func (s *LanguagesApiService) GetLanguage(ctx context.Context, id string) (ImplR
 
 // GetLanguages - Returns a list of languages.
 func (s *LanguagesApiService) GetLanguages(ctx context.Context) (ImplResponse, error) {
+	log.Printf("Hello World - Get Languages")
+
 	// TODO - update GetLanguages with the required logic for this service method.
 	// Add api_languages_service.go to the .openapi-generator-ignore to avoid overwriting this service implementation when updating open api generation.
 
@@ -134,6 +143,8 @@ func (s *LanguagesApiService) GetLanguages(ctx context.Context) (ImplResponse, e
 
 // UpdateLanguage - Updates a langauge.
 func (s *LanguagesApiService) UpdateLanguage(ctx context.Context, id string, language Language) (ImplResponse, error) {
+	log.Printf("Hello World - Update Language")
+
 	// TODO - update UpdateLanguage with the required logic for this service method.
 	// Add api_languages_service.go to the .openapi-generator-ignore to avoid overwriting this service implementation when updating open api generation.
 

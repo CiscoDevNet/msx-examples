@@ -11,6 +11,7 @@ package openapi
 
 import (
 	"context"
+	"log"
 	"net/http"
 	"errors"
 )
@@ -36,6 +37,8 @@ func NewItemsApiService() ItemsApiServicer {
 
 // CreateItem - Creates a new Hello World item.
 func (s *ItemsApiService) CreateItem(ctx context.Context, item Item) (ImplResponse, error) {
+	log.Printf("Hello World - Create Item")
+
 	// TODO - update CreateItem with the required logic for this service method.
 	// Add api_items_service.go to the .openapi-generator-ignore to avoid overwriting this service implementation when updating open api generation.
 
@@ -59,6 +62,8 @@ func (s *ItemsApiService) CreateItem(ctx context.Context, item Item) (ImplRespon
 
 // DeleteItem - Deletes a Hello World item.
 func (s *ItemsApiService) DeleteItem(ctx context.Context, id string) (ImplResponse, error) {
+	log.Printf("Hello World - Delete Item")
+
 	// TODO - update DeleteItem with the required logic for this service method.
 	// Add api_items_service.go to the .openapi-generator-ignore to avoid overwriting this service implementation when updating open api generation.
 
@@ -85,6 +90,8 @@ func (s *ItemsApiService) DeleteItem(ctx context.Context, id string) (ImplRespon
 
 // GetItem - Returns a Hello World item.
 func (s *ItemsApiService) GetItem(ctx context.Context, id string) (ImplResponse, error) {
+	log.Printf("Hello World - Get Item")
+
 	// TODO - update GetItem with the required logic for this service method.
 	// Add api_items_service.go to the .openapi-generator-ignore to avoid overwriting this service implementation when updating open api generation.
 
@@ -111,6 +118,8 @@ func (s *ItemsApiService) GetItem(ctx context.Context, id string) (ImplResponse,
 
 // GetItems - Returns a list of Hello World items.
 func (s *ItemsApiService) GetItems(ctx context.Context, languageId string) (ImplResponse, error) {
+	log.Printf("Hello World - Get Items")
+
 	// TODO - update GetItems with the required logic for this service method.
 	// Add api_items_service.go to the .openapi-generator-ignore to avoid overwriting this service implementation when updating open api generation.
 
@@ -135,6 +144,8 @@ func (s *ItemsApiService) GetItems(ctx context.Context, languageId string) (Impl
 
 // UpdateItem - Updates a Hello World item.
 func (s *ItemsApiService) UpdateItem(ctx context.Context, id string, item Item) (ImplResponse, error) {
+	log.Printf("Hello World - Update Item")
+
 	// TODO - update UpdateItem with the required logic for this service method.
 	// Add api_items_service.go to the .openapi-generator-ignore to avoid overwriting this service implementation when updating open api generation.
 
