@@ -4,7 +4,6 @@
 #
 from flask import Flask
 from msxswagger import MSXSwaggerConfig, Security, DocumentationConfig, Sso
-
 from controllers.items_controller import ItemsApi, ItemApi
 from controllers.languages_controller import LanguageApi, LanguagesApi
 
