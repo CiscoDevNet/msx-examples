@@ -16,8 +16,8 @@ github.com/BurntSushi/toml v0.3.1/go.mod h1:xHWCNGjB5oqiDr8zfno3MHue2Ht5sIBksp03
 github.com/BurntSushi/xgb v0.0.0-20160522181843-27f122750802/go.mod h1:IVnqGOEym/WlBOVXweHU+Q+/VP0lqqI8lqeDx9IjBqo=
 github.com/CiscoDevNet/go-msx-security v1.0.0 h1:zS0Ci2owQRxf9N7uPyj0OkoWQNiN2HRM0uU9UYuBX/8=
 github.com/CiscoDevNet/go-msx-security v1.0.0/go.mod h1:Wc6ZLQOpVWNOvKmR3uIKFy/ck+JQJAGoUo251jnEaDM=
-github.com/CiscoDevNet/go-msx-swagger v1.0.0 h1:tfYeF9FYP9aLEFx8PkZoklZ07iVZU9onn/dh356Ve4A=
-github.com/CiscoDevNet/go-msx-swagger v1.0.0/go.mod h1:iwCJ8q09VVd75X3IMiwnYtYzrOJLuLlDEoGd6WibVRU=
+github.com/CiscoDevNet/go-msx-swagger v1.0.1 h1:MPRaYwf43UcrtxXKk0mxQnsIWuAfQ3S+NJ1SY24yhvw=
+github.com/CiscoDevNet/go-msx-swagger v1.0.1/go.mod h1:iwCJ8q09VVd75X3IMiwnYtYzrOJLuLlDEoGd6WibVRU=
 github.com/OneOfOne/xxhash v1.2.2/go.mod h1:HSdplMjZKSmBqAxg5vPj2TmRDmfkzw+cTzAElWljhcU=
 github.com/alecthomas/template v0.0.0-20160405071501-a0175ee3bccc/go.mod h1:LOuyumcjzFXgccqObfd/Ljyb9UuFJ6TxHnclSeseNhc=
 github.com/alecthomas/units v0.0.0-20151022065526-2efee857e7cf/go.mod h1:ybxpYRFXyAe+OPACYpWeL0wqObRcbAqCMya13uyzqw0=
