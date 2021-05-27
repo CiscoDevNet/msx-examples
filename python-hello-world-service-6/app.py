@@ -10,11 +10,11 @@ from controllers.languages_controller import LanguageApi, LanguagesApi
 
 app = Flask(__name__)
 sso = Sso(base_url='https://dev-plt-aio1.lab.ciscomsx.com/idm',
-          client_id='local-public-client2')
+          client_id='hello-world-service-public-client')
 
 documentation_config = DocumentationConfig(
 	root_path='/helloworld',
-	security=Security(False, sso))
+	security=Security(True, sso))
 
 swagger = MSXSwaggerConfig(
 	app,
