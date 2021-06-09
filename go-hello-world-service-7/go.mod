@@ -7,7 +7,7 @@ module github.com/CiscoDevNet/msx-examples/go-hello-world-service-7
 go 1.13
 
 require (
-	github.com/CiscoDevNet/go-msx-security v1.0.0
+	github.com/CiscoDevNet/go-msx-security v1.0.1
 	github.com/CiscoDevNet/go-msx-swagger v1.0.1
 	github.com/google/uuid v1.2.0
 	github.com/gorilla/mux v1.8.0

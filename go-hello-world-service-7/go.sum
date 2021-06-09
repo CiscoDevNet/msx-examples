@@ -14,8 +14,8 @@ dmitri.shuralyov.com/gpu/mtl v0.0.0-20190408044501-666a987793e9/go.mod h1:H6x//7
 github.com/BurntSushi/toml v0.3.1 h1:WXkYYl6Yr3qBf1K79EBnL4mak0OimBfB0XUf9Vl28OQ=
 github.com/BurntSushi/toml v0.3.1/go.mod h1:xHWCNGjB5oqiDr8zfno3MHue2Ht5sIBksp03qcyfWMU=
 github.com/BurntSushi/xgb v0.0.0-20160522181843-27f122750802/go.mod h1:IVnqGOEym/WlBOVXweHU+Q+/VP0lqqI8lqeDx9IjBqo=
-github.com/CiscoDevNet/go-msx-security v1.0.0 h1:zS0Ci2owQRxf9N7uPyj0OkoWQNiN2HRM0uU9UYuBX/8=
-github.com/CiscoDevNet/go-msx-security v1.0.0/go.mod h1:Wc6ZLQOpVWNOvKmR3uIKFy/ck+JQJAGoUo251jnEaDM=
+github.com/CiscoDevNet/go-msx-security v1.0.1 h1:l25AdE/6MFPrSR3XXxpOMOE9dZmbeQOkhHUTR1EYD+I=
+github.com/CiscoDevNet/go-msx-security v1.0.1/go.mod h1:Wc6ZLQOpVWNOvKmR3uIKFy/ck+JQJAGoUo251jnEaDM=
 github.com/CiscoDevNet/go-msx-swagger v1.0.1 h1:MPRaYwf43UcrtxXKk0mxQnsIWuAfQ3S+NJ1SY24yhvw=
 github.com/CiscoDevNet/go-msx-swagger v1.0.1/go.mod h1:iwCJ8q09VVd75X3IMiwnYtYzrOJLuLlDEoGd6WibVRU=
 github.com/OneOfOne/xxhash v1.2.2/go.mod h1:HSdplMjZKSmBqAxg5vPj2TmRDmfkzw+cTzAElWljhcU=
@@ -323,6 +323,7 @@ github.com/stretchr/testify v1.2.2/go.mod h1:a8OnRcib4nhh0OaRAV+Yts87kKdq0PP7pXf
 github.com/stretchr/testify v1.3.0/go.mod h1:M5WIy9Dh21IEIfnGCwXGc5bZfKNJtfHm1UVUgZn+9EI=
 github.com/stretchr/testify v1.4.0 h1:2E4SXV/wtOkTonXsotYi4li6zVWxYlZuYNCXe9XRJyk=
 github.com/stretchr/testify v1.4.0/go.mod h1:j7eGeouHqKxXV5pUuKE4zz7dFj8WfuZ+81PSLYec5m4=
+github.com/stretchr/testify v1.5.1 h1:nOGnQDM7FYENwehXlg/kFVnos3rEvtKTjRvOWSzb6H4=
 github.com/stretchr/testify v1.5.1/go.mod h1:5W2xD1RspED5o8YsWQXVCued0rvSQ+mT+I5cxcmMvtA=
 github.com/stretchr/testify v1.6.1 h1:hDPOHmpOpP40lSULcqw7IrRb/u7w6RpDC9399XyoNd0=
 github.com/stretchr/testify v1.6.1/go.mod h1:6Fq8oRcR53rry900zMqJjRRixrwX3KX962/h/Wwjteg=
