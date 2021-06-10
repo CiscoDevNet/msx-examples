@@ -1,0 +1,8 @@
+Flask==1.1.2
+Flask-Cors==3.0.10
+flask-restplus==0.13.0
+Werkzeug==0.16.1
+urllib3~=1.24.1
+msxswagger @ git+https://github.com/CiscoDevNet/python-msx-swagger@v0.6.0
+msxsecurity @ git+https://github.com/CiscoDevNet/python-msx-security@v0.1.0
+
