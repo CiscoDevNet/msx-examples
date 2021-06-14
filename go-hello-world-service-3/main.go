@@ -17,6 +17,8 @@ func main() {
 	// Read the configuration.
 	config := config.ReadConfig()
 	log.Printf("Server started")
+	log.Printf("config.host=" + config.Consul.Host)
+	log.Printf("config.port=" + config.Consul.Port)
 
 	// Setup Consul.
 	consul, err := consul.NewConsul(config)
