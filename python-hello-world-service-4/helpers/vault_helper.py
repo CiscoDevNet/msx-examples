@@ -14,7 +14,6 @@ class VaultHelper(object):
             url=config.scheme + "://" + config.host + ":" + config.port,
             token=config.token,
             verify=config.cacert)
-        self._client.kv.default_kv_version = 1
 
     def get_string(self, secret, key, default):
         response = self._client.secrets.kv.v1.read_secret(secret)
