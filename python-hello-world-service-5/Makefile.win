@@ -1,0 +1,23 @@
+#
+# Copyright (c) 2021 Cisco Systems, Inc and its affiliates
+# All rights reserved
+#
+
+# Invoke: 
+# make.exe NAME=helloworldservice VERSION=1.0.5
+
+IMAGE = $(NAME)-$(VERSION).tar.gz
+OUTPUT = $(NAME)-$(VERSION)-component.tar.gz
+
+build: clean package
+
+package:
+	docker build -t $(NAME):$(VERSION) .
+	docker save $(NAME):$(VERSION) | gzip > $(IMAGE)
+	tar -czvf $(OUTPUT) manifest.yml helloworld.yml $(IMAGE)
+	del /F $(IMAGE)
+
+clean:
+	del /F $(IMAGE)
+ 	del /F $(OUTPUT)
+

@@ -1,0 +1,24 @@
+#
+# Copyright (c) 2021 Cisco Systems, Inc and its affiliates
+# All Rights reserved
+#
+consul:
+  host: "http://127.0.0.1" # Bound to env var SPRING_CLOUD_CONSUL_HOST at runtime.
+  port: "8500"             # Bound to env var SPRING_CLOUD_CONSUL_PORT at runtime.
+  cacert: "/etc/ssl/certs/ca-bundle.crt"
+
+vault:
+  scheme: "http"                      # Bound to env var SPRING_CLOUD_VAULT_SCHEME at runtime.
+  host: "127.0.0.1"                   # Bound to env var SPRING_CLOUD_VAULT_HOST at runtime.
+  port: "8200"                        # Bound to env var SPRING_CLOUD_VAULT_PORT at runtime.
+  token: "s.7a2LlpRNBUnMKxAlS5kUDg0t" # Bound to env var SPRING_CLOUD_VAULT_TOKEN at runtime.
+  cacert: "/etc/ssl/certs/ca-bundle.crt"
+
+cockroach:
+  host: "127.0.0.1"
+  port: "26257"
+  databasename: "helloworlddb"  #"helloworldservice"
+  username: "root"
+  sslmode: "disable"
+  #cacert: "/etc/ssl/certs/ca-bundle.crt" # Required by MSX.
+  #password:
