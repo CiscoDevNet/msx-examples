@@ -12,6 +12,9 @@ COPY models/item.py models/item.py
 COPY models/language.py models/language.py
 COPY controllers/items_controller.py controllers/items_controller.py
 COPY controllers/languages_controller.py controllers/languages_controller.py
+RUN pip install --upgrade pip
+# The following line fixes 'psycopg2-binary failed to install on Python-alpine' problem
+RUN apk update && apk add postgresql-dev gcc python3-dev musl-dev
 RUN pip3 install -r requirements.txt
 EXPOSE 8082
 ENTRYPOINT ["flask", "run", "--host", "0.0.0.0", "--port", "8082"]

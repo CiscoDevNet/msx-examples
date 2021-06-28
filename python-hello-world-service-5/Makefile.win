@@ -4,7 +4,7 @@
 #
 
 # Invoke: 
-# make.exe NAME=helloworldservice VERSION=1.0.5
+# nmake /F Makefile.win NAME=helloworldservice VERSION=1.0.5
 
 IMAGE = $(NAME)-$(VERSION).tar.gz
 OUTPUT = $(NAME)-$(VERSION)-component.tar.gz
