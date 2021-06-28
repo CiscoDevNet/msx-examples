@@ -17,7 +17,7 @@ vault:
 cockroach:
   host: "127.0.0.1"
   port: "26257"
-  databasename: "helloworlddb"  #"helloworldservice"
+  databasename: "helloworldservice"
   username: "root"
   sslmode: "disable"
   #cacert: "/etc/ssl/certs/ca-bundle.crt" # Required by MSX.

@@ -22,7 +22,7 @@ vault = VaultHelper(config.vault)
 
 app = Flask(__name__)
 consul.test()
-# vault.test()
+vault.test()
 
 with CockroachHelper(config.cockroach) as db:
 	db.test()

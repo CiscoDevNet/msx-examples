@@ -13,8 +13,6 @@ new_language_dict =  {  'id' :          '55f3028f-1b94-4edd-b14f-183b51b33d68',
                         'name':         'Russian',
                         'description':  'An East Slavic language that uses the Cyrillic alphabet.' }
 
-#  UPSERT INTO helloworlddb.Items (ID, LanguageId, LanguageName, Value) VALUES ('68963944-a88c-4e39-98fd-d77878231d81','01f643a
-# 5-7e34-4366-af1a-9cce5e5c68e8','English','Hello, World!');
 new_item_dict = {   'id':          '62ef8e5f-628a-4f8b-92c9-485981205d92',
                     'languageid':  '55f3028f-1b94-4edd-b14f-183b51b33d68',
                     'languagename':'Russian',
@@ -83,7 +81,7 @@ class CockroachHelper(object):
         listof_rows = []
         query = f'SELECT * FROM {table_name}'
 
-        # logging.info(f'Exceuting={query}')
+        logging.info(f'Exceuting={query}')
         with self._conn.cursor() as cur:
             cur.execute(query)
             # logging.info(f'execute: status message={cur.statusmessage}')
@@ -98,16 +96,20 @@ class CockroachHelper(object):
 
 
     def get_row(self, tablename, keyvalue):
+        listof_rows = []
         query = f"SELECT * FROM {tablename}  where ID='{keyvalue}'"
 
-        # logging.info('Exceuting={query}')
+        logging.info('Exceuting={query}')
         with self._conn.cursor() as cur:
             cur.execute(query)
-            logging.info('Cursor execute: status message={cur.statusmessage}')
+            logging.info(f'Cursor execute: status message={cur.statusmessage}')
             columns = [desc[0] for desc in cur.description]
             row = cur.fetchone()
             self._conn.commit()
             row_dict = dict(zip(columns,row))
+            listof_rows.append(row_dict)
+
+        return listof_rows
 
 
     def updste_row(self, tablename, id, coulmnname, columnvalue):
@@ -115,8 +117,10 @@ class CockroachHelper(object):
 
         with self._conn.cursor() as cur:
             cur.execute(update_clause)
+            statusmessage = cur.statusmessage
         self._conn.commit()
 
+        return statusmessage
 
     def insert_row(self, tablename, row_values_dict):
         columns = '  STRING, '.join(row_values_dict.keys()) + '  STRING' + ', PRIMARY KEY (' + list(row_values_dict.keys())[0] + ')'                             
@@ -155,4 +159,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-    
