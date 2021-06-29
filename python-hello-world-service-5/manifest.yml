@@ -5,13 +5,13 @@
 ---
 Name: "helloworldservice"
 Description: "Hello World service with support for multiple languages."
-Version: "1.0.5"
+Version: "1.0.0"
 Type: Internal
 
 Containers:
   - Name: "helloworldservice"
-    Version: "1.0.5"
-    Artifact: "helloworldservice-1.0.5.tar.gz"
+    Version: "1.0.0"
+    Artifact: "helloworldservice-1.0.0.tar.gz"
     Port: 8082
     ContextPath: "/helloworld"
     Tags:

@@ -2,8 +2,14 @@
 # Copyright (c) 2021 Cisco Systems, Inc and its affiliates
 # All rights reserved
 #
+
+import logging
 from flask_restplus import Resource
+from flask_restplus import reqparse
+
 from models.item import Item
+from config import Config
+from helpers.cockroach_helper import CockroachHelper
 
 
 HELLO_WORLD_ENGLISH = Item(
@@ -21,18 +27,39 @@ HELLO_WORLD_RUSSIAN = Item(
 
 class ItemsApi(Resource):
     def get(self):
-        return [HELLO_WORLD_ENGLISH.to_dict(), HELLO_WORLD_RUSSIAN.to_dict()], 200
+        config = Config("helloworld.yml")
+        with CockroachHelper(config.cockroach) as db:
+            rows = db.get_rows('Items')
 
-    def post(self):
-        return HELLO_WORLD_ENGLISH.to_dict(), 201
+        logging.info(rows)
+        return rows, 200
 
 
 class ItemApi(Resource):
     def get(self, id):
-        return HELLO_WORLD_ENGLISH.to_dict(), 200
+        config = Config("helloworld.yml")
+        with CockroachHelper(config.cockroach) as db:
+            rows = db.get_row('Items', id)
+
+        logging.info(rows)
+        return rows, 200
+
 
     def put(self, id):
-        return HELLO_WORLD_ENGLISH.to_dict(), 200
+        parser = reqparse.RequestParser()
+        parser.add_argument('value')
+        args = parser.parse_args()
+
+        config = Config("helloworld.yml")
+        with CockroachHelper(config.cockroach) as db:
+            statusmessage = db.updste_row('Items', id, 'value', args['value'])
+
+        return statusmessage, 200
+
+
+    def post(self, id):
+        return HELLO_WORLD_ENGLISH.to_dict(), 501
+
 
     def delete(self, id):
-        return "", 204
+        return "", 501

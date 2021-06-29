@@ -4,9 +4,12 @@
 #
 import flask
 from flask_restplus import Resource
-from models.error import Error
-from models.language import Language
+from flask_restplus import reqparse
 
+from config import Config
+from models.language import Language
+from models.error import Error
+from helpers.cockroach_helper import CockroachHelper
 
 LANGUAGE_ENGLISH = Language(
     id="01f643a5-7e34-4366-af1a-9cce5e5c68e8",
@@ -31,7 +34,12 @@ class LanguagesApi(Resource):
 
     def get(self):
         if self._security.has_permission("HELLOWORLD_READ_LANGUAGE", get_access_token()):
-            return [LANGUAGE_ENGLISH.to_dict(), LANGUAGE_RUSSIAN.to_dict()], 200
+            config = Config("helloworld.yml")
+            with CockroachHelper(config.cockroach) as db:
+                rows = db.get_rows('Languages')
+
+            return rows, 200
+
         return Error(code="my_error_code", message="permission denied").to_dict(), 403
 
     def post(self):
@@ -46,12 +54,25 @@ class LanguageApi(Resource):
 
     def get(self, id):
         if self._security.has_permission("HELLOWORLD_READ_LANGUAGE", get_access_token()):
-            return LANGUAGE_ENGLISH.to_dict(), 200
+            config = Config("helloworld.yml")
+            with CockroachHelper(config.cockroach) as db:
+                rows = db.get_row('Languages', id)
+
+            return rows, 200
         return Error(code="my_error_code", message="permission denied").to_dict(), 403
 
     def put(self, id):
         if self._security.has_permission("HELLOWORLD_WRITE_LANGUAGE", get_access_token()):
-            return LANGUAGE_ENGLISH.to_dict(), 200
+            parser = reqparse.RequestParser()
+            parser.add_argument('name')
+            args = parser.parse_args()
+
+            config = Config("helloworld.yml")
+            with CockroachHelper(config.cockroach) as db:
+                statusmessage = db.updste_row('Languages', id, 'name', args['name'])
+
+            return statusmessage, 200
+
         return Error(code="my_error_code", message="permission denied").to_dict(), 403
 
     def delete(self, id):

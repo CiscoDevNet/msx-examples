@@ -8,10 +8,17 @@ COPY app.py app.py
 COPY swagger.json swagger.json
 COPY models/item.py models/item.py
 COPY models/language.py models/language.py
-COPY models/error.py models/error.py
 COPY controllers/items_controller.py controllers/items_controller.py
 COPY controllers/languages_controller.py controllers/languages_controller.py
+COPY config.py config.py
+COPY helloworld.yml helloworld.yml
+COPY helpers/consul_helper.py helpers/consul_helper.py
+COPY helpers/vault_helper.py helpers/vault_helper.py
+COPY helpers/cockroach_helper.py helpers/cockroach_helper.py
+# The following line fixes 'psycopg2-binary failed to install on Python-alpine' problem
+RUN apk update && apk add postgresql-dev gcc python3-dev musl-dev
 RUN apk update && apk add git
+RUN pip install --upgrade pip
 RUN pip3 install -r requirements.txt
 EXPOSE 8082
 ENTRYPOINT ["flask", "run", "--host", "0.0.0.0", "--port", "8082"]

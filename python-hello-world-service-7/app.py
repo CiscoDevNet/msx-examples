@@ -3,10 +3,16 @@
 # All Rights reserved
 #
 from flask import Flask
+
+from config import Config
 from msxsecurity import MSXSecurity, MSXSecurityConfig
 from msxswagger import MSXSwaggerConfig, Security, DocumentationConfig, Sso
 from controllers.items_controller import ItemsApi, ItemApi
 from controllers.languages_controller import LanguageApi, LanguagesApi
+
+from helpers.consul_helper import ConsulHelper
+from helpers.vault_helper import VaultHelper
+from helpers.cockroach_helper import CockroachHelper
 
 SSO_URL = "https://dev-plt-aio1.lab.ciscomsx.com/idm"
 PUBLIC_CLIENT_ID = "hello-world-service-public-client"
@@ -14,6 +20,17 @@ PRIVATE_CLIENT_ID = "hello-world-service-private-client"
 PRIVATE_CLIENT_SECRET = "make-up-a-private-client-secret-and-keep-it-safe"
 
 app = Flask(__name__)
+
+config = Config("helloworld.yml")
+consul = ConsulHelper(config.consul)
+vault = VaultHelper(config.vault)
+
+app = Flask(__name__)
+# consul.test()
+# vault.test()
+
+with CockroachHelper(config.cockroach) as db:
+	db.test()
 
 swagger_config = DocumentationConfig(
 	root_path='/helloworld',
