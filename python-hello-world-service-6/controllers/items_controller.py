@@ -27,8 +27,7 @@ HELLO_WORLD_RUSSIAN = Item(
 
 class ItemsApi(Resource):
     def get(self):
-        config = Config("helloworld.yml")
-        with CockroachHelper(config.cockroach) as db:
+        with CockroachHelper(Config("helloworld.yml").cockroach) as db:
             rows = db.get_rows('Items')
 
         logging.info(rows)
@@ -37,8 +36,7 @@ class ItemsApi(Resource):
 
 class ItemApi(Resource):
     def get(self, id):
-        config = Config("helloworld.yml")
-        with CockroachHelper(config.cockroach) as db:
+        with CockroachHelper(Config("helloworld.yml").cockroach) as db:
             rows = db.get_row('Items', id)
 
         logging.info(rows)
@@ -50,8 +48,7 @@ class ItemApi(Resource):
         parser.add_argument('value')
         args = parser.parse_args()
 
-        config = Config("helloworld.yml")
-        with CockroachHelper(config.cockroach) as db:
+        with CockroachHelper(Config("helloworld.yml").cockroach) as db:
             statusmessage = db.updste_row('Items', id, 'value', args['value'])
 
         return statusmessage, 200

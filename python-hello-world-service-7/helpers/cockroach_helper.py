@@ -55,7 +55,6 @@ class CockroachHelper(object):
         logging.info(f'{column}@{table}= {str(res)}')
 
 
-
     def test(self):        
         self.create_table('Languages', ['id', 'name', 'description'])
         self.create_table('Items', ['id', 'languageid', 'languagename', 'value'])
@@ -124,6 +123,7 @@ class CockroachHelper(object):
         self._conn.commit()
 
         return statusmessage
+
 
     def create_table(self, tablename, col_name_list):
         columns = '  STRING, '.join(col_name_list) + '  STRING' + ', PRIMARY KEY (' + col_name_list[0] + ')'                             

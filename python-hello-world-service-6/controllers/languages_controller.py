@@ -5,8 +5,8 @@
 from flask_restplus import Resource
 from flask_restplus import reqparse
 
-from config import Config
 from models.language import Language
+from config import Config
 from helpers.cockroach_helper import CockroachHelper
 
 LANGUAGE_ENGLISH = Language(
@@ -22,8 +22,7 @@ LANGUAGE_RUSSIAN = Language(
 
 class LanguagesApi(Resource):
     def get(self):
-        config = Config("helloworld.yml")
-        with CockroachHelper(config.cockroach) as db:
+        with CockroachHelper(Config("helloworld.yml").cockroach) as db:
             rows = db.get_rows('Languages')
 
         return rows, 200
@@ -31,8 +30,7 @@ class LanguagesApi(Resource):
 
 class LanguageApi(Resource):
     def get(self, id):
-        config = Config("helloworld.yml")
-        with CockroachHelper(config.cockroach) as db:
+        with CockroachHelper(Config("helloworld.yml").cockroach) as db:
             rows = db.get_row('Languages', id)
 
         return rows, 200
@@ -45,8 +43,7 @@ class LanguageApi(Resource):
         parser.add_argument('name')
         args = parser.parse_args()
 
-        config = Config("helloworld.yml")
-        with CockroachHelper(config.cockroach) as db:
+        with CockroachHelper(Config("helloworld.yml").cockroach) as db:
             statusmessage = db.updste_row('Languages', id, 'name', args['name'])
 
         return statusmessage, 200

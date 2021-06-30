@@ -3,6 +3,7 @@
 # All Rights reserved
 #
 
+import logging
 from flask import Flask
 
 from config import Config
@@ -14,11 +15,12 @@ from helpers.consul_helper import ConsulHelper
 from helpers.vault_helper import VaultHelper
 from helpers.cockroach_helper import CockroachHelper
 
-
 SSO_URL = "https://dev-plt-aio1.lab.ciscomsx.com/idm"
 PUBLIC_CLIENT_ID = "hello-world-service-public-client"
 PRIVATE_CLIENT_ID = "hello-world-service-private-client"
 PRIVATE_CLIENT_SECRET = "make-up-a-private-client-secret-and-keep-it-safe"
+
+logging.basicConfig(level=logging.INFO)
 
 app = Flask(__name__)
 
@@ -28,7 +30,7 @@ vault = VaultHelper(config.vault)
 
 app = Flask(__name__)
 consul.test()
-# vault.test()
+vault.test()
 
 with CockroachHelper(config.cockroach) as db:
 	db.test()

@@ -2,6 +2,8 @@
 # Copyright (c) 2021 Cisco Systems, Inc and its affiliates
 # All Rights reserved
 #
+
+import logging
 from flask import Flask
 
 from config import Config
@@ -19,6 +21,8 @@ PUBLIC_CLIENT_ID = "hello-world-service-public-client"
 PRIVATE_CLIENT_ID = "hello-world-service-private-client"
 PRIVATE_CLIENT_SECRET = "make-up-a-private-client-secret-and-keep-it-safe"
 
+logging.basicConfig(level=logging.INFO)
+
 app = Flask(__name__)
 
 config = Config("helloworld.yml")
@@ -26,8 +30,8 @@ consul = ConsulHelper(config.consul)
 vault = VaultHelper(config.vault)
 
 app = Flask(__name__)
-# consul.test()
-# vault.test()
+consul.test()
+vault.test()
 
 with CockroachHelper(config.cockroach) as db:
 	db.test()

@@ -32,10 +32,10 @@ class LanguagesApi(Resource):
     def __init__(self, *args, **kwargs):
         self._security = kwargs["security"]
 
+
     def get(self):
         if self._security.has_permission("HELLOWORLD_READ_LANGUAGE", get_access_token()):
-            config = Config("helloworld.yml")
-            with CockroachHelper(config.cockroach) as db:
+            with CockroachHelper(Config("helloworld.yml").cockroach) as db:
                 rows = db.get_rows('Languages')
 
             return rows, 200
@@ -52,14 +52,15 @@ class LanguageApi(Resource):
     def __init__(self, *args, **kwargs):
         self._security = kwargs["security"]
 
+
     def get(self, id):
         if self._security.has_permission("HELLOWORLD_READ_LANGUAGE", get_access_token()):
-            config = Config("helloworld.yml")
-            with CockroachHelper(config.cockroach) as db:
+            with CockroachHelper(Config("helloworld.yml").cockroach) as db:
                 rows = db.get_row('Languages', id)
 
             return rows, 200
         return Error(code="my_error_code", message="permission denied").to_dict(), 403
+
 
     def put(self, id):
         if self._security.has_permission("HELLOWORLD_WRITE_LANGUAGE", get_access_token()):
@@ -67,13 +68,13 @@ class LanguageApi(Resource):
             parser.add_argument('name')
             args = parser.parse_args()
 
-            config = Config("helloworld.yml")
-            with CockroachHelper(config.cockroach) as db:
+            with CockroachHelper(Config("helloworld.yml").cockroach) as db:
                 statusmessage = db.updste_row('Languages', id, 'name', args['name'])
 
             return statusmessage, 200
 
         return Error(code="my_error_code", message="permission denied").to_dict(), 403
+
 
     def delete(self, id):
         if self._security.has_permission("HELLOWORLD_WRITE_LANGUAGE", get_access_token()):
