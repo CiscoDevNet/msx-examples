@@ -5,6 +5,8 @@
 import hvac
 import logging
 
+from hvac.exceptions import InvalidPath
+
 from config import VaultConfig
 
 
@@ -24,7 +26,9 @@ class VaultHelper(object):
     def test(self):
         # Read a secret from Vault  and it to the console.
         # Do not leak secrets in production as it is a security violation.
-        secret_squirrel_location = self.get_string("thirdpartyservices/helloworldservice/", "secret.squirrel.location", "UNKNOWN")
-        logging.info("Where are the acorns buried?")
-        logging.info(secret_squirrel_location)
-
+        try:
+            secret_squirrel_location = self.get_string("thirdpartyservices/helloworldservice/", "secret.squirrel.location", "UNKNOWN")
+            logging.info("Where are the acorns buried?")
+            logging.info(secret_squirrel_location)
+        except InvalidPath as e:
+            logging.error(str(e))
