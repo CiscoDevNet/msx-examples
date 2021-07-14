@@ -2,26 +2,33 @@
 # Copyright (c) 2021 Cisco Systems, Inc and its affiliates
 # All Rights reserved
 #
+import logging
+
 from flask import Flask
-from msxswagger import MSXSwaggerConfig, Security, DocumentationConfig, Sso
+from msxswagger import MSXSwaggerConfig
+
+from config import Config
 from controllers.items_controller import ItemsApi, ItemApi
 from controllers.languages_controller import LanguageApi, LanguagesApi
+from helpers.consul_helper import ConsulHelper
+from helpers.swagger_helper import SwaggerHelper
+from helpers.vault_helper import VaultHelper
 
-SSO_URL = "https://dev-plt-aio1.lab.ciscomsx.com/idm"
-PUBLIC_CLIENT_ID = "hello-world-service-public-client"
-PRIVATE_CLIENT_ID = "hello-world-service-private-client"
-PRIVATE_CLIENT_SECRET = "make-up-a-private-client-secret-and-keep-it-safe"
+logging.basicConfig(level=logging.INFO)
+
+config = Config("helloworld.yml")
+consul_helper = ConsulHelper(config.consul)
+vault_helper = VaultHelper(config.vault)
+swagger_helper = SwaggerHelper(config, consul_helper)
 
 app = Flask(__name__)
-
-swagger_config = DocumentationConfig(
-	root_path='/helloworld',
-	security=Security(True, Sso(base_url=SSO_URL, client_id=PUBLIC_CLIENT_ID)))
+consul_helper.test()
+vault_helper.test()
 
 swagger = MSXSwaggerConfig(
-	app,
-	swagger_config,
-	swagger_resource="swagger.json")
+	app=app,
+	documentation_config=swagger_helper.get_documentation_config(),
+	swagger_resource=swagger_helper.get_swagger_resource())
 
 swagger.api.add_resource(ItemsApi, "/api/v1/items")
 swagger.api.add_resource(ItemApi, "/api/v1/items/<id>")

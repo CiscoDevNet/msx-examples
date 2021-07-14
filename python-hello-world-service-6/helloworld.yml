@@ -13,3 +13,10 @@ vault:
   port: "8200"                           # Bound to env var SPRING_CLOUD_VAULT_PORT at runtime.
   token: "s.l06JWgzNUHCwZCXM124iyIXr"    # Bound to env var SPRING_CLOUD_VAULT_TOKEN at runtime.
   cacert: "/etc/ssl/certs/ca-bundle.crt" # Required by MSX.
+
+swagger:
+  rootpath: "/helloworld"             # Required by MSX.
+  secure: true                        # Required by MSX.
+  ssourl: "http://localhost:9515/idm" # CONSUL thirdpartyservices/defaultapplication/swagger.security.sso.baseUrl
+  clientid: "local-public-client"     # CONSUL thirdpartyservices/helloworldservice/public.security.clientId
+  swaggerjsonpath: "swagger.json"     # Required by MSX.

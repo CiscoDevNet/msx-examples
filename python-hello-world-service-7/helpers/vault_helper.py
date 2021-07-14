@@ -33,3 +33,4 @@ class VaultHelper(object):
         logging.info("Where are the acorns buried?")
         logging.info(secret_squirrel_location)
 
+
