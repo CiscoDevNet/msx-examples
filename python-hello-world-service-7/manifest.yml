@@ -38,3 +38,27 @@ Containers:
       - "0.0.0.0"
       - "--port"
       - "8082"
+
+ConfigFiles:
+  - Name: "helloworld.yml"
+    MountTo:
+      Container: "helloworldservice"
+      Path: "/helloworld.yml"
+
+ConsulKeys:
+  - Name: "favourite.color"
+    Value: "Green"
+  - Name: "favourite.food"
+    Value: "Pizza"
+  - Name: "favourite.dinosaur"
+    Value: "Moros Intrepidus"
+  - Name: "public.security.clientId"
+    Value: "hello-world-service-public-client"
+  - Name: "integration.security.clientId"
+    Value: "hello-world-service-private-client"
+
+Secrets:
+  - Name: "secret.squirrel.location"
+    Value: "The acorns are buried under the big oak tree!"
+  - Name: "integration.security.clientSecret"
+    Value: "make-up-a-private-client-secret-and-keep-it-safe"
