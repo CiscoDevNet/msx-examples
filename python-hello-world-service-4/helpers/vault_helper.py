@@ -5,6 +5,8 @@
 import hvac
 import logging
 
+from hvac.exceptions import InvalidPath
+
 from config import VaultConfig
 
 
@@ -16,9 +18,12 @@ class VaultHelper(object):
             verify=config.cacert)
 
     def get_string(self, secret, key, default):
-        response = self._client.secrets.kv.v1.read_secret(secret)
-        if response and response["data"] and key in response["data"]:
-            return response["data"][key]
+        try:
+            response = self._client.secrets.kv.v1.read_secret(secret)
+            if response and response["data"] and key in response["data"]:
+                return response["data"][key]
+        except InvalidPath as e:
+            logging.error(str(e))
         return default
 
     def test(self):

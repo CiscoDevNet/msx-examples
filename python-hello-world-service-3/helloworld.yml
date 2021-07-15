@@ -3,7 +3,7 @@
 # All Rights reserved
 #
 consul:
-  host: "http://127.0.0.1" # Bound to env var SPRING_CLOUD_CONSUL_HOST at runtime.
-  port: "8500"             # Bound to env var SPRING_CLOUD_CONSUL_PORT at runtime.
-  cacert: "/etc/ssl/certs/ca-bundle.crt"
+  host: "http://127.0.0.1"               # Bound to env var SPRING_CLOUD_CONSUL_HOST at runtime.
+  port: "8500"                           # Bound to env var SPRING_CLOUD_CONSUL_PORT at runtime.
+  cacert: "/etc/ssl/certs/ca-bundle.crt" # Required by MSX.
 

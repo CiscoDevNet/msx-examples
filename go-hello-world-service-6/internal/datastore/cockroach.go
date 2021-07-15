@@ -151,6 +151,12 @@ func (c *Cockroach) GetItems(ctx context.Context, id string) (openapi.ImplRespon
 		}
 		list = append(list, i)
 	}
+	if len(list) == 0 {
+		return openapi.ImplResponse{
+			Code: 200,
+			Body: make([]string, 0),
+		}, nil
+	}
 	return openapi.ImplResponse{
 		Code: 200,
 		Body: list,
@@ -241,6 +247,12 @@ func (c *Cockroach) GetLanguages(ctx context.Context) (openapi.ImplResponse, err
 			return openapi.ImplResponse{}, err
 		}
 		list = append(list, i)
+	}
+	if len(list) == 0 {
+		return openapi.ImplResponse{
+			Code: 200,
+			Body: make([]string, 0),
+		}, nil
 	}
 	return openapi.ImplResponse{
 		Code: 200,

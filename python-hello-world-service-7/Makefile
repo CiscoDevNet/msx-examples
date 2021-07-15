@@ -10,7 +10,7 @@ build: clean package
 package:
 	docker build -t ${NAME}:${VERSION} .
 	docker save ${NAME}:${VERSION} | gzip > ${IMAGE}
-	tar -czvf ${OUTPUT} manifest.yml ${IMAGE}
+	tar -czvf ${OUTPUT} manifest.yml helloworld.yml ${IMAGE}
 	rm -f ${IMAGE}
 
 clean:

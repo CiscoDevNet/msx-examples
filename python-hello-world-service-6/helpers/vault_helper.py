@@ -18,18 +18,17 @@ class VaultHelper(object):
             verify=config.cacert)
 
     def get_string(self, secret, key, default):
-        response = self._client.secrets.kv.v1.read_secret(secret)
-        if response and response["data"] and key in response["data"]:
-            return response["data"][key]
+        try:
+            response = self._client.secrets.kv.v1.read_secret(secret)
+            if response and response["data"] and key in response["data"]:
+                return response["data"][key]
+        except InvalidPath as e:
+            logging.error(str(e))
         return default
 
     def test(self):
         # Read a secret from Vault  and it to the console.
         # Do not leak secrets in production as it is a security violation.
-        try:
-            secret_squirrel_location = self.get_string("thirdpartyservices/helloworldservice/", "secret.squirrel.location", "UNKNOWN")
-            logging.info("Where are the acorns buried?")
-            logging.info(secret_squirrel_location)
-        except InvalidPath as e:
-            logging.error(str(e))
-
+        secret_squirrel_location = self.get_string("thirdpartyservices/helloworldservice/", "secret.squirrel.location", "UNKNOWN")
+        logging.info("Where are the acorns buried?")
+        logging.info(secret_squirrel_location)
