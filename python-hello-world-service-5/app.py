@@ -17,12 +17,12 @@ from helpers.cockroach_helper import CockroachHelper
 logging.basicConfig(level=logging.INFO)
 
 config = Config("helloworld.yml")
-consul = ConsulHelper(config.consul)
-vault = VaultHelper(config.vault)
+consul_helper = ConsulHelper(config.consul)
+vault_helper = VaultHelper(config.vault)
 
 app = Flask(__name__)
-consul.test()
-vault.test()
+consul_helper.test()
+vault_helper.test()
 
 with CockroachHelper(config.cockroach) as db:
 	db.test()
