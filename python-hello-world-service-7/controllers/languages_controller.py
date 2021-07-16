@@ -2,13 +2,12 @@
 # Copyright (c) 2021 Cisco Systems, Inc and its affiliates
 # All rights reserved
 #
-import flask
+import logging
 from flask_restplus import Resource
 from flask_restplus import reqparse
 
-from config import Config
 from models.language import Language
-from models.error import Error
+from config import Config
 from helpers.cockroach_helper import CockroachHelper
 
 LANGUAGE_ENGLISH = Language(
@@ -16,67 +15,63 @@ LANGUAGE_ENGLISH = Language(
     name="English",
     description="A West Germanic language that uses the Roman alphabet.")
 
+languages_post_args = ['name', 'description']
 
 LANGUAGE_RUSSIAN = Language(
     id="55f3028f-1b94-4edd-b14f-183b51b33d68",
     name="Russian",
     description="An East Slavic language that uses the Cyrillic alphabet.")
 
-
-def get_access_token():
-    # Authorization: Bearer MY_ACCESS_TOKEN
-    return flask.request.headers.get("Authorization", "")[7:]
-
-
 class LanguagesApi(Resource):
-    def __init__(self, *args, **kwargs):
-        self._security = kwargs["security"]
-
-
     def get(self):
-        if self._security.has_permission("HELLOWORLD_READ_LANGUAGE", get_access_token()):
-            with CockroachHelper(Config("helloworld.yml").cockroach) as db:
-                rows = db.get_rows('Languages')
+        with CockroachHelper(Config("helloworld.yml").cockroach) as db:
+            rows = db.get_rows('Languages')
 
-            return rows, 200
-
-        return Error(code="my_error_code", message="permission denied").to_dict(), 403
+        return rows, 200
 
     def post(self):
-        if self._security.has_permission("HELLOWORLD_WRITE_LANGUAGE", get_access_token()):
-            return LANGUAGE_ENGLISH.to_dict(), 201
-        return Error(code="my_error_code", message="permission denied").to_dict(), 403
+        parser = reqparse.RequestParser()
+        [parser.add_argument(arg) for arg in languages_post_args]
+        args = parser.parse_args()
+
+        print('args=',args)
+        logging.info(args)
+
+        with CockroachHelper(Config("helloworld.yml").cockroach) as db:
+            statusmessage = db.insert_row('Languages', args)
+
+        return statusmessage, 200
+
+
+    def delete(self):
+        with CockroachHelper(Config("helloworld.yml").cockroach) as db:
+            statusmessage = db.delete_rows('Languages')
+
+        return statusmessage, 200
+
 
 
 class LanguageApi(Resource):
-    def __init__(self, *args, **kwargs):
-        self._security = kwargs["security"]
-
-
     def get(self, id):
-        if self._security.has_permission("HELLOWORLD_READ_LANGUAGE", get_access_token()):
-            with CockroachHelper(Config("helloworld.yml").cockroach) as db:
-                rows = db.get_row('Languages', id)
+        with CockroachHelper(Config("helloworld.yml").cockroach) as db:
+            rows = db.get_row('Languages', id)
 
-            return rows, 200
-        return Error(code="my_error_code", message="permission denied").to_dict(), 403
-
+        return rows, 200
 
     def put(self, id):
-        if self._security.has_permission("HELLOWORLD_WRITE_LANGUAGE", get_access_token()):
-            parser = reqparse.RequestParser()
-            parser.add_argument('name')
-            args = parser.parse_args()
+        parser = reqparse.RequestParser()
+        parser.add_argument('name')
+        args = parser.parse_args()
 
-            with CockroachHelper(Config("helloworld.yml").cockroach) as db:
-                statusmessage = db.updste_row('Languages', id, 'name', args['name'])
+        with CockroachHelper(Config("helloworld.yml").cockroach) as db:
+            statusmessage = db.update_row('Languages', id, 'name', args['name'])
 
-            return statusmessage, 200
-
-        return Error(code="my_error_code", message="permission denied").to_dict(), 403
+        return statusmessage, 200
 
 
     def delete(self, id):
-        if self._security.has_permission("HELLOWORLD_WRITE_LANGUAGE", get_access_token()):
-            return "", 204
-        return Error(code="my_error_code", message="permission denied").to_dict(), 403
+        with CockroachHelper(Config("helloworld.yml").cockroach) as db:
+            statusmessage = db.delete_row('Languages', id)
+
+        return statusmessage, 200
+

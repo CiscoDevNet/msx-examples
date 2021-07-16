@@ -24,6 +24,7 @@ HELLO_WORLD_RUSSIAN = Item(
     language_name="Russian",
     value="Привет мир!")
 
+items_post_args = ['languageid', 'languagename', 'value']
 
 class ItemsApi(Resource):
     def get(self):
@@ -32,6 +33,28 @@ class ItemsApi(Resource):
 
         logging.info(rows)
         return rows, 200
+
+
+    def post(self):
+        parser = reqparse.RequestParser()
+        [parser.add_argument(arg) for arg in items_post_args]
+        args = parser.parse_args()
+
+        print('args=',args)
+        logging.info(args)
+
+        with CockroachHelper(Config("helloworld.yml").cockroach) as db:
+            statusmessage = db.insert_row('Items', args)
+
+        return statusmessage, 200
+
+
+    def delete(self):
+        with CockroachHelper(Config("helloworld.yml").cockroach) as db:
+            statusmessage = db.delete_rows('Items')
+
+        return statusmessage, 200
+
 
 
 class ItemApi(Resource):
@@ -49,14 +72,13 @@ class ItemApi(Resource):
         args = parser.parse_args()
 
         with CockroachHelper(Config("helloworld.yml").cockroach) as db:
-            statusmessage = db.updste_row('Items', id, 'value', args['value'])
+            statusmessage = db.update_row('Items', id, 'value', args['value'])
 
         return statusmessage, 200
 
 
-    def post(self, id):
-        return HELLO_WORLD_ENGLISH.to_dict(), 501
-
-
     def delete(self, id):
-        return "", 501
+        with CockroachHelper(Config("helloworld.yml").cockroach) as db:
+            statusmessage = db.delete_row('Items', id)
+
+        return statusmessage, 200

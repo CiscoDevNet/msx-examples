@@ -16,14 +16,15 @@ vault:
   cacert: "/etc/ssl/certs/ca-bundle.crt" # Required by MSX.
 
 cockroach:
+  # host: "172.17.0.4"
   host: "localhost"
   port: "26257"
   databasename: "helloworldservice"
   username: "root"
-  sslmode: "disable"
-  #cacert: "/etc/ssl/certs/ca-bundle.crt" # Required by MSX.
+  sslmode: "verify-ca" # vs "require" vs "disable"
+  cacert: "/etc/ssl/certs/ca-bundle.crt" # Required by MSX.
   #password:
-
+  
 swagger:
   rootpath: "/helloworld"             # Required by MSX.
   secure: true                        # Required by MSX.

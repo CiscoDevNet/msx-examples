@@ -10,7 +10,7 @@ import yaml
 
 ConsulConfig = namedtuple("ConsulConfig", ["host", "port", "cacert"])
 VaultConfig = namedtuple("VaultConfig", ["scheme", "host", "port", "token", "cacert"])
-CockroachConfig = namedtuple("CockroachConfig", ["host", "port", "databasename","username", "sslmode"])
+CockroachConfig = namedtuple("CockroachConfig", ["host", "port", "databasename","username", "sslmode", "cacert"])
 SwaggerConfig = namedtuple("SwaggerConfig", ["rootpath", "secure", "ssourl", "clientid", "swaggerjsonpath"])
 
 class Config(object):
@@ -31,12 +31,7 @@ class Config(object):
         config["vault"]["token"] = environ.get("SPRING_CLOUD_VAULT_TOKEN", config["vault"]["token"])
         self.vault = VaultConfig(**config["vault"])
 
-        # Apply environment variables and create cockroach config object.
-        config["cockroach"]["host"] = environ.get("SPRING_CLOUD_COCKROACH_HOST", config["cockroach"]["host"])
-        config["cockroach"]["port"] = environ.get("SPRING_CLOUD_COCKROACH_PORT", config["cockroach"]["port"])
-        config["cockroach"]["databasename"] = environ.get("SPRING_CLOUD_COCKROACH_DATABASENAME", config["cockroach"]["databasename"])
-        config["cockroach"]["username"] = environ.get("SPRING_CLOUD_COCKROACH_USERNAME", config["cockroach"]["username"])
-        config["cockroach"]["sslmode"] = environ.get("SPRING_CLOUD_COCKROACH_SSLMODE", config["cockroach"]["sslmode"])
+        # Ceate cockroach config object.
         self.cockroach = CockroachConfig(**config["cockroach"])
 
         # Create Swagger config object.

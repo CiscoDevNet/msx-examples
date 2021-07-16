@@ -2,6 +2,7 @@
 # Copyright (c) 2021 Cisco Systems, Inc and its affiliates
 # All rights reserved
 #
+import logging
 from flask_restplus import Resource
 from flask_restplus import reqparse
 
@@ -14,6 +15,7 @@ LANGUAGE_ENGLISH = Language(
     name="English",
     description="A West Germanic language that uses the Roman alphabet.")
 
+languages_post_args = ['name', 'description']
 
 LANGUAGE_RUSSIAN = Language(
     id="55f3028f-1b94-4edd-b14f-183b51b33d68",
@@ -27,6 +29,27 @@ class LanguagesApi(Resource):
 
         return rows, 200
 
+    def post(self):
+        parser = reqparse.RequestParser()
+        [parser.add_argument(arg) for arg in languages_post_args]
+        args = parser.parse_args()
+
+        print('args=',args)
+        logging.info(args)
+
+        with CockroachHelper(Config("helloworld.yml").cockroach) as db:
+            statusmessage = db.insert_row('Languages', args)
+
+        return statusmessage, 200
+
+
+    def delete(self):
+        with CockroachHelper(Config("helloworld.yml").cockroach) as db:
+            statusmessage = db.delete_rows('Languages')
+
+        return statusmessage, 200
+
+
 
 class LanguageApi(Resource):
     def get(self, id):
@@ -35,19 +58,20 @@ class LanguageApi(Resource):
 
         return rows, 200
 
-    def post(self, id):
-        return LANGUAGE_ENGLISH.to_dict(), 200        
-
     def put(self, id):
         parser = reqparse.RequestParser()
         parser.add_argument('name')
         args = parser.parse_args()
 
         with CockroachHelper(Config("helloworld.yml").cockroach) as db:
-            statusmessage = db.updste_row('Languages', id, 'name', args['name'])
+            statusmessage = db.update_row('Languages', id, 'name', args['name'])
 
         return statusmessage, 200
 
 
     def delete(self, id):
-        return "", 204
+        with CockroachHelper(Config("helloworld.yml").cockroach) as db:
+            statusmessage = db.delete_row('Languages', id)
+
+        return statusmessage, 200
+

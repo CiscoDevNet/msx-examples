@@ -3,6 +3,7 @@
 # All rights reserved
 #
 
+import uuid
 import logging
 import psycopg2
 
@@ -29,8 +30,14 @@ class CockroachHelper(object):
 
 
     def __enter__(self):
-        logging.info(f'Connecting {self._databasename} ...')
-        self._conn = psycopg2.connect(database=self._databasename, host=self._host, port=self._port, user=self._username, sslmode=self._sslmode)
+        connection_str = f'dbname={self._databasename} host={self._host} port={self._port} user={self._username} sslmode={self._sslmode} sslrootcert={self._cacert}'
+
+        if self._sslmode != 'require':
+            connection_str = f'dbname={self._databasename} host={self._host} port={self._port} user={self._username} sslmode={self._sslmode}'
+       
+        logging.info(f'Connecting {connection_str}')
+        self._conn = psycopg2.connect(connection_str)
+
         return self
 
 
@@ -55,26 +62,25 @@ class CockroachHelper(object):
         logging.info(f'{column}@{table}= {str(res)}')
 
 
-
     def test(self):        
-        self.create_table('Languages', ['id', 'name', 'description'])
-        self.create_table('Items', ['id', 'languageid', 'languagename', 'value'])
+        print(self.create_table('Languages', ['id', 'name', 'description']))
+        print(self.create_table('Items', ['id', 'languageid', 'languagename', 'value']))
 
         self.log_column('Languages', 'name')
         self.log_column('Items','languagename')
    
-        self.insert_row('Languages', new_language_dict)
-        self.insert_row('Items', new_item_dict)
+        print(self.insert_row('Languages', new_language_dict))
+        print(self.insert_row('Items', new_item_dict))
 
         self.log_column('Languages', 'name')
         self.log_column('Items','languagename')
 
         self.log_column('Items','value')
-        self.updste_row('Items', '62ef8e5f-628a-4f8b-92c9-485981205d92',  'value', 'Привет рим!')
+        print(self.update_row('Items', '62ef8e5f-628a-4f8b-92c9-485981205d92',  'value', 'Привет рим!'))
         self.log_column('Items','value')
 
-        self.delete_row('Languages', '55f3028f-1b94-4edd-b14f-183b51b33d68')
-        self.delete_row('Items', '62ef8e5f-628a-4f8b-92c9-485981205d92')
+        print(self.delete_row('Languages', '55f3028f-1b94-4edd-b14f-183b51b33d68'))
+        print(self.delete_row('Items', '62ef8e5f-628a-4f8b-92c9-485981205d92'))
 
         self.log_column('Languages', 'name')
         self.log_column('Items','languagename')
@@ -94,7 +100,9 @@ class CockroachHelper(object):
             for row in rows:
                 row_dict = dict(zip(columns,row))
                 listof_rows.append(row_dict)
+            statusmessage = cur.statusmessage
         
+        logging.info(f'statusmessage={statusmessage}')
         return listof_rows
 
 
@@ -111,51 +119,79 @@ class CockroachHelper(object):
             self._conn.commit()
             row_dict = dict(zip(columns,row))
             listof_rows.append(row_dict)
-
+            statusmessage = cur.statusmessage
+        
+        logging.info(f'statusmessage={statusmessage}')
         return listof_rows
 
 
-    def updste_row(self, tablename, id, coulmnname, columnvalue):
+    def update_row(self, tablename, id, coulmnname, columnvalue):
         update_clause = f"UPDATE {tablename} SET {coulmnname} = '{columnvalue}' WHERE id = '{id}'"
 
+        logging.info(f'Exceuting={update_clause}')
         with self._conn.cursor() as cur:
             cur.execute(update_clause)
             statusmessage = cur.statusmessage
-        self._conn.commit()
 
+        self._conn.commit()
+        logging.info(f'statusmessage={statusmessage}')
         return statusmessage
+
 
     def create_table(self, tablename, col_name_list):
         columns = '  STRING, '.join(col_name_list) + '  STRING' + ', PRIMARY KEY (' + col_name_list[0] + ')'                             
         create_clause = f'CREATE TABLE IF NOT EXISTS {tablename} ({columns})'
 
+        logging.info(f'Exceuting={create_clause}')
         with self._conn.cursor() as cur:
             cur.execute(create_clause)
+            statusmessage = cur.statusmessage
+
         self._conn.commit()
+        logging.info(f'statusmessage={statusmessage}')
+        return statusmessage
 
 
     def insert_row(self, tablename, row_values_dict):
+        row_values_dict['id'] = str(uuid.uuid4())
         columns = ','.join(row_values_dict.keys())
         values = ','.join(  "'" + key + "'"  for key in  row_values_dict.values() )
-
         upsert_clause = f'UPSERT INTO {tablename} ({columns}) VALUES ({values})'
 
+        logging.info('Exceuting='+upsert_clause)
         with self._conn.cursor() as cur:
             cur.execute(upsert_clause)
+            statusmessage = cur.statusmessage
+
         self._conn.commit()
+        logging.info(f'statusmessage={statusmessage}')
+        return statusmessage
 
 
     def delete_row(self, tablename, id):
+        delete_clause = f"DELETE FROM {tablename} WHERE ID='{id}'"
+
+        logging.info('Exceuting='+delete_clause)
         with self._conn.cursor() as cur:
-            cur.execute(f"DELETE FROM {tablename} WHERE ID='{id}'")
+            cur.execute(delete_clause)
+            statusmessage = cur.statusmessage
+
         self._conn.commit()
+        logging.info(f'statusmessage={statusmessage}')
+        return statusmessage
 
 
     def delete_rows(self, tablename):
+        delete_clause = f"DELETE FROM {tablename}"
+
+        logging.info('Exceuting='+delete_clause)
         with self._conn.cursor() as cur:
-            cur.execute(f"DELETE FROM {tablename}")
+            cur.execute(delete_clause)
+            statusmessage = cur.statusmessage
 
         self._conn.commit()
+        logging.info(f'statusmessage={statusmessage}')
+        return statusmessage
    
 
 def main():

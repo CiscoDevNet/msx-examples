@@ -19,6 +19,7 @@ new_item_dict = {   'id':          '62ef8e5f-628a-4f8b-92c9-485981205d92',
                     'languagename':'Russian',
                     'value' :       'Привет мир!' }
 
+
 class CockroachHelper(object):
     def __init__(self, config: CockroachConfig):
         self._conn = None
@@ -26,12 +27,26 @@ class CockroachHelper(object):
         self._host=config.host 
         self._port=config.port 
         self._username=config.username 
-        self._sslmode=config.sslmode        
+        self._sslmode=config.sslmode
+        self._cacert = config.cacert
 
 
     def __enter__(self):
-        logging.info(f'Connecting {self._databasename} ...')
-        self._conn = psycopg2.connect(database=self._databasename, host=self._host, port=self._port, user=self._username, sslmode=self._sslmode)
+
+        connection_str = f'dbname={self._databasename} host={self._host} port={self._port} user={self._username} sslmode={self._sslmode} sslrootcert={self._cacert}'
+
+        if self._sslmode != 'require':
+            connection_str = f'dbname={self._databasename} host={self._host} port={self._port} user={self._username} sslmode={self._sslmode}'
+       
+        logging.info(f'Connecting {connection_str}')
+
+        # conn = psycopg2.connect("dbname=test user=postgres password=secret")
+        self._conn = psycopg2.connect(connection_str)
+        # if self._sslmode == 'require':
+        #     self._conn = psycopg2.connect(database=self._databasename, host=self._host, port=self._port, user=self._username, sslmode=self._sslmode, sslrootcert=self._cacert )
+        # else:
+        #     self._conn = psycopg2.connect(database=self._databasename, host=self._host, port=self._port, user=self._username, sslmode=self._sslmode)
+
         return self
 
 
