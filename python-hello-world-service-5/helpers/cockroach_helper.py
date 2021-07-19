@@ -32,20 +32,13 @@ class CockroachHelper(object):
 
 
     def __enter__(self):
-
-        connection_str = f'dbname={self._databasename} host={self._host} port={self._port} user={self._username} sslmode={self._sslmode} sslrootcert={self._cacert}'
-
-        if self._sslmode != 'require':
+        if self._sslmode == 'disable':
             connection_str = f'dbname={self._databasename} host={self._host} port={self._port} user={self._username} sslmode={self._sslmode}'
+        else:
+            connection_str = f'dbname={self._databasename} host={self._host} port={self._port} user={self._username} sslmode={self._sslmode} sslrootcert={self._cacert}'
        
         logging.info(f'Connecting {connection_str}')
-
-        # conn = psycopg2.connect("dbname=test user=postgres password=secret")
         self._conn = psycopg2.connect(connection_str)
-        # if self._sslmode == 'require':
-        #     self._conn = psycopg2.connect(database=self._databasename, host=self._host, port=self._port, user=self._username, sslmode=self._sslmode, sslrootcert=self._cacert )
-        # else:
-        #     self._conn = psycopg2.connect(database=self._databasename, host=self._host, port=self._port, user=self._username, sslmode=self._sslmode)
 
         return self
 

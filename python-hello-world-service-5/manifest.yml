@@ -58,5 +58,5 @@ Secrets:
 
 Infrastructure:
   Database:
-    Type: Cockroach
-    Name: "helloworld"
+    Type: "Cockroach"
+    Name: "helloworldservice"
