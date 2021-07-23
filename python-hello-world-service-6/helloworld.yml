@@ -3,8 +3,8 @@
 # All Rights reserved
 #
 consul:
-  # host: "http://127.0.0.1" # Bound to env var SPRING_CLOUD_CONSUL_HOST at runtime.
-  host: "http://172.17.0.3" # Bound to env var SPRING_CLOUD_CONSUL_HOST at runtime.
+  host: "http://127.0.0.1" # Bound to env var SPRING_CLOUD_CONSUL_HOST at runtime.
+  # host: "http://172.17.0.3" # Bound to env var SPRING_CLOUD_CONSUL_HOST at runtime.
   port: "8500"             # Bound to env var SPRING_CLOUD_CONSUL_PORT at runtime.
   cacert: "/etc/ssl/certs/ca-bundle.crt"
   
@@ -18,8 +18,8 @@ vault:
   cacert: "/etc/ssl/certs/ca-bundle.crt"
 
 cockroach:
-  host: "172.17.0.4"
-  # host: "127.0.0.1"
+  # host: "172.17.0.4"
+  host: "127.0.0.1"
   # host: localhost
   port: "26257"
   databasename: "helloworldservice"

@@ -46,7 +46,6 @@ class ItemsApi(Resource):
         [parser.add_argument(arg) for arg in items_post_args]
         args = parser.parse_args()
 
-        print('args=',args)
         logging.info(args)
 
         with CockroachHelper(Config("helloworld.yml")) as db:
