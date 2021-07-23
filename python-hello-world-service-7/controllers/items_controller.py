@@ -10,6 +10,8 @@ from flask_restplus import reqparse
 from models.item import Item
 from config import Config
 from helpers.cockroach_helper import CockroachHelper
+from helpers.consul_helper import ConsulHelper
+from helpers.vault_helper import VaultHelper
 
 
 HELLO_WORLD_ENGLISH = Item(
@@ -28,10 +30,14 @@ items_post_args = ['languageid', 'languagename', 'value']
 
 class ItemsApi(Resource):
     def get(self):
-        with CockroachHelper(Config("helloworld.yml").cockroach) as db:
-            rows = db.get_rows('Items')
+        try: 
+            with CockroachHelper(Config("helloworld.yml")) as db:
+                rows = db.get_rows('Items')
+                logging.info(rows)
+        except Exception as e:
+            logging.error("helloworld service error:" + str(e))
+            rows = [{"error": str(e)}]
 
-        logging.info(rows)
         return rows, 200
 
 
@@ -43,14 +49,14 @@ class ItemsApi(Resource):
         print('args=',args)
         logging.info(args)
 
-        with CockroachHelper(Config("helloworld.yml").cockroach) as db:
+        with CockroachHelper(Config("helloworld.yml")) as db:
             statusmessage = db.insert_row('Items', args)
 
         return statusmessage, 200
 
 
     def delete(self):
-        with CockroachHelper(Config("helloworld.yml").cockroach) as db:
+        with CockroachHelper(Config("helloworld.yml")) as db:
             statusmessage = db.delete_rows('Items')
 
         return statusmessage, 200
@@ -59,7 +65,7 @@ class ItemsApi(Resource):
 
 class ItemApi(Resource):
     def get(self, id):
-        with CockroachHelper(Config("helloworld.yml").cockroach) as db:
+        with CockroachHelper(Config("helloworld.yml")) as db:
             rows = db.get_row('Items', id)
 
         logging.info(rows)
@@ -71,14 +77,14 @@ class ItemApi(Resource):
         parser.add_argument('value')
         args = parser.parse_args()
 
-        with CockroachHelper(Config("helloworld.yml").cockroach) as db:
+        with CockroachHelper(Config("helloworld.yml")) as db:
             statusmessage = db.update_row('Items', id, 'value', args['value'])
 
         return statusmessage, 200
 
 
     def delete(self, id):
-        with CockroachHelper(Config("helloworld.yml").cockroach) as db:
+        with CockroachHelper(Config("helloworld.yml")) as db:
             statusmessage = db.delete_row('Items', id)
 
         return statusmessage, 200

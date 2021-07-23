@@ -24,10 +24,16 @@ LANGUAGE_RUSSIAN = Language(
 
 class LanguagesApi(Resource):
     def get(self):
-        with CockroachHelper(Config("helloworld.yml").cockroach) as db:
-            rows = db.get_rows('Languages')
+        try: 
+            with CockroachHelper(Config("helloworld.yml")) as db:
+                rows = db.get_rows('Languages')
+                logging.info(rows)
+        except Exception as e:
+            logging.error("helloworld service error:" + str(e))
+            rows = [{"error": str(e)}]
 
         return rows, 200
+
 
     def post(self):
         parser = reqparse.RequestParser()
@@ -37,14 +43,14 @@ class LanguagesApi(Resource):
         print('args=',args)
         logging.info(args)
 
-        with CockroachHelper(Config("helloworld.yml").cockroach) as db:
+        with CockroachHelper(Config("helloworld.yml")) as db:
             statusmessage = db.insert_row('Languages', args)
 
         return statusmessage, 200
 
 
     def delete(self):
-        with CockroachHelper(Config("helloworld.yml").cockroach) as db:
+        with CockroachHelper(Config("helloworld.yml")) as db:
             statusmessage = db.delete_rows('Languages')
 
         return statusmessage, 200
@@ -53,7 +59,7 @@ class LanguagesApi(Resource):
 
 class LanguageApi(Resource):
     def get(self, id):
-        with CockroachHelper(Config("helloworld.yml").cockroach) as db:
+        with CockroachHelper(Config("helloworld.yml")) as db:
             rows = db.get_row('Languages', id)
 
         return rows, 200
@@ -63,14 +69,14 @@ class LanguageApi(Resource):
         parser.add_argument('name')
         args = parser.parse_args()
 
-        with CockroachHelper(Config("helloworld.yml").cockroach) as db:
+        with CockroachHelper(Config("helloworld.yml")) as db:
             statusmessage = db.update_row('Languages', id, 'name', args['name'])
 
         return statusmessage, 200
 
 
     def delete(self, id):
-        with CockroachHelper(Config("helloworld.yml").cockroach) as db:
+        with CockroachHelper(Config("helloworld.yml")) as db:
             statusmessage = db.delete_row('Languages', id)
 
         return statusmessage, 200

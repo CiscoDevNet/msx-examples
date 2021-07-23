@@ -31,7 +31,7 @@ app = Flask(__name__)
 consul_helper.test()
 vault_helper.test()
 
-with CockroachHelper(config.cockroach) as db:
+with CockroachHelper(config) as db:
 	db.test()
 
 swagger = MSXSwaggerConfig(

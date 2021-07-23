@@ -6,7 +6,6 @@
 import logging
 
 from flask import Flask
-from msxsecurity import MSXSecurity
 from msxswagger import MSXSwaggerConfig
 
 from config import Config
@@ -29,7 +28,7 @@ app = Flask(__name__)
 consul_helper.test()
 vault_helper.test()
 
-with CockroachHelper(config.cockroach) as db:
+with CockroachHelper(config) as db:
 	db.test()
 
 swagger = MSXSwaggerConfig(
@@ -40,8 +39,8 @@ swagger = MSXSwaggerConfig(
 
 swagger.api.add_resource(ItemsApi, "/api/v1/items")
 swagger.api.add_resource(ItemApi, "/api/v1/items/<id>")
-swagger.api.add_resource(LanguagesApi, "/api/v1/languages", resource_class_kwargs={"security": security})
-swagger.api.add_resource(LanguageApi, "/api/v1/languages/<id>", resource_class_kwargs={"security": security})
+swagger.api.add_resource(LanguagesApi, "/api/v1/languages")
+swagger.api.add_resource(LanguageApi, "/api/v1/languages/<id>")
 app.register_blueprint(swagger.api.blueprint)
 
 if __name__ == '__main__':

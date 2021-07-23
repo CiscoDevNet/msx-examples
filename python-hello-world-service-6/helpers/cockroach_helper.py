@@ -10,6 +10,10 @@ import psycopg2
 from config import Config
 from config import CockroachConfig
 
+from helpers.consul_helper import ConsulHelper
+from helpers.vault_helper import VaultHelper
+
+
 new_language_dict =  {  'id' :          '55f3028f-1b94-4edd-b14f-183b51b33d68',
                         'name':         'Russian',
                         'description':  'An East Slavic language that uses the Cyrillic alphabet.' }
@@ -19,25 +23,35 @@ new_item_dict = {   'id':          '62ef8e5f-628a-4f8b-92c9-485981205d92',
                     'languagename':'Russian',
                     'value' :       'Привет мир!' }
 
+
 class CockroachHelper(object):
-    def __init__(self, config: CockroachConfig):
+    def __init__(self, config: Config):
+
+        consul_helper = ConsulHelper(config.consul)
+        vault_helper = VaultHelper(config.vault)
+        cockroach_config = config.cockroach
+
         self._conn = None
-        self._databasename = config.databasename 
-        self._host=config.host 
-        self._port=config.port 
-        self._username=config.username 
-        self._sslmode=config.sslmode        
+        self._databasename  = consul_helper.get_string("thirdpartyservices/defaultapplication/db.cockroach.databaseName",   cockroach_config.databasename )
+        self._host          = consul_helper.get_string("thirdpartyservices/defaultapplication/db.cockroach.host",           cockroach_config.host )
+        self._port          = consul_helper.get_string("thirdpartyservices/defaultapplication/db.cockroach.port",           cockroach_config.port )
+        self._username      = consul_helper.get_string("thirdpartyservices/helloworldservice/db.cockroach.username",        cockroach_config.username )
+        self._sslmode       = consul_helper.get_string("thirdpartyservices/helloworldservice/db.cockroach.sslmode",         cockroach_config.sslmode )
+        self._password      = vault_helper.get_string("secret/thirdpartyservices/helloworldservice",  "db.cockroach.password",  "" )
+        self._cacert        = cockroach_config.cacert
 
 
     def __enter__(self):
-        connection_str = f'dbname={self._databasename} host={self._host} port={self._port} user={self._username} sslmode={self._sslmode} sslrootcert={self._cacert}'
-
-        if self._sslmode != 'require':
-            connection_str = f'dbname={self._databasename} host={self._host} port={self._port} user={self._username} sslmode={self._sslmode}'
+        if self._sslmode == 'disable':
+            connection_str = f'postgres://{self._username}:{self._password}@{self._host}:{self._port}/{self._databasename}?sslmode={self._sslmode}'
+            # connection_str = f'dbname={self._databasename} host={self._host} port={self._port} user={self._username} sslmode={self._sslmode}'
+        else:
+            connection_str = f'postgres://{self._username}:{self._password}@{self._host}:{self._port}/{self._databasename}?sslmode={self._sslmode}&sslrootcert={self._cacert}'
+            # connection_str = f'dbname={self._databasename} host={self._host} port={self._port} user={self._username} password={self._password} sslmode={self._sslmode} sslrootcert={self._cacert}'
        
         logging.info(f'Connecting {connection_str}')
         self._conn = psycopg2.connect(connection_str)
-
+        logging.info(f'Connetion status={self._conn.status}')
         return self
 
 
