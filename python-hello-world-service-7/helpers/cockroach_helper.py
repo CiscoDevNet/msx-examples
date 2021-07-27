@@ -37,7 +37,7 @@ class CockroachHelper(object):
         self._port          = consul_helper.get_string("thirdpartyservices/defaultapplication/db.cockroach.port",           cockroach_config.port )
         self._username      = consul_helper.get_string("thirdpartyservices/helloworldservice/db.cockroach.username",        cockroach_config.username )
         self._sslmode       = consul_helper.get_string("thirdpartyservices/helloworldservice/db.cockroach.sslmode",         cockroach_config.sslmode )
-        self._password      = vault_helper.get_string("secret/thirdpartyservices/helloworldservice",  "db.cockroach.password",  "" )
+        self._password      = vault_helper.get_string("thirdpartyservices/helloworldservice",  "db.cockroach.password",  "" )
         self._cacert        = cockroach_config.cacert
 
 
