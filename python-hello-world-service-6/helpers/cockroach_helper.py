@@ -83,18 +83,23 @@ class CockroachHelper(object):
         self.log_column('Languages', 'name')
         self.log_column('Items','languagename')
    
-        print(self.insert_row('Languages', new_language_dict))
-        print(self.insert_row('Items', new_item_dict))
+        row = self.insert_row('Languages', new_language_dict)
+        print(row)
+        language_id = row['id']
+        
+        row = self.insert_row('Items', new_item_dict)
+        print(row)
+        item_id =  row['id']
 
         self.log_column('Languages', 'name')
         self.log_column('Items','languagename')
 
         self.log_column('Items','value')
-        print(self.update_row('Items', '62ef8e5f-628a-4f8b-92c9-485981205d92',  'value', 'Привет рим!'))
+        print(self.update_row('Items', item_id,  'value', 'Привет рим!'))
         self.log_column('Items','value')
 
-        print(self.delete_row('Languages', '55f3028f-1b94-4edd-b14f-183b51b33d68'))
-        print(self.delete_row('Items', '62ef8e5f-628a-4f8b-92c9-485981205d92'))
+        print(self.delete_row('Languages', language_id))
+        print(self.delete_row('Items', item_id))
 
         self.log_column('Languages', 'name')
         self.log_column('Items','languagename')
@@ -104,7 +109,7 @@ class CockroachHelper(object):
         listof_rows = []
         query = f'SELECT * FROM {table_name}'
 
-        logging.info(f'Exceuting={query}')
+        logging.info(f'Executing={query}')
         with self._conn.cursor() as cur:
             cur.execute(query)
             # logging.info(f'execute: status message={cur.statusmessage}')
@@ -121,42 +126,40 @@ class CockroachHelper(object):
 
 
     def get_row(self, tablename, keyvalue):
-        listof_rows = []
         query = f"SELECT * FROM {tablename}  where ID='{keyvalue}'"
-
-        logging.info('Exceuting={query}')
+        row = {}
+        logging.info(f'Executing={query}')
         with self._conn.cursor() as cur:
             cur.execute(query)
             logging.info(f'Cursor execute: status message={cur.statusmessage}')
             columns = [desc[0] for desc in cur.description]
             row = cur.fetchone()
             self._conn.commit()
-            row_dict = dict(zip(columns,row))
-            listof_rows.append(row_dict)
+            row = dict(zip(columns,row))
             statusmessage = cur.statusmessage
         
         logging.info(f'statusmessage={statusmessage}')
-        return listof_rows
+        return row
 
 
     def update_row(self, tablename, id, coulmnname, columnvalue):
         update_clause = f"UPDATE {tablename} SET {coulmnname} = '{columnvalue}' WHERE id = '{id}'"
 
-        logging.info(f'Exceuting={update_clause}')
+        logging.info(f'Executing={update_clause}')
         with self._conn.cursor() as cur:
             cur.execute(update_clause)
             statusmessage = cur.statusmessage
 
         self._conn.commit()
         logging.info(f'statusmessage={statusmessage}')
-        return statusmessage
+        return self.get_row(tablename, id)
 
 
     def create_table(self, tablename, col_name_list):
         columns = '  STRING, '.join(col_name_list) + '  STRING' + ', PRIMARY KEY (' + col_name_list[0] + ')'                             
         create_clause = f'CREATE TABLE IF NOT EXISTS {tablename} ({columns})'
 
-        logging.info(f'Exceuting={create_clause}')
+        logging.info(f'Executing={create_clause}')
         with self._conn.cursor() as cur:
             cur.execute(create_clause)
             statusmessage = cur.statusmessage
@@ -172,20 +175,20 @@ class CockroachHelper(object):
         values = ','.join(  "'" + key + "'"  for key in  row_values_dict.values() )
         upsert_clause = f'UPSERT INTO {tablename} ({columns}) VALUES ({values})'
 
-        logging.info('Exceuting='+upsert_clause)
+        logging.info(f'Executing={upsert_clause}')
         with self._conn.cursor() as cur:
             cur.execute(upsert_clause)
             statusmessage = cur.statusmessage
 
         self._conn.commit()
         logging.info(f'statusmessage={statusmessage}')
-        return statusmessage
+        return row_values_dict
 
 
     def delete_row(self, tablename, id):
         delete_clause = f"DELETE FROM {tablename} WHERE ID='{id}'"
 
-        logging.info('Exceuting='+delete_clause)
+        logging.info(f'Executing={delete_clause}')
         with self._conn.cursor() as cur:
             cur.execute(delete_clause)
             statusmessage = cur.statusmessage
@@ -198,7 +201,7 @@ class CockroachHelper(object):
     def delete_rows(self, tablename):
         delete_clause = f"DELETE FROM {tablename}"
 
-        logging.info('Exceuting='+delete_clause)
+        logging.info(f'Executing={delete_clause}')
         with self._conn.cursor() as cur:
             cur.execute(delete_clause)
             statusmessage = cur.statusmessage

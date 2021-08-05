@@ -8,6 +8,7 @@ from flask_restplus import Resource
 from flask_restplus import reqparse
 
 from models.item import Item
+import config
 from config import Config
 from helpers.cockroach_helper import CockroachHelper
 from helpers.consul_helper import ConsulHelper
@@ -38,7 +39,7 @@ class ItemsApi(Resource):
             logging.error("helloworld service error:" + str(e))
             rows = [{"error": str(e)}]
 
-        return rows, 200
+        return rows, config.HTTP_STATUS_CODE_OK
 
 
     def post(self):
@@ -46,19 +47,19 @@ class ItemsApi(Resource):
         [parser.add_argument(arg) for arg in items_post_args]
         args = parser.parse_args()
 
-        logging.info(args)
+        logging.info(args)        
 
         with CockroachHelper(Config("helloworld.yml")) as db:
-            statusmessage = db.insert_row('Items', args)
+            result = db.insert_row('Items', args)
 
-        return statusmessage, 200
+        return result, config.HTTP_STATUS_CODE_CREATED
 
 
     def delete(self):
         with CockroachHelper(Config("helloworld.yml")) as db:
-            statusmessage = db.delete_rows('Items')
+            result = db.delete_rows('Items')
 
-        return statusmessage, 200
+        return result, config.HTTP_STATUS_CODE_NOCONTENT
 
 
 
@@ -67,8 +68,7 @@ class ItemApi(Resource):
         with CockroachHelper(Config("helloworld.yml")) as db:
             rows = db.get_row('Items', id)
 
-        logging.info(rows)
-        return rows, 200
+        return rows, config.HTTP_STATUS_CODE_OK
 
 
     def put(self, id):
@@ -77,13 +77,13 @@ class ItemApi(Resource):
         args = parser.parse_args()
 
         with CockroachHelper(Config("helloworld.yml")) as db:
-            statusmessage = db.update_row('Items', id, 'value', args['value'])
+            result = db.update_row('Items', id, 'value', args['value'])
 
-        return statusmessage, 200
+        return result, config.HTTP_STATUS_CODE_OK
 
 
     def delete(self, id):
         with CockroachHelper(Config("helloworld.yml")) as db:
-            statusmessage = db.delete_row('Items', id)
+            result = db.delete_row('Items', id)
 
-        return statusmessage, 200
+        return result, config.HTTP_STATUS_CODE_NOCONTENT

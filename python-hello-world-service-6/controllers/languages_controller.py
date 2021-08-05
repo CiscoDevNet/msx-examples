@@ -7,6 +7,7 @@ from flask_restplus import Resource
 from flask_restplus import reqparse
 
 from models.language import Language
+import config
 from config import Config
 from helpers.cockroach_helper import CockroachHelper
 
@@ -32,7 +33,7 @@ class LanguagesApi(Resource):
             logging.error("helloworld service error:" + str(e))
             rows = [{"error": str(e)}]
 
-        return rows, 200
+        return rows, config.HTTP_STATUS_CODE_OK
 
 
     def post(self):
@@ -43,16 +44,16 @@ class LanguagesApi(Resource):
         logging.info(args)
 
         with CockroachHelper(Config("helloworld.yml")) as db:
-            statusmessage = db.insert_row('Languages', args)
+            result = db.insert_row('Languages', args)
 
-        return statusmessage, 200
+        return result, config.HTTP_STATUS_CODE_CREATED
 
 
     def delete(self):
         with CockroachHelper(Config("helloworld.yml")) as db:
-            statusmessage = db.delete_rows('Languages')
+            result = db.delete_rows('Languages')
 
-        return statusmessage, 200
+        return result, config.HTTP_STATUS_CODE_NOCONTENT
 
 
 
@@ -61,7 +62,7 @@ class LanguageApi(Resource):
         with CockroachHelper(Config("helloworld.yml")) as db:
             rows = db.get_row('Languages', id)
 
-        return rows, 200
+        return rows, config.HTTP_STATUS_CODE_OK
 
     def put(self, id):
         parser = reqparse.RequestParser()
@@ -69,14 +70,13 @@ class LanguageApi(Resource):
         args = parser.parse_args()
 
         with CockroachHelper(Config("helloworld.yml")) as db:
-            statusmessage = db.update_row('Languages', id, 'name', args['name'])
+            result = db.update_row('Languages', id, 'name', args['name'])
 
-        return statusmessage, 200
+        return result, config.HTTP_STATUS_CODE_OK
 
 
     def delete(self, id):
         with CockroachHelper(Config("helloworld.yml")) as db:
-            statusmessage = db.delete_row('Languages', id)
+            result = db.delete_row('Languages', id)
 
-        return statusmessage, 200
-
+        return result, config.HTTP_STATUS_CODE_NOCONTENT

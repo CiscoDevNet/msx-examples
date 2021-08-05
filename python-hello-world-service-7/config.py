@@ -2,16 +2,20 @@
 # Copyright (c) 2021 Cisco Systems, Inc and its affiliates
 # All Rights reserved
 #
+import logging
 import pkgutil
 from os import environ
 from collections import namedtuple
 import yaml
 
+
+HTTP_STATUS_CODE_OK         = 200
+HTTP_STATUS_CODE_CREATED    = 201
+HTTP_STATUS_CODE_NOCONTENT  = 204
+
 ConsulConfig = namedtuple("ConsulConfig", ["host", "port", "cacert"])
 VaultConfig = namedtuple("VaultConfig", ["scheme", "host", "port", "token", "cacert"])
 CockroachConfig = namedtuple("CockroachConfig", ["host", "port", "databasename","username", "sslmode", "cacert"])
-SwaggerConfig = namedtuple("SwaggerConfig", ["rootpath", "secure", "ssourl", "clientid", "swaggerjsonpath"])
-SecurityConfig = namedtuple("SecurityConfig", ["ssourl", "clientid", "clientsecret"])
 
 class Config(object):
     def __init__(self, resource_name):
@@ -34,9 +38,5 @@ class Config(object):
         # Ceate cockroach config object.
         self.cockroach = CockroachConfig(**config["cockroach"])
 
-        # Create Swagger config object.
-        self.swagger = SwaggerConfig(**config["swagger"])
 
-        # Create Security config object.
-        self.security = SecurityConfig(**config["security"])
 

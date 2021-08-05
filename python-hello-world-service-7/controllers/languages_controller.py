@@ -2,14 +2,12 @@
 # Copyright (c) 2021 Cisco Systems, Inc and its affiliates
 # All rights reserved
 #
-import flask
-from models.error import Error
-
 import logging
 from flask_restplus import Resource
 from flask_restplus import reqparse
 
 from models.language import Language
+import config
 from config import Config
 from helpers.cockroach_helper import CockroachHelper
 
@@ -25,20 +23,8 @@ LANGUAGE_RUSSIAN = Language(
     name="Russian",
     description="An East Slavic language that uses the Cyrillic alphabet.")
 
-
-def get_access_token():
-    # Authorization: Bearer MY_ACCESS_TOKEN
-    return flask.request.headers.get("Authorization", "")[7:]
-
-
 class LanguagesApi(Resource):
-    def __init__(self, *args, **kwargs):
-        self._security = kwargs["security"]
-
     def get(self):
-        if not self._security.has_permission("HELLOWORLD_READ_LANGUAGE", get_access_token()):
-            return Error(code="my_error_code", message="permission denied").to_dict(), 403
-
         try: 
             with CockroachHelper(Config("helloworld.yml")) as db:
                 rows = db.get_rows('Languages')
@@ -47,13 +33,10 @@ class LanguagesApi(Resource):
             logging.error("helloworld service error:" + str(e))
             rows = [{"error": str(e)}]
 
-        return rows, 200
+        return rows, config.HTTP_STATUS_CODE_OK
 
 
     def post(self):
-        if not self._security.has_permission("HELLOWORLD_WRITE_LANGUAGE", get_access_token()):
-            return Error(code="my_error_code", message="permission denied").to_dict(), 403
-
         parser = reqparse.RequestParser()
         [parser.add_argument(arg) for arg in languages_post_args]
         args = parser.parse_args()
@@ -61,56 +44,39 @@ class LanguagesApi(Resource):
         logging.info(args)
 
         with CockroachHelper(Config("helloworld.yml")) as db:
-            statusmessage = db.insert_row('Languages', args)
+            result = db.insert_row('Languages', args)
 
-        return statusmessage, 200
+        return result, config.HTTP_STATUS_CODE_CREATED
 
 
     def delete(self):
-        if not self._security.has_permission("HELLOWORLD_WRITE_LANGUAGE", get_access_token()):
-            return Error(code="my_error_code", message="permission denied").to_dict(), 403
-
         with CockroachHelper(Config("helloworld.yml")) as db:
-            statusmessage = db.delete_rows('Languages')
+            result = db.delete_rows('Languages')
 
-        return statusmessage, 200
+        return result, config.HTTP_STATUS_CODE_NOCONTENT
 
 
 
 class LanguageApi(Resource):
-    def __init__(self, *args, **kwargs):
-        self._security = kwargs["security"]
-
     def get(self, id):
-        if not self._security.has_permission("HELLOWORLD_WRITE_LANGUAGE", get_access_token()):
-            return Error(code="my_error_code", message="permission denied").to_dict(), 403
-
         with CockroachHelper(Config("helloworld.yml")) as db:
             rows = db.get_row('Languages', id)
 
-        return rows, 200
-        
+        return rows, config.HTTP_STATUS_CODE_OK
 
     def put(self, id):
-        if not self._security.has_permission("HELLOWORLD_WRITE_LANGUAGE", get_access_token()):
-            return Error(code="my_error_code", message="permission denied").to_dict(), 403
-
         parser = reqparse.RequestParser()
         parser.add_argument('name')
         args = parser.parse_args()
 
         with CockroachHelper(Config("helloworld.yml")) as db:
-            statusmessage = db.update_row('Languages', id, 'name', args['name'])
+            result = db.update_row('Languages', id, 'name', args['name'])
 
-        return statusmessage, 200
+        return result, config.HTTP_STATUS_CODE_OK
 
 
     def delete(self, id):
-        if not self._security.has_permission("HELLOWORLD_WRITE_LANGUAGE", get_access_token()):
-            return Error(code="my_error_code", message="permission denied").to_dict(), 403
-
         with CockroachHelper(Config("helloworld.yml")) as db:
-            statusmessage = db.delete_row('Languages', id)
+            result = db.delete_row('Languages', id)
 
-        return statusmessage, 200
-
+        return result, config.HTTP_STATUS_CODE_NOCONTENT
