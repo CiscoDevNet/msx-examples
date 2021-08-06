@@ -20,18 +20,25 @@ config = Config("helloworld.yml")
 consul_helper = ConsulHelper(config.consul)
 vault_helper = VaultHelper(config.vault)
 
+logging.info('helloworld=start_test')
+
 app = Flask(__name__)
 consul_helper.test()
+logging.info('helloworld=consul_tested')
 vault_helper.test()
+logging.info('helloworld=vault_tested')
 
 with CockroachHelper(config) as db:
 	db.test()
+logging.info('helloworld=CockroachHelper_tested')
 
 api = Api(app)
 api.add_resource(ItemsApi, "/helloworld/api/v1/items")
 api.add_resource(ItemApi, "/helloworld/api/v1/items/<id>")
 api.add_resource(LanguagesApi, "/helloworld/api/v1/languages")
 api.add_resource(LanguageApi, "/helloworld/api/v1/languages/<id>")
+
+logging.info('helloworld=API_started')
 
 if __name__ == '__main__':
 	app.run()
