@@ -23,14 +23,14 @@ vault_helper = VaultHelper(config.vault)
 logging.info('helloworld=start_test')
 
 app = Flask(__name__)
-# consul_helper.test()
-# logging.info('helloworld=consul_tested')
-# vault_helper.test()
-# logging.info('helloworld=vault_tested')
+consul_helper.test()
+logging.info('helloworld=consul_tested')
+vault_helper.test()
+logging.info('helloworld=vault_tested')
 
-# with CockroachHelper(config) as db:
-# 	db.test()
-# logging.info('helloworld=CockroachHelper_tested')
+with CockroachHelper(config) as db:
+	db.test()
+logging.info('helloworld=CockroachHelper_tested')
 
 api = Api(app)
 api.add_resource(ItemsApi, "/helloworld/api/v1/items")
