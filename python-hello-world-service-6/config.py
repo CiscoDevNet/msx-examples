@@ -16,6 +16,7 @@ HTTP_STATUS_CODE_NOCONTENT  = 204
 ConsulConfig = namedtuple("ConsulConfig", ["host", "port", "cacert"])
 VaultConfig = namedtuple("VaultConfig", ["scheme", "host", "port", "token", "cacert"])
 CockroachConfig = namedtuple("CockroachConfig", ["host", "port", "databasename","username", "sslmode", "cacert"])
+SwaggerConfig = namedtuple("SwaggerConfig", ["rootpath", "secure", "ssourl", "clientid", "swaggerjsonpath"])
 
 class Config(object):
     def __init__(self, resource_name):
@@ -38,5 +39,5 @@ class Config(object):
         # Ceate cockroach config object.
         self.cockroach = CockroachConfig(**config["cockroach"])
 
-
-
+        # Create Swagger config object.
+        self.swagger = SwaggerConfig(**config["swagger"])

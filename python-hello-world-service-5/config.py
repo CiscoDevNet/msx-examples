@@ -12,6 +12,8 @@ import yaml
 HTTP_STATUS_CODE_OK         = 200
 HTTP_STATUS_CODE_CREATED    = 201
 HTTP_STATUS_CODE_NOCONTENT  = 204
+HTTP_STATUS_CODE_UNPROCESSABLE_ENTITY   = 422
+HTTP_STATUS_CODE_NOT_IMPLEMENTED   = 501
 
 ConsulConfig = namedtuple("ConsulConfig", ["host", "port", "cacert"])
 VaultConfig = namedtuple("VaultConfig", ["scheme", "host", "port", "token", "cacert"])

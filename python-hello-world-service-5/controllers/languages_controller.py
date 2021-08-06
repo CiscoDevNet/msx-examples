@@ -50,11 +50,7 @@ class LanguagesApi(Resource):
 
 
     def delete(self):
-        with CockroachHelper(Config("helloworld.yml")) as db:
-            result = db.delete_rows('Languages')
-
-        return result, config.HTTP_STATUS_CODE_NOCONTENT
-
+        return "Delete Rows is Not Supported", config.HTTP_STATUS_CODE_NOT_IMPLEMENTED
 
 
 class LanguageApi(Resource):
@@ -66,11 +62,12 @@ class LanguageApi(Resource):
 
     def put(self, id):
         parser = reqparse.RequestParser()
-        parser.add_argument('name')
+        [parser.add_argument(arg) for arg in languages_post_args]
         args = parser.parse_args()
+        logging.info(args)        
 
         with CockroachHelper(Config("helloworld.yml")) as db:
-            result = db.update_row('Languages', id, 'name', args['name'])
+            result = db.update_row('Languages', id, args)
 
         return result, config.HTTP_STATUS_CODE_OK
 
