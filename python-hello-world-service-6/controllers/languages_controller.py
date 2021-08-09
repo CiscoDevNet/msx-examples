@@ -16,12 +16,14 @@ LANGUAGE_ENGLISH = Language(
     name="English",
     description="A West Germanic language that uses the Roman alphabet.")
 
-languages_post_args = ['name', 'description']
-
 LANGUAGE_RUSSIAN = Language(
     id="55f3028f-1b94-4edd-b14f-183b51b33d68",
     name="Russian",
     description="An East Slavic language that uses the Cyrillic alphabet.")
+
+languages_post_args = ['name', 'description']
+
+LANGUAGE_NOT_FOUND_TXT = 'Language Not found'
 
 class LanguagesApi(Resource):
     def get(self):
@@ -53,12 +55,17 @@ class LanguagesApi(Resource):
         return "Delete Rows is Not Supported", config.HTTP_STATUS_CODE_NOT_IMPLEMENTED
 
 
+
 class LanguageApi(Resource):
     def get(self, id):
         with CockroachHelper(Config("helloworld.yml")) as db:
-            rows = db.get_row('Languages', id)
+            row = db.get_row('Languages', id)
 
-        return rows, config.HTTP_STATUS_CODE_OK
+        if not row:
+            return LANGUAGE_NOT_FOUND_TXT, config.HTTP_STATUS_CODE_NOT_FOUND    
+
+        return row, config.HTTP_STATUS_CODE_OK
+
 
     def put(self, id):
         parser = reqparse.RequestParser()
@@ -67,13 +74,19 @@ class LanguageApi(Resource):
         logging.info(args)        
 
         with CockroachHelper(Config("helloworld.yml")) as db:
-            result = db.update_row('Languages', id, args)
+            row = db.update_row('Languages', id, args)
 
-        return result, config.HTTP_STATUS_CODE_OK
+        if not row:
+            return LANGUAGE_NOT_FOUND_TXT, config.HTTP_STATUS_CODE_NOT_FOUND    
+
+        return row, config.HTTP_STATUS_CODE_OK
 
 
     def delete(self, id):
         with CockroachHelper(Config("helloworld.yml")) as db:
             result = db.delete_row('Languages', id)
+
+        if result != 'DELETE 1':
+            return LANGUAGE_NOT_FOUND_TXT, config.HTTP_STATUS_CODE_NOT_FOUND    
 
         return result, config.HTTP_STATUS_CODE_NOCONTENT
