@@ -95,7 +95,7 @@ class CockroachHelper(object):
         self.log_column('Items','languagename')
 
         self.log_column('Items','value')
-        print(self.update_row('Items', item_id,  'value', 'Привет рим!'))
+        print(self.update_row('Items', item_id,  {'value':'Привет рим!'}))
         self.log_column('Items','value')
 
         print(self.delete_row('Languages', language_id))
@@ -133,17 +133,20 @@ class CockroachHelper(object):
             cur.execute(query)
             logging.info(f'Cursor execute: status message={cur.statusmessage}')
             columns = [desc[0] for desc in cur.description]
-            row = cur.fetchone()
+            dbrow = cur.fetchone()
             self._conn.commit()
-            row = dict(zip(columns,row))
             statusmessage = cur.statusmessage
-        
+            if dbrow:
+                row = dict(zip(columns,dbrow))
+            
         logging.info(f'statusmessage={statusmessage}')
         return row
 
 
-    def update_row(self, tablename, id, coulmnname, columnvalue):
-        update_clause = f"UPDATE {tablename} SET {coulmnname} = '{columnvalue}' WHERE id = '{id}'"
+    def update_row(self, tablename, id , row_values_dict):
+        l = [k+ "='"+ v +"'" for (k,v) in row_values_dict.items() if v]
+        set_pairs = ','.join(l)
+        update_clause = f"UPDATE {tablename} SET {set_pairs} WHERE id = '{id}'"
 
         logging.info(f'Executing={update_clause}')
         with self._conn.cursor() as cur:

@@ -49,35 +49,50 @@ class ItemsApi(Resource):
 
         logging.info(args)        
 
+        languageid = args['languageid']
+
         with CockroachHelper(Config("helloworld.yml")) as db:
+            row = db.get_row('Languages', languageid)
+            logging.info('row')
+            logging.info(row)
+
+            if not row:
+                return 'languageId not found', config.HTTP_STATUS_CODE_UNPROCESSABLE_ENTITY
+            
             result = db.insert_row('Items', args)
 
         return result, config.HTTP_STATUS_CODE_CREATED
 
-
     def delete(self):
-        with CockroachHelper(Config("helloworld.yml")) as db:
-            result = db.delete_rows('Items')
-
-        return result, config.HTTP_STATUS_CODE_NOCONTENT
-
+        return "Delete Rows is Not Supported", config.HTTP_STATUS_CODE_NOT_IMPLEMENTED
 
 
 class ItemApi(Resource):
     def get(self, id):
         with CockroachHelper(Config("helloworld.yml")) as db:
-            rows = db.get_row('Items', id)
+            row = db.get_row('Items', id)
 
-        return rows, config.HTTP_STATUS_CODE_OK
+        return row, config.HTTP_STATUS_CODE_OK
 
 
     def put(self, id):
         parser = reqparse.RequestParser()
-        parser.add_argument('value')
+        [parser.add_argument(arg) for arg in items_post_args]
         args = parser.parse_args()
+        logging.info(args)        
 
         with CockroachHelper(Config("helloworld.yml")) as db:
-            result = db.update_row('Items', id, 'value', args['value'])
+            if 'languageid' in args and args['languageid']:
+                languageid = args['languageid']
+
+                row = db.get_row('Languages', languageid)
+                logging.info('row')
+                logging.info(row)
+
+                if not row:
+                    return 'languageId not found', config.HTTP_STATUS_CODE_UNPROCESSABLE_ENTITY
+
+            result = db.update_row('Items', id, args)
 
         return result, config.HTTP_STATUS_CODE_OK
 
