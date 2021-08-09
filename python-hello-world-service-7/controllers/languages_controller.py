@@ -38,7 +38,7 @@ class LanguagesApi(Resource):
 
     def get(self):
         if not self._security.has_permission("HELLOWORLD_READ_LANGUAGE", get_access_token()):
-            return Error(code="my_error_code", message="permission denied").to_dict(), 403
+            return Error(code="my_error_code", message="permission denied").to_dict(), config.HTTP_STATUS_CODE_FORBIDDEN
 
         try: 
             with CockroachHelper(Config("helloworld.yml")) as db:
@@ -53,7 +53,7 @@ class LanguagesApi(Resource):
 
     def post(self):
         if not self._security.has_permission("HELLOWORLD_WRITE_LANGUAGE", get_access_token()):
-            return Error(code="my_error_code", message="permission denied").to_dict(), 403
+            return Error(code="my_error_code", message="permission denied").to_dict(), config.HTTP_STATUS_CODE_FORBIDDEN
 
         parser = reqparse.RequestParser()
         [parser.add_argument(arg) for arg in languages_post_args]
@@ -78,7 +78,7 @@ class LanguageApi(Resource):
 
     def get(self, id):
         if not self._security.has_permission("HELLOWORLD_READ_LANGUAGE", get_access_token()):
-            return Error(code="my_error_code", message="permission denied").to_dict(), 403
+            return Error(code="my_error_code", message="permission denied").to_dict(), config.HTTP_STATUS_CODE_FORBIDDEN
 
         with CockroachHelper(Config("helloworld.yml")) as db:
             rows = db.get_row('Languages', id)
@@ -88,7 +88,7 @@ class LanguageApi(Resource):
 
     def put(self, id):
         if not self._security.has_permission("HELLOWORLD_WRITE_LANGUAGE", get_access_token()):
-            return Error(code="my_error_code", message="permission denied").to_dict(), 403
+            return Error(code="my_error_code", message="permission denied").to_dict(), config.HTTP_STATUS_CODE_FORBIDDEN
 
         parser = reqparse.RequestParser()
         [parser.add_argument(arg) for arg in languages_post_args]
@@ -103,7 +103,7 @@ class LanguageApi(Resource):
 
     def delete(self, id):
         if not self._security.has_permission("HELLOWORLD_WRITE_LANGUAGE", get_access_token()):
-            return Error(code="my_error_code", message="permission denied").to_dict(), 403
+            return Error(code="my_error_code", message="permission denied").to_dict(), config.HTTP_STATUS_CODE_FORBIDDEN
 
         with CockroachHelper(Config("helloworld.yml")) as db:
             result = db.delete_row('Languages', id)
