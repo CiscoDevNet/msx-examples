@@ -27,7 +27,10 @@ HELLO_WORLD_RUSSIAN = Item(
     language_name="Russian",
     value="Привет мир!")
 
-items_post_args = ['languageid', 'languagename', 'value']
+items_post_args = ['languageid', 'value']
+
+ITEM_NOT_FOUND_TXT = 'Item Not found'
+LANGUAGEID_NOT_FOUND_TXT = 'Item with languageId not found'
 
 class ItemsApi(Resource):
     def get(self):
@@ -57,20 +60,27 @@ class ItemsApi(Resource):
             logging.info(row)
 
             if not row:
-                return 'languageId not found', config.HTTP_STATUS_CODE_UNPROCESSABLE_ENTITY
+                return LANGUAGEID_NOT_FOUND_TXT, config.HTTP_STATUS_CODE_UNPROCESSABLE_ENTITY
             
+            args['languagename'] = row['name']
+
             result = db.insert_row('Items', args)
 
         return result, config.HTTP_STATUS_CODE_CREATED
 
+
     def delete(self):
         return "Delete Rows is Not Supported", config.HTTP_STATUS_CODE_NOT_IMPLEMENTED
+
 
 
 class ItemApi(Resource):
     def get(self, id):
         with CockroachHelper(Config("helloworld.yml")) as db:
             row = db.get_row('Items', id)
+
+        if not row:
+            return ITEM_NOT_FOUND_TXT, config.HTTP_STATUS_CODE_NOT_FOUND    
 
         return row, config.HTTP_STATUS_CODE_OK
 
@@ -86,19 +96,26 @@ class ItemApi(Resource):
                 languageid = args['languageid']
 
                 row = db.get_row('Languages', languageid)
-                logging.info('row')
-                logging.info(row)
 
                 if not row:
-                    return 'languageId not found', config.HTTP_STATUS_CODE_UNPROCESSABLE_ENTITY
+                    return LANGUAGEID_NOT_FOUND_TXT, config.HTTP_STATUS_CODE_UNPROCESSABLE_ENTITY
 
-            result = db.update_row('Items', id, args)
+                args['languagename'] = row['name']
+                logging.info('args')
+                logging.info(args)
+            row = db.update_row('Items', id, args)
 
-        return result, config.HTTP_STATUS_CODE_OK
+        if not row:
+            return ITEM_NOT_FOUND_TXT, config.HTTP_STATUS_CODE_NOT_FOUND    
+
+        return row, config.HTTP_STATUS_CODE_OK
 
 
     def delete(self, id):
         with CockroachHelper(Config("helloworld.yml")) as db:
             result = db.delete_row('Items', id)
+
+        if result != 'DELETE 1':
+            return ITEM_NOT_FOUND_TXT, config.HTTP_STATUS_CODE_NOT_FOUND    
 
         return result, config.HTTP_STATUS_CODE_NOCONTENT
