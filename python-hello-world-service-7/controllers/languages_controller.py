@@ -26,6 +26,9 @@ LANGUAGE_RUSSIAN = Language(
 
 languages_post_args = ['name', 'description']
 
+LANGUAGE_NOT_FOUND_TXT = 'Language Not found'
+
+
 def get_access_token():
     # Authorization: Bearer MY_ACCESS_TOKEN
     return flask.request.headers.get("Authorization", "")[7:]
@@ -68,7 +71,7 @@ class LanguagesApi(Resource):
 
 
     def delete(self):
-        return "Delete Rows is Not Supported", config.HTTP_STATUS_CODE_NOT_IMPLEMENTED
+        return "Delete Languages Is Not Supported", config.HTTP_STATUS_CODE_NOT_IMPLEMENTED
 
 
 class LanguageApi(Resource):
@@ -81,9 +84,12 @@ class LanguageApi(Resource):
             return Error(code="my_error_code", message="permission denied").to_dict(), config.HTTP_STATUS_CODE_FORBIDDEN
 
         with CockroachHelper(Config("helloworld.yml")) as db:
-            rows = db.get_row('Languages', id)
+            row = db.get_row('Languages', id)
 
-        return rows, config.HTTP_STATUS_CODE_OK
+        if not row:
+            return LANGUAGE_NOT_FOUND_TXT, config.HTTP_STATUS_CODE_NOT_FOUND    
+
+        return row, config.HTTP_STATUS_CODE_OK
 
 
     def put(self, id):
@@ -96,9 +102,12 @@ class LanguageApi(Resource):
         logging.info(args)        
 
         with CockroachHelper(Config("helloworld.yml")) as db:
-            result = db.update_row('Languages', id, args)
+            row = db.update_row('Languages', id, args)
 
-        return result, config.HTTP_STATUS_CODE_OK
+        if not row:
+            return LANGUAGE_NOT_FOUND_TXT, config.HTTP_STATUS_CODE_NOT_FOUND    
+
+        return row, config.HTTP_STATUS_CODE_OK
 
 
     def delete(self, id):
@@ -107,5 +116,8 @@ class LanguageApi(Resource):
 
         with CockroachHelper(Config("helloworld.yml")) as db:
             result = db.delete_row('Languages', id)
+
+        if result != 'DELETE 1':
+            return LANGUAGE_NOT_FOUND_TXT, config.HTTP_STATUS_CODE_NOT_FOUND    
 
         return result, config.HTTP_STATUS_CODE_NOCONTENT

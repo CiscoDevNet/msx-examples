@@ -70,7 +70,7 @@ class ItemsApi(Resource):
 
 
     def delete(self):
-        return "Delete Rows is Not Supported", config.HTTP_STATUS_CODE_NOT_IMPLEMENTED
+        return "Delete Items Is Not Supported", config.HTTP_STATUS_CODE_NOT_IMPLEMENTED
 
 
 
