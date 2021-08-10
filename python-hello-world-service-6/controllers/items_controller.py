@@ -30,7 +30,7 @@ HELLO_WORLD_RUSSIAN = Item(
 items_post_args = ['languageid', 'value']
 
 ITEM_NOT_FOUND_TXT = 'Item Not found'
-LANGUAGEID_NOT_FOUND_TXT = 'Item with languageId not found'
+LANGUAGEID_NOT_FOUND_TXT = 'Language is not found by id'
 
 class ItemsApi(Resource):
     def get(self):
