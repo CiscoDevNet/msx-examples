@@ -27,10 +27,18 @@ HELLO_WORLD_RUSSIAN = Item(
     language_name="Russian",
     value="Привет мир!")
 
-items_post_args = ['languageid', 'value']
+items_post_args = ['languageId', 'value']
 
 ITEM_NOT_FOUND_TXT = 'Item Not found'
 LANGUAGEID_NOT_FOUND_TXT = 'Language is not found by id'
+
+def adjust_prop_names(row):
+    if 'languagename' in row.keys():
+        row['languageName'] = row.pop('languagename')
+
+    if 'languageid' in row.keys():
+        row['languageId'] = row.pop('languageid')
+
 
 class ItemsApi(Resource):
     def get(self):
@@ -42,6 +50,7 @@ class ItemsApi(Resource):
             logging.error("helloworld service error:" + str(e))
             rows = [{"error": str(e)}]
 
+        [adjust_prop_names(row) for row in rows]
         return rows, config.HTTP_STATUS_CODE_OK
 
 
@@ -51,22 +60,24 @@ class ItemsApi(Resource):
         args = parser.parse_args()
 
         logging.info(args)        
+        
+        if 'languageId' not in args or not args['languageId']:
+            return "languageId is not in arguments", config.HTTP_STATUS_CODE_BAD_REQUEST
 
-        languageid = args['languageid']
+        language_id = args['languageId']
 
         with CockroachHelper(Config("helloworld.yml")) as db:
-            row = db.get_row('Languages', languageid)
-            logging.info('row')
+            row = db.get_row('Languages', language_id)
             logging.info(row)
 
             if not row:
-                return LANGUAGEID_NOT_FOUND_TXT, config.HTTP_STATUS_CODE_UNPROCESSABLE_ENTITY
+                return LANGUAGEID_NOT_FOUND_TXT, config.HTTP_STATUS_CODE_BAD_REQUEST
             
             args['languagename'] = row['name']
 
-            result = db.insert_row('Items', args)
-
-        return result, config.HTTP_STATUS_CODE_CREATED
+            row = db.insert_row('Items', args)
+            adjust_prop_names(row)
+        return row, config.HTTP_STATUS_CODE_CREATED
 
 
     def delete(self):
@@ -82,32 +93,34 @@ class ItemApi(Resource):
         if not row:
             return ITEM_NOT_FOUND_TXT, config.HTTP_STATUS_CODE_NOT_FOUND    
 
+        adjust_prop_names(row)
         return row, config.HTTP_STATUS_CODE_OK
-
 
     def put(self, id):
         parser = reqparse.RequestParser()
         [parser.add_argument(arg) for arg in items_post_args]
         args = parser.parse_args()
-        logging.info(args)        
+        logging.info(args)
 
         with CockroachHelper(Config("helloworld.yml")) as db:
-            if 'languageid' in args and args['languageid']:
-                languageid = args['languageid']
-
-                row = db.get_row('Languages', languageid)
+            if 'languageId' in args and args['languageId']:
+                language_id = args['languageId']
+                print('language_id=',language_id)
+                row = db.get_row('Languages', language_id)
 
                 if not row:
-                    return LANGUAGEID_NOT_FOUND_TXT, config.HTTP_STATUS_CODE_UNPROCESSABLE_ENTITY
+                    return LANGUAGEID_NOT_FOUND_TXT, config.HTTP_STATUS_CODE_BAD_REQUEST
 
-                args['languagename'] = row['name']
-                logging.info('args')
-                logging.info(args)
-            row = db.update_row('Items', id, args)
+                args['languageName'] = row['name']
+
+                row = db.update_row('Items', id, args)
+            else:
+                return "languageId is not in arguments", config.HTTP_STATUS_CODE_BAD_REQUEST
 
         if not row:
             return ITEM_NOT_FOUND_TXT, config.HTTP_STATUS_CODE_NOT_FOUND    
 
+        adjust_prop_names(row)
         return row, config.HTTP_STATUS_CODE_OK
 
 

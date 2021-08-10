@@ -112,7 +112,6 @@ class CockroachHelper(object):
         logging.info(f'Executing={query}')
         with self._conn.cursor() as cur:
             cur.execute(query)
-            # logging.info(f'execute: status message={cur.statusmessage}')
             columns = [desc[0] for desc in cur.description]
             rows = cur.fetchall()
             self._conn.commit()
@@ -131,7 +130,6 @@ class CockroachHelper(object):
         logging.info(f'Executing={query}')
         with self._conn.cursor() as cur:
             cur.execute(query)
-            logging.info(f'Cursor execute: status message={cur.statusmessage}')
             columns = [desc[0] for desc in cur.description]
             dbrow = cur.fetchone()
             self._conn.commit()
