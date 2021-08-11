@@ -6,14 +6,13 @@ consul:
   host: "http://127.0.0.1" # Bound to env var SPRING_CLOUD_CONSUL_HOST at runtime.
   port: "8500"             # Bound to env var SPRING_CLOUD_CONSUL_PORT at runtime.
   cacert: "/etc/ssl/certs/ca-bundle.crt"
-  
 
 vault:
   scheme: "http"                      # Bound to env var SPRING_CLOUD_VAULT_SCHEME at runtime.
   host: "127.0.0.1"                   # Bound to env var SPRING_CLOUD_VAULT_HOST at runtime.
   port: "8200"                        # Bound to env var SPRING_CLOUD_VAULT_PORT at runtime.
-  token: "s.KvMQAs1iqqJ7RAHSbRTr2q4b" # Bound to env var SPRING_CLOUD_VAULT_TOKEN at runtime.
-  cacert: "/etc/ssl/certs/ca-bundle.crt" # Required by MSX.
+  token: "s.2ZqddB1VbNADHBaWTB2TnMJj" # Bound to env var SPRING_CLOUD_VAULT_TOKEN at runtime.
+  cacert: "/etc/ssl/certs/ca-bundle.crt"
 
 cockroach:
   host: "127.0.0.1"
@@ -23,10 +22,4 @@ cockroach:
   sslmode: "require"  #"disable"
   cacert: "/etc/ssl/certs/ca-bundle.crt" # Required by MSX.
   #password:
-    
-swagger:
-  rootpath: "/helloworld"             # Required by MSX.
-  secure: true                        # Required by MSX.
-  ssourl: "http://localhost:9515/idm" # CONSUL thirdpartyservices/defaultapplication/swagger.security.sso.baseUrl
-  clientid: "local-public-client"     # CONSUL thirdpartyservices/helloworldservice/public.security.clientId
-  swaggerjsonpath: "swagger.json"     # Required by MSX.
+  

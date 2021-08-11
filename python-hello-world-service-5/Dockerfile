@@ -1,33 +1,27 @@
 #
 # Copyright (c) 2021 Cisco Systems, Inc and its affiliates
-# All Rights reserved
+# All rights reserved
 #
-FROM python:3.8.3-slim
+# FROM python:3-alpine3.12
+FROM python:3.8.3-slim          
+#Image python:3.9.5-slim also works # Image python:3.9.5-slim-buster also works
 COPY requirements.txt requirements.txt
 COPY app.py app.py
-COPY config.py config.py
-COPY swagger.json swagger.json
-COPY helpers/consul_helper.py helpers/consul_helper.py
-COPY helpers/vault_helper.py helpers/vault_helper.py
-COPY helpers/swagger_helper.py helpers/swagger_helper.py
-COPY models/item.py models/item.py
-COPY models/language.py models/language.py
-COPY controllers/items_controller.py controllers/items_controller.py
-COPY controllers/languages_controller.py controllers/languages_controller.py
 COPY config.py config.py
 COPY helloworld.yml helloworld.yml
 COPY helpers/consul_helper.py helpers/consul_helper.py
 COPY helpers/vault_helper.py helpers/vault_helper.py
 COPY helpers/cockroach_helper.py helpers/cockroach_helper.py
+COPY models/item.py models/item.py
+COPY models/language.py models/language.py
+COPY controllers/items_controller.py controllers/items_controller.py
+COPY controllers/languages_controller.py controllers/languages_controller.py
 # The following line fixes 'psycopg2-binary failed to install on Python-alpine' problem
 # RUN apk update && apk add postgresql-dev gcc python3-dev musl-dev
-# RUN apk update && apk add git
-
 
 RUN apt-get update \
-    && apt-get -y install git \
     && apt-get -y install libpq-dev gcc \
-    && pip install psycopg2 
+    && pip install psycopg2
 
 RUN pip install --upgrade pip
 RUN pip3 install -r requirements.txt

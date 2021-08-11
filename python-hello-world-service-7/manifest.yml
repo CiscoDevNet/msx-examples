@@ -62,3 +62,8 @@ Secrets:
     Value: "The acorns are buried under the big oak tree!"
   - Name: "integration.security.clientSecret"
     Value: "make-up-a-private-client-secret-and-keep-it-safe"
+
+Infrastructure:
+  Database:
+    Type: Cockroach
+    Name: "helloworld"

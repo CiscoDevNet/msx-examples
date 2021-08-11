@@ -16,11 +16,9 @@ HTTP_STATUS_CODE_BAD_REQUEST = 400
 HTTP_STATUS_CODE_NOT_FOUND  = 404
 HTTP_STATUS_CODE_NOT_IMPLEMENTED   = 501
 
-
 ConsulConfig = namedtuple("ConsulConfig", ["host", "port", "cacert"])
 VaultConfig = namedtuple("VaultConfig", ["scheme", "host", "port", "token", "cacert"])
 CockroachConfig = namedtuple("CockroachConfig", ["host", "port", "databasename","username", "sslmode", "cacert"])
-SwaggerConfig = namedtuple("SwaggerConfig", ["rootpath", "secure", "ssourl", "clientid", "swaggerjsonpath"])
 
 class Config(object):
     def __init__(self, resource_name):
@@ -43,5 +41,5 @@ class Config(object):
         # Ceate cockroach config object.
         self.cockroach = CockroachConfig(**config["cockroach"])
 
-        # Create Swagger config object.
-        self.swagger = SwaggerConfig(**config["swagger"])
+
+
