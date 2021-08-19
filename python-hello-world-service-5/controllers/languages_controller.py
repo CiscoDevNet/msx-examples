@@ -2,12 +2,11 @@
 # Copyright (c) 2021 Cisco Systems, Inc and its affiliates
 # All rights reserved
 #
+import http
 import logging
 from flask_restplus import Resource
 from flask_restplus import reqparse
-
 from models.language import Language
-import config
 from config import Config
 from helpers.cockroach_helper import CockroachHelper
 
@@ -21,72 +20,59 @@ LANGUAGE_RUSSIAN = Language(
     name="Russian",
     description="An East Slavic language that uses the Cyrillic alphabet.")
 
-languages_post_args = ['name', 'description']
+LANGUAGE_INPUT_ARGUMENTS = ['name', 'description']
 
-LANGUAGE_NOT_FOUND_TXT = 'Language Not found'
+LANGUAGE_NOT_FOUND = 'Language not found'
+
 
 class LanguagesApi(Resource):
     def get(self):
-        try: 
-            with CockroachHelper(Config("helloworld.yml")) as db:
-                rows = db.get_rows('Languages')
-                logging.info(rows)
-        except Exception as e:
-            logging.error("helloworld service error:" + str(e))
-            rows = [{"error": str(e)}]
+        with CockroachHelper(Config("helloworld.yml")) as db:
+            rows = db.get_rows('Languages')
+            logging.info(rows)
 
-        return rows, config.HTTP_STATUS_CODE_OK
-
+        languages = [Language(row=x) for x in rows]
+        return [x.to_dict() for x in languages], http.HTTPStatus.OK
 
     def post(self):
         parser = reqparse.RequestParser()
-        [parser.add_argument(arg) for arg in languages_post_args]
+        [parser.add_argument(arg) for arg in LANGUAGE_INPUT_ARGUMENTS]
         args = parser.parse_args()
-
         logging.info(args)
 
         with CockroachHelper(Config("helloworld.yml")) as db:
-            result = db.insert_row('Languages', args)
-
-        return result, config.HTTP_STATUS_CODE_CREATED
-
-
-    def delete(self):
-        return "Delete Languages Is Not Supported", config.HTTP_STATUS_CODE_NOT_IMPLEMENTED
-
+            row = db.insert_row('Languages', args)
+            return Language(row=row).to_dict(), http.HTTPStatus.CREATED
 
 
 class LanguageApi(Resource):
     def get(self, id):
         with CockroachHelper(Config("helloworld.yml")) as db:
             row = db.get_row('Languages', id)
+            if not row:
+                return LANGUAGE_NOT_FOUND, http.HTTPStatus.NOT_FOUND
 
-        if not row:
-            return LANGUAGE_NOT_FOUND_TXT, config.HTTP_STATUS_CODE_NOT_FOUND    
-
-        return row, config.HTTP_STATUS_CODE_OK
-
+            return Language(row=row).to_dict(), http.HTTPStatus.OK
 
     def put(self, id):
         parser = reqparse.RequestParser()
-        [parser.add_argument(arg) for arg in languages_post_args]
+        [parser.add_argument(arg) for arg in LANGUAGE_INPUT_ARGUMENTS]
         args = parser.parse_args()
         logging.info(args)        
 
         with CockroachHelper(Config("helloworld.yml")) as db:
             row = db.update_row('Languages', id, args)
+            if not row:
+                return LANGUAGE_NOT_FOUND, http.HTTPStatus.NOT_FOUND
 
-        if not row:
-            return LANGUAGE_NOT_FOUND_TXT, config.HTTP_STATUS_CODE_NOT_FOUND    
-
-        return row, config.HTTP_STATUS_CODE_OK
-
+            return Language(row=row).to_dict(), http.HTTPStatus.OK
 
     def delete(self, id):
         with CockroachHelper(Config("helloworld.yml")) as db:
-            result = db.delete_row('Languages', id)
+            result = db.delete_row("Languages", id)
+            if result == "DELETE 1":
+                 return None, http.HTTPStatus.NO_CONTENT
 
-        if result != 'DELETE 1':
-            return LANGUAGE_NOT_FOUND_TXT, config.HTTP_STATUS_CODE_NOT_FOUND    
+            return LANGUAGE_NOT_FOUND, http.HTTPStatus.NOT_FOUND
 
-        return result, config.HTTP_STATUS_CODE_NOCONTENT
+

@@ -12,7 +12,7 @@ class Item:
 	def to_dict(self):
 		return {
 			"id": self._id,
-			"language_id": self._language_id,
-			"language_name": self._language_name,
+			"languageId": self._language_id,
+			"languageName": self._language_name,
 			"value": self._value
 		}

@@ -2,18 +2,13 @@
 # Copyright (c) 2021 Cisco Systems, Inc and its affiliates
 # All rights reserved
 #
-
+import http
 import logging
 from flask_restplus import Resource
 from flask_restplus import reqparse
-
-from models.item import Item
-import config
 from config import Config
 from helpers.cockroach_helper import CockroachHelper
-from helpers.consul_helper import ConsulHelper
-from helpers.vault_helper import VaultHelper
-
+from models.item import Item
 
 HELLO_WORLD_ENGLISH = Item(
     id="68963944-a88c-4e39-98fd-d77878231d81",
@@ -27,108 +22,84 @@ HELLO_WORLD_RUSSIAN = Item(
     language_name="Russian",
     value="Привет мир!")
 
-items_post_args = ['languageId', 'value']
+ITEM_INPUT_ARGUMENTS = ['languageId', 'value']
 
-ITEM_NOT_FOUND_TXT = 'Item Not found'
-LANGUAGEID_NOT_FOUND_TXT = 'Language is not found by id'
+ITEM_NOT_FOUND = 'Item not found'
 
-def adjust_prop_names(row):
-    if 'languagename' in row.keys():
-        row['languageName'] = row.pop('languagename')
+LANGUAGE_NOT_FOUND = 'Language not found'
 
-    if 'languageid' in row.keys():
-        row['languageId'] = row.pop('languageid')
+LANGUAGE_ID_IS_REQUIRED = 'Language id is required'
 
 
 class ItemsApi(Resource):
     def get(self):
-        try: 
-            with CockroachHelper(Config("helloworld.yml")) as db:
-                rows = db.get_rows('Items')
-                logging.info(rows)
-        except Exception as e:
-            logging.error("helloworld service error:" + str(e))
-            rows = [{"error": str(e)}]
+        with CockroachHelper(Config("helloworld.yml")) as db:
+            rows = db.get_rows('Items')
+            logging.info(rows)
 
-        [adjust_prop_names(row) for row in rows]
-        return rows, config.HTTP_STATUS_CODE_OK
-
+        items = [Item(row=x) for x in rows]
+        return [x.to_dict() for x in items], http.HTTPStatus.OK
 
     def post(self):
         parser = reqparse.RequestParser()
-        [parser.add_argument(arg) for arg in items_post_args]
+        [parser.add_argument(arg) for arg in ITEM_INPUT_ARGUMENTS]
         args = parser.parse_args()
-
         logging.info(args)        
         
-        if 'languageId' not in args or not args['languageId']:
-            return "languageId is not in arguments", config.HTTP_STATUS_CODE_BAD_REQUEST
-
-        language_id = args['languageId']
+        if "languageId" not in args or not args["languageId"]:
+            return LANGUAGE_ID_IS_REQUIRED, http.HTTPStatus.BAD_REQUEST
+        args['languageid'] = args.pop('languageId')
 
         with CockroachHelper(Config("helloworld.yml")) as db:
-            row = db.get_row('Languages', language_id)
-            logging.info(row)
-
-            if not row:
-                return LANGUAGEID_NOT_FOUND_TXT, config.HTTP_STATUS_CODE_BAD_REQUEST
-            
-            args['languagename'] = row['name']
+            language_row = db.get_row('Languages', args["languageid"])
+            logging.info(language_row)
+            if not language_row:
+                return LANGUAGE_NOT_FOUND, http.HTTPStatus.BAD_REQUEST
+            args["languagename"] = language_row["name"]
 
             row = db.insert_row('Items', args)
-            adjust_prop_names(row)
-        return row, config.HTTP_STATUS_CODE_CREATED
-
-
-    def delete(self):
-        return "Delete Items Is Not Supported", config.HTTP_STATUS_CODE_NOT_IMPLEMENTED
-
+            return Item(row=row).to_dict(), http.HTTPStatus.CREATED
+        return None, http.HTTPStatus.INTERNAL_SERVER_ERROR
 
 
 class ItemApi(Resource):
     def get(self, id):
         with CockroachHelper(Config("helloworld.yml")) as db:
             row = db.get_row('Items', id)
+            if not row:
+                return ITEM_NOT_FOUND, http.HTTPStatus.NOT_FOUND
 
-        if not row:
-            return ITEM_NOT_FOUND_TXT, config.HTTP_STATUS_CODE_NOT_FOUND    
-
-        adjust_prop_names(row)
-        return row, config.HTTP_STATUS_CODE_OK
+            return Item(row=row).to_dict(), http.HTTPStatus.OK
 
     def put(self, id):
         parser = reqparse.RequestParser()
-        [parser.add_argument(arg) for arg in items_post_args]
+        [parser.add_argument(arg) for arg in ITEM_INPUT_ARGUMENTS]
         args = parser.parse_args()
         logging.info(args)
 
+        if 'languageId' not in args or not args['languageId']:
+            return LANGUAGE_ID_IS_REQUIRED, http.HTTPStatus.BAD_REQUEST
+        args['languageid'] = args.pop('languageId')
+
         with CockroachHelper(Config("helloworld.yml")) as db:
-            if 'languageId' in args and args['languageId']:
-                language_id = args['languageId']
-                print('language_id=',language_id)
-                row = db.get_row('Languages', language_id)
+            language_row = db.get_row('Languages', args["languageid"])
+            if not language_row:
+                return LANGUAGE_NOT_FOUND, http.HTTPStatus.BAD_REQUEST
+            args["languagename"] = language_row["name"]
 
-                if not row:
-                    return LANGUAGEID_NOT_FOUND_TXT, config.HTTP_STATUS_CODE_BAD_REQUEST
-
-                args['languageName'] = row['name']
-
-                row = db.update_row('Items', id, args)
-            else:
-                return "languageId is not in arguments", config.HTTP_STATUS_CODE_BAD_REQUEST
-
-        if not row:
-            return ITEM_NOT_FOUND_TXT, config.HTTP_STATUS_CODE_NOT_FOUND    
-
-        adjust_prop_names(row)
-        return row, config.HTTP_STATUS_CODE_OK
-
+            row = db.update_row('Items', id, args)
+            if not row:
+                return ITEM_NOT_FOUND, http.HTTPStatus.NOT_FOUND
+            return Item(row=row).to_dict(), http.HTTPStatus.OK
 
     def delete(self, id):
         with CockroachHelper(Config("helloworld.yml")) as db:
             result = db.delete_row('Items', id)
+            if result != 'DELETE 1':
+                return ITEM_NOT_FOUND, http.HTTPStatus.NOT_FOUND
 
-        if result != 'DELETE 1':
-            return ITEM_NOT_FOUND_TXT, config.HTTP_STATUS_CODE_NOT_FOUND    
+            return result, http.HTTPStatus.NO_CONTENT
 
-        return result, config.HTTP_STATUS_CODE_NOCONTENT
+
+
+
