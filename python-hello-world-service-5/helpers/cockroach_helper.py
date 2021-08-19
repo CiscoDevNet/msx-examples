@@ -27,21 +27,24 @@ class CockroachHelper(object):
         cockroach_config = config.cockroach
 
         self._conn = None
-        self._databasename = consul_helper.get_string(
-            "thirdpartyservices/defaultapplication/db.cockroach.databaseName",
-            cockroach_config.databasename)
+        # Common configuration.
         self._host = consul_helper.get_string(
             "thirdpartyservices/defaultapplication/db.cockroach.host",
             cockroach_config.host)
         self._port = consul_helper.get_string(
             "thirdpartyservices/defaultapplication/db.cockroach.port",
             cockroach_config.port)
+        self._sslmode = consul_helper.get_string(
+            "thirdpartyservices/defaultapplication/db.cockroach.sslmode",
+            cockroach_config.sslmode)
+
+        # Application configuration.
+        self._databasename = consul_helper.get_string(
+            "thirdpartyservices/helloworldservice/db.cockroach.databaseName",
+            cockroach_config.databasename)
         self._username = consul_helper.get_string(
             "thirdpartyservices/helloworldservice/db.cockroach.username",
             cockroach_config.username)
-        self._sslmode = consul_helper.get_string(
-            "thirdpartyservices/helloworldservice/db.cockroach.sslmode",
-            cockroach_config.sslmode)
         self._password = vault_helper.get_string(
             "thirdpartyservices/helloworldservice",
             "db.cockroach.password",
@@ -203,15 +206,3 @@ class CockroachHelper(object):
         self._conn.commit()
         logging.info(f'Database status message={statusmessage}')
         return statusmessage
-
-
-def main():
-    config = Config("helloworld.yml")
-
-    with CockroachHelper(config.cockroach) as db:
-        db.log_status()
-        db.test()
-
-
-if __name__ == "__main__":
-    main()

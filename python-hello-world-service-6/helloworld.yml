@@ -20,8 +20,7 @@ cockroach:
   port: "26257"
   databasename: "helloworld"
   username: "root"
-  sslmode: "require"
-#  sslmode: "disable"
+  sslmode: "disable"
   cacert: "/etc/ssl/certs/ca-bundle.crt" # Required by MSX.
     
 swagger:
