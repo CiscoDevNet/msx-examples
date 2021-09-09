@@ -13,7 +13,11 @@ import urllib3
 urllib3.disable_warnings()
 
 MY_SERVER_URL = "https://dev-plt-aio1.lab.ciscomsx.com"
-VERIFY_SSL = False  # TODO - Do not defeat the SSL certificate in production code!
+
+# <DANGER> Do not defeat the SSL certificate in production.
+VERIFY_SSL = False
+# </DANGER>
+
 MY_CLIENT_ID = "hello-world-service-private-client"
 MY_CLIENT_SECRET = "make-up-a-private-client-secret-and-keep-it-safe"
 MY_USERNAME = "superuser"
@@ -49,12 +53,13 @@ def main():
     basic_authorization = "Basic " + basic_token.decode()
 
     access_token = get_access_token(authorization=basic_authorization, username=MY_USERNAME, password=MY_PASSWORD)
+    print(f"Got Access Token")
     api_client = get_api_client(access_token=access_token)
     tenants_api = TenantsApi(api_client)
 
     body = TenantCreate(
         name="my_unique_tenant_name_" + str(uuid.uuid4()),
-        description="Monsters exist, but they are too few in number to be truly dangerous. More dangerous are the common men, the functionaries ready to believe and to act without asking questions. --Primo Levi",
+        description="Nobody reaches anywhere by believing. --Osho",
         email="test@example.com",
         url="https://cisco.com")
 
@@ -62,6 +67,7 @@ def main():
     print(f"Created Tenant: {tenant1.id}")
 
     page0 = tenants_api.get_tenants_page(0, 100)
+    print(f"Got Tenants Page")
     print("\n".join(map(lambda x: format_tenant(x), page0.contents)))
 
     tenants_api.delete_tenant(tenant1.id)
