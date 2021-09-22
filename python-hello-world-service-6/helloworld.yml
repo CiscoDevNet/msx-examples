@@ -26,6 +26,6 @@ cockroach:
 swagger:
   rootpath: "/helloworld"             # Required by MSX.
   secure: true                        # Required by MSX.
-  ssourl: "http://localhost:9515/idm" # CONSUL thirdpartyservices/defaultapplication/swagger.security.sso.baseUrl
-  clientid: "local-public-client"     # CONSUL thirdpartyservices/helloworldservice/public.security.clientId
+  ssourl: "http://localhost:9515/idm" # CONSUL {prefix}/defaultapplication/swagger.security.sso.baseUrl
+  clientid: "local-public-client"     # CONSUL {prefix}/helloworldservice/public.security.clientId
   swaggerjsonpath: "swagger.json"     # Required by MSX.
