@@ -16,12 +16,13 @@ from helpers.vault_helper import VaultHelper
 logging.basicConfig(level=logging.INFO)
 
 config = Config("helloworld.yml")
-consul = ConsulHelper(config.consul)
-vault = VaultHelper(config.vault)
+consul_helper = ConsulHelper(config.consul)
+vault_helper = VaultHelper(config.vault)
+config.find_consul_vault_prefix(consul_helper)
 
 app = Flask(__name__)
-consul.test()
-vault.test()
+consul_helper.test(config.config_prefix)
+vault_helper.test(config.config_prefix)
 
 api = Api(app)
 api.add_resource(ItemsApi, "/helloworld/api/v1/items")

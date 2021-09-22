@@ -16,6 +16,8 @@ Containers:
     Tags:
       - "3.10.0"
       - "4.0.0"
+      - "4.1.0"
+      - "4.2.0"
       - "name=Hello World Service"
       - "componentAttributes=serviceName:helloworldservice~context:helloworld~name:Hello World Service~description:Hello World service with support for multiple languages."
     Check:
@@ -27,8 +29,8 @@ Containers:
       InitialDelaySec: 300
       TimeoutSec: 120
     Limits:
-      Memory: "1500Mi"
-      CPU: "2"
+      Memory: "1000Mi"
+      CPU: "1"
     Command:
       - "/usr/local/bin/flask"
       - "run"

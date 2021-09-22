@@ -15,10 +15,10 @@ class SwaggerHelper(object):
 
     def get_documentation_config(self):
         sso_url = self._consul_helper.get_string(
-            key="thirdpartyservices/defaultapplication/swagger.security.sso.baseUrl",
+            key=f"{self._config.config_prefix}/defaultapplication/swagger.security.sso.baseUrl",
             default=self._config.swagger.ssourl)
         client_id = self._consul_helper.get_string(
-            key="thirdpartyservices/helloworldservice/public.security.clientId",
+            key=f"{self._config.config_prefix}/helloworldservice/public.security.clientId",
             default=self._config.swagger.clientid)
 
         return DocumentationConfig(

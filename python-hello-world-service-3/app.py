@@ -13,11 +13,11 @@ import logging
 logging.basicConfig(level=logging.INFO)
 
 config = Config("helloworld.yml")
-consul = ConsulHelper(config.consul)
-
+consul_helper = ConsulHelper(config.consul)
+config.find_consul_vault_prefix(consul_helper)
 
 app = Flask(__name__)
-consul.test()
+consul_helper.test(config.config_prefix)
 
 api = Api(app)
 api.add_resource(ItemsApi, "/helloworld/api/v1/items")

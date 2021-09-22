@@ -19,10 +19,11 @@ logging.basicConfig(level=logging.INFO)
 config = Config("helloworld.yml")
 consul_helper = ConsulHelper(config.consul)
 vault_helper = VaultHelper(config.vault)
+config.find_consul_vault_prefix(consul_helper)
 
 app = Flask(__name__)
-consul_helper.test()
-vault_helper.test()
+consul_helper.test(config.config_prefix)
+vault_helper.test(config.config_prefix)
 
 with CockroachHelper(config) as db:
     db.test()
