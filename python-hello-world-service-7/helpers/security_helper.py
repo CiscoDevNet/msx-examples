@@ -17,13 +17,13 @@ class SecurityHelper(object):
 
     def get_config(self, cache_enabled, cache_ttl_seconds):
         sso_url = self._consul_helper.get_string(
-            key="thirdpartyservices/defaultapplication/swagger.security.sso.baseUrl",
+            key=f"{self._config.config_prefix}/defaultapplication/swagger.security.sso.baseUrl",
             default=self._config.security.ssourl)
         client_id = self._consul_helper.get_string(
-            key="thirdpartyservices/helloworldservice/integration.security.clientId",
+            key=f"{self._config.config_prefix}/helloworldservice/integration.security.clientId",
             default=self._config.security.clientid)
         client_secret = self._vault_helper.get_string(
-            secret="thirdpartyservices/helloworldservice",
+            secret=f"{self._config.config_prefix}/helloworldservice",
             key="integration.security.clientSecret",
             default=self._config.security.clientsecret)
 

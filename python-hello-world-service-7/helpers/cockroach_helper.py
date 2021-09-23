@@ -29,24 +29,24 @@ class CockroachHelper(object):
         self._conn = None
         # Common configuration.
         self._host = consul_helper.get_string(
-            "thirdpartyservices/defaultapplication/db.cockroach.host",
+            f"{config.config_prefix}/defaultapplication/db.cockroach.host",
             cockroach_config.host)
         self._port = consul_helper.get_string(
-            "thirdpartyservices/defaultapplication/db.cockroach.port",
+            f"{config.config_prefix}/defaultapplication/db.cockroach.port",
             cockroach_config.port)
         self._sslmode = consul_helper.get_string(
-            "thirdpartyservices/defaultapplication/db.cockroach.sslmode",
+            f"{config.config_prefix}/defaultapplication/db.cockroach.sslmode",
             cockroach_config.sslmode)
 
         # Application configuration.
         self._databasename = consul_helper.get_string(
-            "thirdpartyservices/helloworldservice/db.cockroach.databaseName",
+            f"{config.config_prefix}/helloworldservice/db.cockroach.databaseName",
             cockroach_config.databasename)
         self._username = consul_helper.get_string(
-            "thirdpartyservices/helloworldservice/db.cockroach.username",
+            f"{config.config_prefix}/helloworldservice/db.cockroach.username",
             cockroach_config.username)
         self._password = vault_helper.get_string(
-            "thirdpartyservices/helloworldservice",
+            f"{config.config_prefix}/helloworldservice",
             "db.cockroach.password",
             "")
         self._cacert = cockroach_config.cacert
@@ -206,4 +206,3 @@ class CockroachHelper(object):
         self._conn.commit()
         logging.info(f'Database status message={statusmessage}')
         return statusmessage
-

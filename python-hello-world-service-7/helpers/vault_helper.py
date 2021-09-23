@@ -26,10 +26,9 @@ class VaultHelper(object):
             logging.error(str(e))
         return default
 
-    def test(self):
+    def test(self, prefix):
         # Read a secret from Vault  and it to the console.
         # Do not leak secrets in production as it is a security violation.
-        secret_squirrel_location = self.get_string("thirdpartyservices/helloworldservice/", "secret.squirrel.location", "UNKNOWN")
+        secret_squirrel_location = self.get_string(f"{prefix}/helloworldservice/", "secret.squirrel.location", "UNKNOWN")
         logging.info("Where are the acorns buried?")
         logging.info(secret_squirrel_location)
-
