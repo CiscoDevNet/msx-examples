@@ -54,6 +54,7 @@ type Vault struct {
 	Token           string
 	CACert          string
 	Insecure        bool
+	Prefix          string
 }
 
 // Consul represent the Consul config options.
@@ -63,6 +64,7 @@ type Consul struct {
 	CACert   string
 	Insecure bool
 	Token    string
+	Prefix   string
 }
 
 func ReadConfig() *Config {

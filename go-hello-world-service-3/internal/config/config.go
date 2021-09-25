@@ -23,6 +23,7 @@ type Consul struct {
 	CACert   string
 	Insecure bool
 	Token    string
+	Prefix   string
 }
 
 func ReadConfig() *Config {

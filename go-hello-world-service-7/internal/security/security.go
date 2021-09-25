@@ -5,12 +5,12 @@
 package security
 
 import (
+	"fmt"
+	"github.com/CiscoDevNet/go-msx-security"
 	openapi "github.com/CiscoDevNet/msx-examples/go-hello-world-service-7/go"
 	"github.com/CiscoDevNet/msx-examples/go-hello-world-service-7/internal/config"
 	"github.com/CiscoDevNet/msx-examples/go-hello-world-service-7/internal/consul"
 	"github.com/CiscoDevNet/msx-examples/go-hello-world-service-7/internal/vault"
-	"github.com/CiscoDevNet/go-msx-security"
-	"fmt"
 	"github.com/gorilla/mux"
 	"net/http"
 )
@@ -26,11 +26,9 @@ type EnsureAuth struct {
 
 // Override configuration with values from Consul and Vault.
 func UpdateConfig(c *config.Config, consul *consul.HelloWorldConsul, vault *vault.HelloWorldVault) error {
-	c.Security.SsoURL, _ = consul.GetString("thirdpartyservices/defaultapplication/swagger.security.sso.baseUrl", c.Security.SsoURL)
-
-	c.Security.ClientID, _ = consul.GetString("thirdpartyservices/helloworldservice/integration.security.clientId", c.Security.ClientID)
-
-	c.Security.ClientSecret, _ = vault.GetString("secret/thirdpartyservices/helloworldservice", "integration.security.clientSecret", c.Security.ClientSecret)
+	c.Security.SsoURL, _ = consul.GetString(c.Consul.Prefix + "/defaultapplication/swagger.security.sso.baseUrl", c.Security.SsoURL)
+	c.Security.ClientID, _ = consul.GetString(c.Consul.Prefix + "/helloworldservice/integration.security.clientId", c.Security.ClientID)
+	c.Security.ClientSecret, _ = vault.GetString(c.Vault.Prefix + "/helloworldservice", "integration.security.clientSecret", c.Security.ClientSecret)
 	return nil
 }
 
