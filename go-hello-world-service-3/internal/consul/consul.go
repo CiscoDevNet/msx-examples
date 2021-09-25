@@ -5,8 +5,8 @@
 package consul
 
 import (
-	"github.com/CiscoDevNet/msx-examples/go-hello-world-service-3/internal/config"
 	"fmt"
+	"github.com/CiscoDevNet/msx-examples/go-hello-world-service-3/internal/config"
 	"github.com/hashicorp/consul/api"
 	"net/url"
 )
@@ -61,6 +61,15 @@ func (p *HelloWorldConsul) GetString(key string, defaultValue string) (string, e
 	return defaultValue, error
 }
 
+func (p *HelloWorldConsul) FindPrefix() string {
+	_, err  := p.GetString("thirdpartycomponents/defaultapplication/swagger.security.sso.baseUrl", "")
+	if err == nil {
+		return "thirdpartycomponents"
+	} else {
+		return "thirdpartyservices"
+	}
+}
+
 func NewConsul(cfg *config.Config) (HelloWorldConsul, error) {
 	ic := HelloWorldConsul{
 		Config: cfg.Consul,
@@ -71,3 +80,4 @@ func NewConsul(cfg *config.Config) (HelloWorldConsul, error) {
 	}
 	return ic, nil
 }
+

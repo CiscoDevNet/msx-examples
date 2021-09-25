@@ -40,12 +40,12 @@ type Cockroach struct {
 }
 
 func UpdateConfig(c *config.Config, consul *consul.HelloWorldConsul, vault *vault.HelloWorldVault) error {
-	c.Cockroach.Host, _         = consul.GetString("thirdpartyservices/defaultapplication/db.cockroach.host", c.Cockroach.Host)
-	c.Cockroach.Port, _         = consul.GetString("thirdpartyservices/defaultapplication/db.cockroach.port", c.Cockroach.Port)
-	c.Cockroach.SSLMode, _      = consul.GetString("thirdpartyservices/defaultapplication/db.cockroach.sslmode", c.Cockroach.SSLMode)
-	c.Cockroach.DatabaseName, _ = consul.GetString("thirdpartyservices/helloworldservice/db.cockroach.databaseName", c.Cockroach.DatabaseName)
-	c.Cockroach.Username, _     = consul.GetString("thirdpartyservices/helloworldservice/db.cockroach.username", c.Cockroach.Username)
-	c.Cockroach.Password, _     = vault.GetString("secret/thirdpartyservices/helloworldservice", "db.cockroach.password", c.Cockroach.Password)
+	c.Cockroach.Host, _         = consul.GetString(c.Consul.Prefix + "/defaultapplication/db.cockroach.host", c.Cockroach.Host)
+	c.Cockroach.Port, _         = consul.GetString(c.Consul.Prefix + "/defaultapplication/db.cockroach.port", c.Cockroach.Port)
+	c.Cockroach.SSLMode, _      = consul.GetString(c.Consul.Prefix + "/defaultapplication/db.cockroach.sslmode", c.Cockroach.SSLMode)
+	c.Cockroach.DatabaseName, _ = consul.GetString(c.Consul.Prefix + "/helloworldservice/db.cockroach.databaseName", c.Cockroach.DatabaseName)
+	c.Cockroach.Username, _     = consul.GetString(c.Consul.Prefix + "/helloworldservice/db.cockroach.username", c.Cockroach.Username)
+	c.Cockroach.Password, _     = vault.GetString(c.Vault.Prefix + "/helloworldservice", "db.cockroach.password", c.Cockroach.Password)
 	return nil
 }
 

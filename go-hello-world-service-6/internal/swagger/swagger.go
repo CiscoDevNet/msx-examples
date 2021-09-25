@@ -5,16 +5,16 @@
 package swagger
 
 import (
+	"github.com/CiscoDevNet/go-msx-swagger"
 	"github.com/CiscoDevNet/msx-examples/go-hello-world-service-6/internal/config"
 	"github.com/CiscoDevNet/msx-examples/go-hello-world-service-6/internal/consul"
 	"github.com/CiscoDevNet/msx-examples/go-hello-world-service-6/internal/vault"
-	"github.com/CiscoDevNet/go-msx-swagger"
 )
 
 // Override configuration with values from Consul and Vault.
 func UpdateConfig(c *config.Config, consul *consul.HelloWorldConsul, vault *vault.HelloWorldVault) error {
-	c.Swagger.SsoURL, _ = consul.GetString("thirdpartyservices/defaultapplication/swagger.security.sso.baseUrl", c.Swagger.SsoURL)
-	c.Swagger.ClientID, _ = consul.GetString("thirdpartyservices/helloworldservice/public.security.clientId", c.Swagger.ClientID)
+	c.Swagger.SsoURL, _ = consul.GetString(c.Consul.Prefix + "/defaultapplication/swagger.security.sso.baseUrl", c.Swagger.SsoURL)
+	c.Swagger.ClientID, _ = consul.GetString(c.Consul.Prefix + "/helloworldservice/public.security.clientId", c.Swagger.ClientID)
 	return nil
 }
 
