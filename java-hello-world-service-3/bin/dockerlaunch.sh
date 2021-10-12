@@ -22,7 +22,7 @@ JAVA_OPTS=${JAVA_OPTS:-" \\
   -XX:+HeapDumpOnOutOfMemoryError \\
   -XX:HeapDumpPath=/data/conf/dump.hprof"}
 
-CMD="exec java -Djavax.net.ssl.trustStore=/keystore/msxtruststore.jks $JAVA_OPTS -jar /service/$SERVICE_JAR $@"
+CMD="exec java -Djavax.net.ssl.trustStore=/keystore/msxtruststore.jks $@ $JAVA_OPTS -jar /service/$SERVICE_JAR"
 
 echo "$CMD"
 eval "$CMD"

@@ -20,7 +20,7 @@ spring:
       port: 8500
       config:
         enabled: true
-        prefix: thirdpartyservices
+        prefix: thirdpartycomponents
         defaultContext: defaultapplication
 
 server:

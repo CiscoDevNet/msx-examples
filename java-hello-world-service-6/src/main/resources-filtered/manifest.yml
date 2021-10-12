@@ -32,6 +32,8 @@ Containers:
     Tags:
       - "3.10.0"
       - "4.0.0"
+      - "4.1.0"
+      - "4.2.0"
       - "managedMicroservice"
       - "buildNumber=@project.version@"
       - "name=@project.artifactId@"
@@ -64,6 +66,8 @@ Containers:
     # Command to use to start the application.
     Command:
       - "/service/dockerlaunch.sh"
+      # Set the profile for MSX <= 4.0
+      # - "-Dspring.profiles.active=legacy"
 
 
 # [Optional] Configuration section for infrastructure needs such as database for your application.
