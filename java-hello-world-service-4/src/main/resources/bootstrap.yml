@@ -20,7 +20,7 @@ spring:
       port: 8500
       config:
         enabled: true
-        prefix: thirdpartyservices
+        prefix: thirdpartycomponents
         defaultContext: defaultapplication
     vault:
       host: localhost
@@ -29,7 +29,7 @@ spring:
       kv:
         default-context: defaultapplication
         enabled: true
-        backend: secret/thirdpartyservices
+        backend: secret/thirdpartycomponents
       authentication: TOKEN
       token: replace_with_token_value # replace with actual token value or provide this value via another property source
 
