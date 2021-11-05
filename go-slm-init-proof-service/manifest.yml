@@ -1,0 +1,58 @@
+#
+# Copyright (c) 2021 Cisco Systems, Inc and its affiliates
+# All Rights reserved
+#
+---
+Name: "slminitproofservice"
+Description: "SLM Init Proof service with support for multiple languages."
+Version: "1.0.0"
+Type: Internal
+Containers:
+  - Name: "slminitproofservice"
+    Version: "1.0.0"
+    Artifact: "slminitproofservice-1.0.0.tar.gz"
+    Port: 8080
+    ContextPath: "/slminitproof"
+    Tags:
+      - "3.10.0"
+      - "4.0.0"
+      - "4.1.0"
+      - "4.2.0"
+      - "name=Hello World Service"
+      - "componentAttributes=serviceName:slminitproofservice~context:slminitproof~name:Hello World Service~description:Hello World service with support for multiple languages."
+    Check:
+      Http:
+        Scheme: "http"
+        Host: "127.0.0.1"
+        Path: "/slminitproof/api/v1/items"
+      IntervalSec: 60
+      InitialDelaySec: 30
+      TimeoutSec: 30
+    Limits:
+      Memory: "256Mi"
+      CPU: "1"
+    Command:
+      - "/slminitproof"
+
+ConfigFiles:
+  - Name: "helloworld.yml"
+    MountTo:
+      Container: "slminitproofservice"
+      Path: "/helloworld.yml"
+
+ConsulKeys:
+  - Name: "favourite.color"
+    Value: "Green"
+  - Name: "favourite.food"
+    Value: "Pizza"
+  - Name: "favourite.dinosaur"
+    Value: "Moros Intrepidus"
+
+Secrets:
+  - Name: "secret.squirrel.location"
+    Value: "The acorns are buried under the big oak tree!"
+
+Infrastructure:
+  Database:
+    Type: Cockroach
+    Name: "helloworld"
