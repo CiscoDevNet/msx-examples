@@ -15,6 +15,16 @@ To see how to make this your own, look here:
 - API version: 1
 - Build date: 2021-03-15T11:03:59.253350-04:00[America/New_York]
 
+The purpose of this exercise is to validate that SLM can execute an initialization job prior to starting a microservice. 
+Such initialization job is loaded as a container within component. 
+Special directive in the container manifest suggests SLM loading the initialization job prior to load the microservice:
+
+PrePopulate:
+  Uid: slminitproofservice-1.0.0 
+
+This example presents component and a microservice that executed after the initialization job is finished. 
+The initialization job container implemented in the ‘go-slm-init-proof-service’ example
+
 
 ### Running the server
 To run the server, follow these simple steps:
