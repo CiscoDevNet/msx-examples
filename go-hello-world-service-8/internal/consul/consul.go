@@ -6,6 +6,7 @@ package consul
 
 import (
 	"fmt"
+	"log"
 	"net/url"
 
 	"github.com/CiscoDevNet/msx-examples/go-hello-world-service-8/internal/config"
@@ -55,10 +56,13 @@ func (p *HelloWorldConsul) GetValue(key string) ([]byte, error) {
 }
 
 func (p *HelloWorldConsul) GetString(key string, defaultValue string) (string, error) {
+	log.Printf("Consul GetString  key=%s", key)
 	value, error := p.GetValue(key)
 	if error == nil {
+		log.Printf("Consul GetString value=%s", value)
 		return string(value), error
 	}
+	log.Printf("Consul failed to GetString Error=%s, defaultValue=%s", error.Error(), defaultValue)
 	return defaultValue, error
 }
 

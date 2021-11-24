@@ -19,7 +19,7 @@ import (
 func main() {
 	// Read the configuration.
 	config := config.ReadConfig()
-	log.Printf("go-slm-init-proof-service Server started")
+	log.Printf("go-slm-init-proof-service Server started config=%#v", config)
 
 	// Setup Consul.
 	consul, err := consul.NewConsul(config)
@@ -60,19 +60,23 @@ func main() {
 func testConsul(config *config.Config, consul *consul.HelloWorldConsul) {
 	// Read our favourites from Consul and print them to the console.
 	// Do not leak config in production as it is a security violation.
+
+	// log.Printf("config.Consul=%#v", config.Consul)
+	// log.Printf("consul=%#v", consul)
+
 	log.Printf("config.Consul.Prefix=%s.", config.Consul.Prefix)
-	favouriteColor, _ := consul.GetString(config.Consul.Prefix+"/slminitproofservice/favourite.color", "UNKNOWN")
+	favouriteColor, _ := consul.GetString(config.Consul.Prefix+"/helloworldservice/favourite.color", "UNKNOWN")
 	log.Printf("My favourite color is %s.", favouriteColor)
-	favouriteFood, _ := consul.GetString(config.Consul.Prefix+"/slminitproofservice/favourite.food", "UNKNOWN")
+	favouriteFood, _ := consul.GetString(config.Consul.Prefix+"/helloworldservice/favourite.food", "UNKNOWN")
 	log.Printf("My favourite food is %s.", favouriteFood)
-	favouriteDinosaur, _ := consul.GetString(config.Consul.Prefix+"/slminitproofservice/favourite.dinosaur", "UNKNOWN")
+	favouriteDinosaur, _ := consul.GetString(config.Consul.Prefix+"/helloworldservice/favourite.dinosaur", "UNKNOWN")
 	log.Printf("My favourite dinosaur is %s.", favouriteDinosaur)
 }
 
 func testVault(config *config.Config, vault *vault.HelloWorldVault) {
 	// Read a secret from Vault and it to the console.
 	// Do not leak secrets in production as it is a security violation.
-	secretSquirrelLocation, _ := vault.GetString(config.Vault.Prefix+"/slminitproofservice/", "secret.squirrel.location", "UNKNOWN")
+	secretSquirrelLocation, _ := vault.GetString(config.Vault.Prefix+"/helloworldservice/", "secret.squirrel.location", "UNKNOWN")
 	log.Printf("Where are the acorns buried?")
 	log.Print(secretSquirrelLocation)
 }
@@ -82,9 +86,12 @@ func testDb(db *datastore.Cockroach) {
 
 	result, err := db.GetLanguages(ctx)
 	if err != nil {
-		log.Printf("GetLanguages 1 Error=%s", err.Error())
+		log.Printf("GetLanguages Error=%s", err.Error())
 		return
 	}
+
+	log.Printf("GetLanguages Result Code=%d", result.Code)
+	log.Printf("GetLanguages Result Body=%#v", result.Body)
 
 	languages, ok := result.Body.([]openapi.Language)
 	if ok && containsLanguage(languages, "French") {

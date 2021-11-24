@@ -44,9 +44,9 @@ func UpdateConfig(c *config.Config, consul *consul.HelloWorldConsul, vault *vaul
 	c.Cockroach.Host, _ = consul.GetString(c.Consul.Prefix+"/defaultapplication/db.cockroach.host", c.Cockroach.Host)
 	c.Cockroach.Port, _ = consul.GetString(c.Consul.Prefix+"/defaultapplication/db.cockroach.port", c.Cockroach.Port)
 	c.Cockroach.SSLMode, _ = consul.GetString(c.Consul.Prefix+"/defaultapplication/db.cockroach.sslmode", c.Cockroach.SSLMode)
-	c.Cockroach.DatabaseName, _ = consul.GetString(c.Consul.Prefix+"/slminitproofservice/db.cockroach.databaseName", c.Cockroach.DatabaseName)
-	c.Cockroach.Username, _ = consul.GetString(c.Consul.Prefix+"/slminitproofservice/db.cockroach.username", c.Cockroach.Username)
-	c.Cockroach.Password, _ = vault.GetString(c.Vault.Prefix+"/slminitproofservice", "db.cockroach.password", c.Cockroach.Password)
+	c.Cockroach.DatabaseName, _ = consul.GetString(c.Consul.Prefix+"/helloworldservice/db.cockroach.databaseName", c.Cockroach.DatabaseName)
+	c.Cockroach.Username, _ = consul.GetString(c.Consul.Prefix+"/helloworldservice/db.cockroach.username", c.Cockroach.Username)
+	c.Cockroach.Password, _ = vault.GetString(c.Vault.Prefix+"/helloworldservice", "db.cockroach.password", c.Cockroach.Password)
 	return nil
 }
 

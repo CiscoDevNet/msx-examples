@@ -56,6 +56,7 @@ func ReadConfig() *Config {
 	v.AddConfigPath("/etc/slminitproof/")
 	v.AddConfigPath(".")
 	v.SetEnvPrefix("slminitproof")
+
 	v.SetEnvKeyReplacer(strings.NewReplacer(".", "_"))
 	v.AutomaticEnv()
 	if err := v.ReadInConfig(); err != nil {
@@ -75,8 +76,12 @@ func ReadConfig() *Config {
 	bindConfig(v, "Vault.Port", "SPRING_CLOUD_VAULT_PORT")
 	bindConfig(v, "Vault.Token", "SPRING_CLOUD_VAULT_TOKEN")
 
+	log.Printf("viper after binding=%#v", v)
+
 	var c Config
+	// log.Printf("before unmarshal c=%#v", c)
 	v.Unmarshal(&c)
+	// log.Printf("Config after viper unmarshal c=%#v", c)
 	return &c
 }
 
