@@ -70,6 +70,7 @@ func NewCockroachDB(c *config.Config) (*Cockroach, error) {
 			c.Cockroach.CACert)
 	}
 
+	log.Printf("HW8 CockroachDB connString =%s", connString)
 	conf, err := pgxpool.ParseConfig(connString)
 	if err != nil {
 		return nil, err

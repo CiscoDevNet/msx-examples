@@ -69,6 +69,7 @@ func NewCockroachDB(c *config.Config) (*Cockroach, error) {
 			c.Cockroach.SSLMode,
 			c.Cockroach.CACert)
 	}
+	log.Printf("SlmInit CockroachDB connString =%s", connString)
 
 	conf, err := pgxpool.ParseConfig(connString)
 	if err != nil {
@@ -196,21 +197,28 @@ func (c *Cockroach) CreateLanguage(ctx context.Context, l openapi.Language) (ope
 		return openapi.ImplResponse{}, err
 	}
 	l.Id = uuid.New().String()
+
 	defer func() {
 		err = tx.Rollback(context.Background())
 		if err != nil {
 			fmt.Printf("Error rolling back transaction: %s", err.Error())
 		}
 	}()
+
+	log.Printf("MT: CreateLanguage ID=%s, Name=%s, Description=%s", l.Id, l.Name, l.Description)
+
 	_, err = tx.Exec(context.Background(),
 		"UPSERT INTO helloworld.Languages (ID, Name, Description) VALUES ($1,$2,$3)",
 		l.Id,
 		l.Name,
 		l.Description,
 	)
+
 	if err != nil {
+		log.Printf("MT: Exec UPSERT ERROR %s", err.Error())
 		return openapi.ImplResponse{}, err
 	}
+
 	err = tx.Commit(context.Background())
 	return openapi.ImplResponse{
 		Code: 200,
@@ -224,6 +232,7 @@ func (c *Cockroach) GetLanguage(ctx context.Context, id string) (openapi.ImplRes
 		"SELECT ID, Name, Description FROM helloworld.Languages WHERE ID=$1 LIMIT 1", id).
 		Scan(&i.Id, &i.Name, &i.Description)
 	if err != nil {
+		fmt.Printf("Failed to GetLanguage: %s", err.Error())
 		return openapi.ImplResponse{}, err
 	}
 	return openapi.ImplResponse{
