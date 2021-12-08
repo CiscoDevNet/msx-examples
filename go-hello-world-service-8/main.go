@@ -21,7 +21,7 @@ import (
 func main() {
 	// Read the configuration.
 	config := config.ReadConfig()
-	log.Printf("Server started= config%#v", config)
+	log.Printf("Service started")
 
 	// Setup Consul.
 	consul, err := consul.NewConsul(config)

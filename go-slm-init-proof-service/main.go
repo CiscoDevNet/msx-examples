@@ -19,7 +19,7 @@ import (
 func main() {
 	// Read the configuration.
 	config := config.ReadConfig()
-	log.Printf("go-slm-init-proof-service Server started config=%#v", config)
+	log.Printf("go-slm-init-proof-service Server started")
 
 	// Setup Consul.
 	consul, err := consul.NewConsul(config)
