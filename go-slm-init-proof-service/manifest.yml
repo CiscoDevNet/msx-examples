@@ -20,14 +20,6 @@ Containers:
       - "4.2.0"
       - "name=SLM Init Init Proof Service"
       - "componentAttributes=serviceName:slminitproofservice~context:slminitproof~name:Hello World Service~description:Hello World service with support for multiple languages."
-    Check:
-      Http:
-        Scheme: "http"
-        Host: "127.0.0.1"
-        Path: "/slminitproof/api/v1/items"
-      IntervalSec: 60
-      InitialDelaySec: 30
-      TimeoutSec: 30
     Limits:
       Memory: "256Mi"
       CPU: "1"

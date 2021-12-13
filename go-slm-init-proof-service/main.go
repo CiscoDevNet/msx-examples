@@ -49,12 +49,6 @@ func main() {
 	}
 
 	testDb(db)
-
-	// Create the resource controllers.
-	// ItemsApiController := openapi.NewItemsApiController(db)
-	// LanguagesApiController := openapi.NewLanguagesApiController(db)
-	// router := openapi.NewRouter(ItemsApiController, LanguagesApiController)
-	// log.Fatal(http.ListenAndServe(":8081", router))
 }
 
 func testConsul(config *config.Config, consul *consul.HelloWorldConsul) {
