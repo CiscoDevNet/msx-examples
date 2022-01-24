@@ -26,10 +26,15 @@ class SecurityHelper(object):
             secret=f"{self._config.config_prefix}/helloworldservice",
             key="integration.security.clientSecret",
             default=self._config.security.clientsecret)
+        ssl_verify = self._vault_helper.get_string(
+            secret=f"{self._config.config_prefix}/helloworldservice",
+            key="integration.security.sslVerify",
+            default=self._config.security.sslverify)
 
         return MSXSecurityConfig(
             sso_url=sso_url,
             client_id=client_id,
             client_secret=client_secret,
+            ssl_verify=ssl_verify,            
             cache_enabled=cache_enabled,
             cache_ttl_seconds=cache_ttl_seconds)

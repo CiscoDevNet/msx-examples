@@ -33,3 +33,5 @@ security:
   ssourl: "http://localhost:9515/idm"                              # CONSUL {prefix}/defaultapplication/swagger.security.sso.baseUrl
   clientid: "local-private-client"                                 # CONSUL {prefix}/helloworldservice/integration.security.clientId
   clientsecret: "make-up-a-private-client-secret-and-keep-it-safe" # Required by MSX.
+  sslverify: true
+  
