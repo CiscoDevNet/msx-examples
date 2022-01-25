@@ -12,7 +12,7 @@ ConsulConfig = namedtuple("ConsulConfig", ["host", "port", "cacert"])
 VaultConfig = namedtuple("VaultConfig", ["scheme", "host", "port", "token", "cacert"])
 CockroachConfig = namedtuple("CockroachConfig", ["host", "port", "databasename","username", "sslmode", "cacert"])
 SwaggerConfig = namedtuple("SwaggerConfig", ["rootpath", "secure", "ssourl", "clientid", "swaggerjsonpath"])
-SecurityConfig = namedtuple("SecurityConfig", ["ssourl", "clientid", "clientsecret"])
+SecurityConfig = namedtuple("SecurityConfig", ["ssourl", "clientid", "clientsecret", "sslverify"])
 
 
 class Config(object):
