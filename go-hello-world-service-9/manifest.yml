@@ -13,18 +13,11 @@ Infrastructure:
     Type: Cockroach
     Name: "helloworld"
 
-PrePopulate:
-  Uid: slminitproofservice-1.0.0
-
 ConfigFiles:
   - Name: "helloworld.yml"
     MountTo:
       Container: "helloworldservice"
       Path: "/helloworld.yml"
-  - Name: "slminitproof.yml"
-    MountTo:
-      Container: "slminitproofservice"
-      Path: "/slminitproof.yml"
 
 ConsulKeys:
   - Name: "favourite.color"
@@ -71,26 +64,3 @@ Containers:
       CPU: "1"
     Command:
       - "/helloworld"
-
-  - Name: "slminitproofservice"
-    Version: "1.0.0"
-    Artifact: "slminitproofservice-1.0.0.tar.gz"
-    Port: 8081
-    ContextPath: "/slminitproof"
-    Uid: slminitproofservice-1.0.0
-    Tags:
-      - "4.2.0"
-      - "name=SLM Init Proof Service"
-    Check:
-      Http:
-        Scheme: "http"
-        Host: "127.0.0.1"
-        Path: "/slminitproof/api/v1/items"
-      IntervalSec: 60
-      InitialDelaySec: 30
-      TimeoutSec: 30
-    Limits:
-      Memory: "256Mi"
-      CPU: "1"
-    Command:
-      - "/slminitproof"

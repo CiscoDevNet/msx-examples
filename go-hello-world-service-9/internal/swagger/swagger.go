@@ -6,9 +6,9 @@ package swagger
 
 import (
 	msxswagger "github.com/CiscoDevNet/go-msx-swagger"
-	"github.com/CiscoDevNet/msx-examples/go-hello-world-service-8/internal/config"
-	"github.com/CiscoDevNet/msx-examples/go-hello-world-service-8/internal/consul"
-	"github.com/CiscoDevNet/msx-examples/go-hello-world-service-8/internal/vault"
+	"github.com/CiscoDevNet/msx-examples/go-hello-world-service-9/internal/config"
+	"github.com/CiscoDevNet/msx-examples/go-hello-world-service-9/internal/consul"
+	"github.com/CiscoDevNet/msx-examples/go-hello-world-service-9/internal/vault"
 )
 
 // Override configuration with values from Consul and Vault.

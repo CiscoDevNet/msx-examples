@@ -5,17 +5,16 @@
 package main
 
 import (
+	"context"
+	openapi "github.com/CiscoDevNet/msx-examples/go-hello-world-service-9/go"
+	"github.com/CiscoDevNet/msx-examples/go-hello-world-service-9/internal/config"
+	"github.com/CiscoDevNet/msx-examples/go-hello-world-service-9/internal/consul"
+	"github.com/CiscoDevNet/msx-examples/go-hello-world-service-9/internal/datastore"
+	"github.com/CiscoDevNet/msx-examples/go-hello-world-service-9/internal/stream"
+	"github.com/CiscoDevNet/msx-examples/go-hello-world-service-9/internal/swagger"
+	"github.com/CiscoDevNet/msx-examples/go-hello-world-service-9/internal/vault"
 	"log"
 	"net/http"
-
-	"github.com/CiscoDevNet/msx-examples/go-hello-world-service-8/internal/config"
-	"github.com/CiscoDevNet/msx-examples/go-hello-world-service-8/internal/consul"
-	"github.com/CiscoDevNet/msx-examples/go-hello-world-service-8/internal/datastore"
-	"github.com/CiscoDevNet/msx-examples/go-hello-world-service-8/internal/security"
-	"github.com/CiscoDevNet/msx-examples/go-hello-world-service-8/internal/swagger"
-	"github.com/CiscoDevNet/msx-examples/go-hello-world-service-8/internal/vault"
-
-	openapi "github.com/CiscoDevNet/msx-examples/go-hello-world-service-8/go"
 )
 
 func main() {
@@ -57,27 +56,28 @@ func main() {
 		log.Fatalf("Could not setup Swagger: %s", err.Error())
 	}
 
-	// Setup Security.
-	security.UpdateConfig(config, &consul, &vault)
-	err = security.NewSecurity(config)
-	if err != nil {
-		log.Fatalf("Could not setup Security: %s", err.Error())
-	}
-
 	// Setup Controllers
 	ItemsApiController := openapi.NewItemsApiController(db)
 	LanguagesApiController := openapi.NewLanguagesApiController(db)
 
-	// Add insecure routes for Items.
-	router := openapi.NewRouter(ItemsApiController)
-
-	// Add secure routes for Languages.
-	secureRouter := security.AddSecureRoutes(router, LanguagesApiController)
+	// Add insecure routes for Items and Languages.
+	router := openapi.NewRouter(ItemsApiController, LanguagesApiController)
 
 	// Add route for Swagger.
 	router.PathPrefix("/helloworld/swagger").HandlerFunc(swagger.SwaggerRoutes)
-
-	log.Fatal(http.ListenAndServe(":8080", secureRouter))
+	listenToTopics(*config)
+	log.Fatal(http.ListenAndServe(":8080", router))
+}
+func listenToTopics(config config.Config) {
+	kafkaClient, error := stream.NewKafkaService(context.Background())
+	if error != nil {
+		log.Printf("Error opening a connection to kafka, could not listen to topics %s", error)
+	} else {
+		for _, topic := range config.Kafka.Topics.Consume {
+			log.Println("Kicking off consumer for topic ", topic)
+			go kafkaClient.ConsumeTopicMessages(topic)
+		}
+	}
 }
 
 func testConsul(config *config.Config, consul *consul.HelloWorldConsul) {

@@ -18,6 +18,7 @@ type Config struct {
 	Cockroach Cockroach
 	Swagger   Swagger
 	Security  Security
+	Kafka 	  Kafka
 }
 
 // Security config options.
@@ -67,6 +68,28 @@ type Consul struct {
 	Token    string
 	Prefix   string
 }
+type TLSConfig struct {
+	ClientCertificate 	   string   `config:"/etc/ssl/certs/kafka-client.cert"`
+	ClientCertificateKey   string   `config:"/etc/ssl/certs/kafka-client.key"`
+	CaCert 				   string   `config:"/etc/ssl/certs/issuing-cert.cert"`
+}
+
+type KafkaTopics struct {
+	Consume []string
+	Produce []string
+}
+
+type Kafka struct {
+	Brokers                []string `config:"default=localhost"`
+	Port			       int      `config:"default=9093"`
+	RequiredAcks           int      `config:"default=1"`
+	Version                string   `config:"default=2.0.0"`
+	ClientId               string   `config:"default=${spring.application.name}"`
+	ClientIdSuffix         string   `config:"default=${spring.application.instance}"`
+	Partitioner            string   `config:"default=hash"`
+	Topics				   KafkaTopics
+	TLS                    TLSConfig
+}
 
 func ReadConfig() *Config {
 	v := viper.New()
@@ -93,7 +116,6 @@ func ReadConfig() *Config {
 	bindConfig(v, "Vault.Host", "SPRING_CLOUD_VAULT_HOST")
 	bindConfig(v, "Vault.Port", "SPRING_CLOUD_VAULT_PORT")
 	bindConfig(v, "Vault.Token", "SPRING_CLOUD_VAULT_TOKEN")
-
 	var c Config
 	v.Unmarshal(&c)
 	return &c

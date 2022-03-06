@@ -10,7 +10,11 @@
 package openapi
 
 import (
+	"context"
 	"encoding/json"
+	"github.com/CiscoDevNet/msx-examples/go-hello-world-service-9/internal/config"
+	"github.com/CiscoDevNet/msx-examples/go-hello-world-service-9/internal/stream"
+	"log"
 	"net/http"
 	"strings"
 
@@ -20,11 +24,17 @@ import (
 // A LanguagesApiController binds http requests to an api service and writes the service results to the http response
 type LanguagesApiController struct {
 	service LanguagesApiServicer
+	kafkaClient stream.KafkaService
+	config *config.Config
 }
 
 // NewLanguagesApiController creates a default api controller
 func NewLanguagesApiController(s LanguagesApiServicer) Router {
-	return &LanguagesApiController{ service: s }
+	kClient, err := stream.NewKafkaService(context.Background())
+	if err != nil {
+		log.Println("Failed to Create Kafka Client ", err)
+	}
+	return &LanguagesApiController{ service: s, kafkaClient: kClient, config: config.ReadConfig()}
 }
 
 // Routes returns all of the api route for the LanguagesApiController
@@ -75,16 +85,29 @@ func (c *LanguagesApiController) CreateLanguage(w http.ResponseWriter, r *http.R
 		w.WriteHeader(http.StatusBadRequest)
 		return
 	}
-	
+
 	result, err := c.service.CreateLanguage(r.Context(), *language)
 	//If an error occured, encode the error with the status code
 	if err != nil {
 		EncodeJSONResponse(err.Error(), &result.Code, w)
 		return
 	}
+
+	errors := []error{}
+	produceTopics := c.config.Kafka.Topics.Produce
+	for _, topic := range produceTopics {
+		err := c.kafkaClient.Produce(language.Name + " " + language.Description, topic)
+		if err != nil {
+			errors = append(errors, err)
+		}
+	}
+	if len(errors) > 0 {
+		var statusCode = http.StatusBadRequest
+		EncodeJSONResponse(errors, &statusCode, w)
+		return
+	}
 	//If no error, encode the body and the result code
 	EncodeJSONResponse(result.Body, &result.Code, w)
-	
 }
 
 // DeleteLanguage - Deletes a langauge.
@@ -118,7 +141,7 @@ func (c *LanguagesApiController) GetLanguage(w http.ResponseWriter, r *http.Requ
 }
 
 // GetLanguages - Returns a list of languages.
-func (c *LanguagesApiController) GetLanguages(w http.ResponseWriter, r *http.Request) { 
+func (c *LanguagesApiController) GetLanguages(w http.ResponseWriter, r *http.Request) {
 	result, err := c.service.GetLanguages(r.Context())
 	//If an error occured, encode the error with the status code
 	if err != nil {

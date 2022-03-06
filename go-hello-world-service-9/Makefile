@@ -13,7 +13,7 @@ build: clean package
 package:
 	docker build -t ${NAME}:${VERSION} .
 	docker save ${NAME}:${VERSION} | gzip > ${IMAGE}
-	tar -czvf $(OUTPUT) manifest.yml helloworld.yml slminitproof.yml slminitproofservice-1.0.0.tar.gz $(IMAGE)
+	tar -czvf ${OUTPUT} manifest.yml helloworld.yml ${IMAGE}
 	rm -f ${IMAGE}
 
 clean:

@@ -17,6 +17,25 @@ vault:
   cacert: "/etc/ssl/certs/ca-bundle.crt"
   insecure: false
 
+kafka:
+  brokers: ["kafka.service.consul:9093"]
+  port: "9093"
+  version: "2.0.0"
+  enabled: true
+  clientId: "helloworld"
+  clientIdSuffix: "service"
+  requiredAcks: 1
+  partitioner: "hash"
+  topics:
+    consume:
+      - NOTIFICATION_TOPIC
+    produce:
+      - HELLOWORLD_TOPIC
+  tls:
+    clientCertificateKey: "/kafkatls/kafka-client.key"
+    clientCertificate: "/kafkatls/kafka-client.cert"
+    caCert: "/kafkatls/issuing-cert.cert"
+
 cockroach:
   host: "127.0.0.1"
   port: "26257"

@@ -9,7 +9,7 @@ import (
 	"log"
 	"net/url"
 
-	"github.com/CiscoDevNet/msx-examples/go-hello-world-service-8/internal/config"
+	"github.com/CiscoDevNet/msx-examples/go-hello-world-service-9/internal/config"
 	"github.com/hashicorp/consul/api"
 )
 

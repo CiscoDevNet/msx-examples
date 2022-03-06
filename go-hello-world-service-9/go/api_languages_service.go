@@ -11,8 +11,8 @@ package openapi
 
 import (
 	"context"
-	"net/http"
 	"errors"
+	"net/http"
 )
 
 // StubLanguage is a sample language for this example
@@ -55,8 +55,7 @@ func (s *LanguagesApiService) CreateLanguage(ctx context.Context, language Langu
 
 	//TODO: Uncomment the next line to return response Response(500, Error{}) or use other options such as http.Ok ...
 	//return Response(500, Error{}), nil
-
-	return Response(http.StatusNotImplemented, nil), errors.New("CreateLanguage method not implemented")
+	return Response(http.StatusOK, nil), nil
 }
 
 // DeleteLanguage - Deletes a langauge.

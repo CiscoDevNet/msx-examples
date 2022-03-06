@@ -9,10 +9,10 @@ import (
 	"fmt"
 	"log"
 
-	openapi "github.com/CiscoDevNet/msx-examples/go-hello-world-service-8/go"
-	"github.com/CiscoDevNet/msx-examples/go-hello-world-service-8/internal/config"
-	"github.com/CiscoDevNet/msx-examples/go-hello-world-service-8/internal/consul"
-	"github.com/CiscoDevNet/msx-examples/go-hello-world-service-8/internal/vault"
+	openapi "github.com/CiscoDevNet/msx-examples/go-hello-world-service-9/go"
+	"github.com/CiscoDevNet/msx-examples/go-hello-world-service-9/internal/config"
+	"github.com/CiscoDevNet/msx-examples/go-hello-world-service-9/internal/consul"
+	"github.com/CiscoDevNet/msx-examples/go-hello-world-service-9/internal/vault"
 	"github.com/google/uuid"
 	"github.com/jackc/pgx/v4"
 	"github.com/jackc/pgx/v4/pgxpool"
@@ -133,8 +133,6 @@ func (c *Cockroach) GetItem(ctx context.Context, id string) (openapi.ImplRespons
 		Body: i,
 	}, nil
 }
-
-// TODO: when you are done, update the cockroach code in the examples too.
 
 func (c *Cockroach) GetItems(ctx context.Context, id string) (openapi.ImplResponse, error) {
 	rows, err := c.Pool.Query(context.Background(),

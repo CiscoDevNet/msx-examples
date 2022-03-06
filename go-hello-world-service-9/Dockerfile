@@ -1,10 +1,10 @@
 FROM golang:alpine as builder
 RUN apk update && apk add ca-certificates upx git
-COPY go/ /go/src/github.com/CiscoDevNet/msx-examples/go-hello-world-service-8/go
-COPY go.mod go.sum main.go /go/src/github.com/CiscoDevNet/msx-examples/go-hello-world-service-8/
-COPY internal/ /go/src/github.com/CiscoDevNet/msx-examples/go-hello-world-service-8/internal
+COPY go/ /go/src/github.com/CiscoDevNet/msx-examples/go-hello-world-service-9/go
+COPY go.mod go.sum main.go /go/src/github.com/CiscoDevNet/msx-examples/go-hello-world-service-9/
+COPY internal/ /go/src/github.com/CiscoDevNet/msx-examples/go-hello-world-service-9/internal
 COPY HelloWorldService-1.json /
-WORKDIR /go/src/github.com/CiscoDevNet/msx-examples/go-hello-world-service-8
+WORKDIR /go/src/github.com/CiscoDevNet/msx-examples/go-hello-world-service-9
 RUN go mod vendor \
   && go build -ldflags="-s -w" -o helloworld main.go \
   && upx helloworld
@@ -20,15 +20,15 @@ RUN adduser \
     --no-create-home \
     --uid "${UID}" \
     "${USER}"
-RUN chown helloworld:helloworld /go/src/github.com/CiscoDevNet/msx-examples/go-hello-world-service-8/helloworld
+RUN chown helloworld:helloworld /go/src/github.com/CiscoDevNet/msx-examples/go-hello-world-service-9/helloworld
 RUN chown helloworld:helloworld /HelloWorldService-1.json
 
-FROM scratch
-COPY --from=builder /go/src/github.com/CiscoDevNet/msx-examples/go-hello-world-service-8/helloworld /
+FROM alpine:latest
+COPY --from=builder /go/src/github.com/CiscoDevNet/msx-examples/go-hello-world-service-9/helloworld /
 COPY --from=builder /HelloWorldService-1.json /
 COPY --from=builder /etc/passwd /etc/passwd
 COPY --from=builder /etc/group /etc/group
-COPY --from=builder /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/
+
+COPY --from=builder /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/ca-certificates.crt
 COPY --from=builder /lib/ld-musl-x86_64.so.1 /lib/ld-musl-x86_64.so.1
-USER helloworld:helloworld
 ENTRYPOINT ["/helloworld"]
