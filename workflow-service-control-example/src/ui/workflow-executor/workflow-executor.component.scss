@@ -1,0 +1,34 @@
+.wx-workflow-executor {
+  &__panels {
+    display: flex;
+    flex-direction: row;
+  }
+
+  &__panel {
+    flex: 1 1 0;
+    position: relative;
+    margin-bottom: 0 !important;
+
+    & + & {
+      margin-left: 1rem;
+    }
+  }
+
+  &__busy-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(230, 230, 230, 0.3);
+  }
+
+  &__output {
+    padding: 1rem;
+    background-color: #1c1c1c;
+    color: #5f5;
+  }
+}

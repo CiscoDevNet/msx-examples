@@ -1,0 +1,12 @@
+<div class="sk-font-modal-title" msxResourceString="workflowexecutor.upload.title">
+</div>
+<msx-file-object msxFieldId="selectedCsv" [(msxModel)]="fileToUpload" msxAccept="*.csv" msxLabel="Upload csv file"
+  msxPlaceholder="workflowexecutor.service_control.upload.csv.placeholder" class="wx-upload__spacing">
+</msx-file-object>
+<div class="button-bar center-buttons wx-upload__spacing">
+  <button class="button button--secondary" (click)="readClose()" msxResourceString="workflowexecutor.buttons.close">
+  </button>
+  <button class="button button--cta" (click)="readClose()"
+    [disabled]="!fileToUpload || fileToUpload.type !== 'text/csv'" msxResourceString="workflowexecutor.buttons.submit">
+  </button>
+</div>

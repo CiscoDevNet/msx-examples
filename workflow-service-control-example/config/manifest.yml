@@ -1,0 +1,40 @@
+#
+# Copyright (c) 2021 Cisco Systems, Inc and its affiliates
+# All rights reserved
+#
+---
+Name: "workflowexecutor"
+Description: "Workflow Executor"
+Version: "1.0.0"
+Type: Internal
+Containers:
+  - Name: "workflowexecutor"
+    Version: "1.0.0"
+    Artifact: "slmimage-workflowexecutor-1.0.0.tar.gz"
+    Port: 4200
+    ContextPath: "/workflowexecutorui"
+    Tags:
+      - "productUI"
+      - "buildNumber=1.0.0"
+      - "instanceUuid=81d5dbde-9649-4b0a-83f4-9b6c5b88805e"
+      - "buildDateTime=2021-07-30T21:38:53.547Z"
+      - "name=workflowexecutor"
+      - "version=1.0.0"
+    Check:
+      Http:
+        Host: "127.0.0.1"
+        Scheme: "http"
+        Path: "/workflowexecutorui/workflowexecutor.css"
+      IntervalSec: 60
+      InitialDelaySec: 30
+      TimeoutSec: 30
+    Limits:
+      Memory: "256Mi"
+      CPU: "1"
+    Command:
+      - "/docker-entrypoint.sh"
+      - "nginx"
+      - "-g"
+      - "daemon off;"
+    Endpoints:
+      - "/workflowexecutorui"

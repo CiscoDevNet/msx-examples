@@ -1,0 +1,24 @@
+{
+	"compileOnSave": false,
+	"compilerOptions": {
+		"baseUrl": "./",
+		"sourceMap": true,
+		"esModuleInterop": true,
+		"declaration": false,
+		"module": "es2020",
+		"moduleResolution": "node",
+		"emitDecoratorMetadata": true,
+		"experimentalDecorators": true,
+		"importHelpers": true,
+		"target": "es5",
+		"types": [
+      "@cisco-msx/types"
+		],
+		"lib": [
+			"es2018",
+			"dom"
+		],
+		"paths": {
+			"workflowexecutor/*": ["src/ui*"]
+		}
+	}}
