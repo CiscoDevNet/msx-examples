@@ -30,8 +30,7 @@ spring:
         default-context: defaultapplication
         enabled: true
         backend: secret/thirdpartycomponents
-      authentication: TOKEN
-      token: replace_with_token_value # replace with actual token value or provide this value via another property source
+      authentication: NONE
 
 server:
   port: @server.port@ # see pom.xml
