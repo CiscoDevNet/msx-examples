@@ -7,4 +7,5 @@ PyYAML==5.4.1
 python-consul==1.1.0
 urllib3==1.24.1
 hvac==0.10.14
+itsdangerous==2.0.1
 msxswagger @ git+https://github.com/CiscoDevNet/python-msx-swagger@v0.6.0

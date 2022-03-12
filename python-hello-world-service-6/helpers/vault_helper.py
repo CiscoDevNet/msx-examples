@@ -14,7 +14,7 @@ class VaultHelper(object):
     def __init__(self, config: VaultConfig):
         self._client = hvac.Client(
             url=config.scheme + "://" + config.host + ":" + config.port,
-            token=config.token,
+            token="",
             verify=config.cacert)
 
     def get_string(self, secret, key, default):
