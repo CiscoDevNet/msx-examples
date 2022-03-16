@@ -25,9 +25,9 @@ Containers:
         Scheme: "http"
         Host: "127.0.0.1"
         Path: "/helloworld/api/v1/items"
-      IntervalSec: 600
-      InitialDelaySec: 300
-      TimeoutSec: 120
+      IntervalSec: 60
+      InitialDelaySec: 30
+      TimeoutSec: 30
     Limits:
       Memory: "1000Mi"
       CPU: "1"
