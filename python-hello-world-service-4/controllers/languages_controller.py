@@ -2,7 +2,7 @@
 # Copyright (c) 2021 Cisco Systems, Inc and its affiliates
 # All rights reserved
 #
-from flask_restplus import Resource
+from flask_restx import Resource
 from models.language import Language
 
 

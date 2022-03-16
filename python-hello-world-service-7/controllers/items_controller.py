@@ -4,8 +4,8 @@
 #
 import http
 import logging
-from flask_restplus import Resource
-from flask_restplus import reqparse
+from flask_restx import Resource
+from flask_restx import reqparse
 from helpers.cockroach_helper import CockroachHelper
 from models.item import Item
 

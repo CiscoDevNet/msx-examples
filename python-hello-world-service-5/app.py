@@ -4,7 +4,7 @@
 #
 import logging
 from flask import Flask
-from flask_restplus import Api
+from flask_restx import Api
 
 from config import Config
 from controllers.items_controller import ItemsApi, ItemApi
