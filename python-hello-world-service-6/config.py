@@ -10,7 +10,7 @@ from consul import ACLPermissionDenied
 
 ConsulConfig = namedtuple("ConsulConfig", ["host", "port", "cacert"])
 VaultConfig = namedtuple("VaultConfig", ["scheme", "host", "port", "token", "cacert"])
-CockroachConfig = namedtuple("CockroachConfig", ["host", "port", "databasename","username", "sslmode", "cacert"])
+CockroachConfig = namedtuple("CockroachConfig", ["host", "port", "databasename", "username", "sslmode", "cacert"])
 SwaggerConfig = namedtuple("SwaggerConfig", ["rootpath", "secure", "ssourl", "clientid", "swaggerjsonpath"])
 
 
@@ -27,10 +27,15 @@ class Config(object):
         self.consul = ConsulConfig(**config["consul"])
 
         # Apply environment variables and create Vault config object.
+        # Vault scheme of HTTP means local development with a token.
+        # Vault scheme of HTTPS means Vault Agent Sidecar without a token.
         config["vault"]["scheme"] = environ.get("SPRING_CLOUD_VAULT_SCHEME", config["vault"]["scheme"])
         config["vault"]["host"] = environ.get("SPRING_CLOUD_VAULT_HOST", config["vault"]["host"])
         config["vault"]["port"] = environ.get("SPRING_CLOUD_VAULT_PORT", config["vault"]["port"])
-        config["vault"]["token"] = environ.get("SPRING_CLOUD_VAULT_TOKEN", config["vault"]["token"], "")
+        if config["vault"]["scheme"].casefold() == "http".casefold():
+            config["vault"]["token"] = environ.get("SPRING_CLOUD_VAULT_TOKEN", config["vault"]["token"])
+        else:
+            config["vault"]["token"] = None
         self.vault = VaultConfig(**config["vault"])
 
         # Create Cockroach config object.

@@ -12,9 +12,10 @@ from config import VaultConfig
 
 class VaultHelper(object):
     def __init__(self, config: VaultConfig):
+        # Assume Value Agent Sidecar if scheme is HTTPS.
         self._client = hvac.Client(
             url=config.scheme + "://" + config.host + ":" + config.port,
-            token="",
+            token=config.token,
             verify=config.cacert)
 
     def get_string(self, secret, key, default):
