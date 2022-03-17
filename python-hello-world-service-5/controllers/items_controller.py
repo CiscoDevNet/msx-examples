@@ -4,8 +4,8 @@
 #
 import http
 import logging
-from flask_restplus import Resource
-from flask_restplus import reqparse
+from flask_restx import Resource
+from flask_restx import reqparse
 from helpers.cockroach_helper import CockroachHelper
 from models.item import Item
 
@@ -20,8 +20,9 @@ LANGUAGE_ID_IS_REQUIRED = 'Language id is required'
 
 class ItemsApi(Resource):
     def __init__(self, *args, **kwargs):
+        Resource.__init__(self, *args)
         self._config = kwargs["config"]
-        
+
     def get(self):
         with CockroachHelper(self._config) as db:
             rows = db.get_rows('Items')
@@ -34,8 +35,8 @@ class ItemsApi(Resource):
         parser = reqparse.RequestParser()
         [parser.add_argument(arg) for arg in ITEM_INPUT_ARGUMENTS]
         args = parser.parse_args()
-        logging.info(args)        
-        
+        logging.info(args)
+
         if "languageId" not in args or not args["languageId"]:
             return LANGUAGE_ID_IS_REQUIRED, http.HTTPStatus.BAD_REQUEST
         args['languageid'] = args.pop('languageId')
@@ -54,6 +55,7 @@ class ItemsApi(Resource):
 
 class ItemApi(Resource):
     def __init__(self, *args, **kwargs):
+        Resource.__init__(self, *args)
         self._config = kwargs["config"]
 
     def get(self, id):

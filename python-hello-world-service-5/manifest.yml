@@ -18,6 +18,7 @@ Containers:
       - "4.0.0"
       - "4.1.0"
       - "4.2.0"
+      - "4.3.0"
       - "name=Hello World Service"
       - "componentAttributes=serviceName:helloworldservice~context:helloworld~name:Hello World Service~description:Hello World service with support for multiple languages."
     Check:
@@ -32,12 +33,10 @@ Containers:
       Memory: "1000Mi"
       CPU: "1"
     Command:
-      - "/usr/local/bin/flask"
-      - "run"
-      - "--host"
-      - "0.0.0.0"
-      - "--port"
-      - "8082"
+      - "/usr/local/bin/gunicorn"
+      - "--bind"
+      - "0.0.0.0:8082"
+      - "wsgi:app"
 
 ConfigFiles:
   - Name: "helloworld.yml"

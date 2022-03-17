@@ -3,7 +3,7 @@
 # All rights reserved
 #
 from flask import Flask
-from flask_restplus import Api
+from flask_restx import Api
 from controllers.items_controller import ItemsApi, ItemApi
 from controllers.languages_controller import LanguageApi, LanguagesApi
 

@@ -1,5 +1,7 @@
-Flask==1.1.2
-Flask-Cors==3.0.10
-flask-restplus==0.13.0
-Werkzeug==0.16.1
-
+gunicorn~=20.1.0
+Flask~=2.0.3
+Flask-Cors~=3.0.10
+flask-restx~=0.5.1
+Werkzeug~=2.0.3
+jinja2~=3.0.3
+markupsafe~=2.1.1
