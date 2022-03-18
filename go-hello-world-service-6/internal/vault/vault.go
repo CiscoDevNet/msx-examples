@@ -7,9 +7,8 @@ package vault
 import (
 	"errors"
 	"github.com/CiscoDevNet/msx-examples/go-hello-world-service-6/internal/config"
-	hclog "github.com/hashicorp/go-hclog"
 	"github.com/hashicorp/vault/api"
-	"log"
+	"strings"
 )
 
 type HelloWorldVault struct {
@@ -19,9 +18,7 @@ type HelloWorldVault struct {
 
 func (v *HelloWorldVault) Connect() error {
 	c := api.DefaultConfig()
-	c.OutputCurlString = true
-	c.Logger = hclog.New(&hclog.LoggerOptions{Name: "hello-world-6-vault-client", Level: hclog.Debug})
-	c.AgentAddress = v.Config.Scheme + "://" + v.Config.Host + ":" + v.Config.Port
+	c.Address = v.Config.Scheme + "://" + v.Config.Host + ":" + v.Config.Port
 
 	if v.Config.Scheme == "https" {
 		t := api.TLSConfig{
@@ -37,8 +34,12 @@ func (v *HelloWorldVault) Connect() error {
 	if err != nil {
 		return err
 	}
-	log.Printf("Connection setup with Vault token: %s", v.Config.Token)
-	client.SetToken(v.Config.Token)
+
+	// Vault scheme of HTTP means local development with a token.
+	// Vault scheme of HTTPS means Vault Agent Sidecar without a token.
+	if strings.EqualFold(v.Config.Scheme, "http") {
+		client.SetToken(v.Config.Token)
+	}
 	v.Client = client
 	return nil
 }
