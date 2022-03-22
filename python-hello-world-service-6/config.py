@@ -2,6 +2,7 @@
 # Copyright (c) 2021 Cisco Systems, Inc and its affiliates
 # All Rights reserved
 #
+import logging
 import pkgutil
 from os import environ
 from collections import namedtuple
@@ -32,10 +33,7 @@ class Config(object):
         config["vault"]["scheme"] = environ.get("SPRING_CLOUD_VAULT_SCHEME", config["vault"]["scheme"])
         config["vault"]["host"] = environ.get("SPRING_CLOUD_VAULT_HOST", config["vault"]["host"])
         config["vault"]["port"] = environ.get("SPRING_CLOUD_VAULT_PORT", config["vault"]["port"])
-        if config["vault"]["scheme"].casefold() == "http".casefold():
-            config["vault"]["token"] = environ.get("SPRING_CLOUD_VAULT_TOKEN", config["vault"]["token"])
-        else:
-            config["vault"]["token"] = None
+        config["vault"]["token"] = environ.get("SPRING_CLOUD_VAULT_TOKEN", config["vault"]["token"])
         self.vault = VaultConfig(**config["vault"])
 
         # Create Cockroach config object.

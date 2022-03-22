@@ -35,9 +35,8 @@ func (v *HelloWorldVault) Connect() error {
 		return err
 	}
 
-	// Vault scheme of HTTP means local development with a token.
-	// Vault scheme of HTTPS means Vault Agent Sidecar without a token.
-	if strings.EqualFold(v.Config.Scheme, "http") {
+	// Ignore empty Vault tokens.
+	if strings.TrimSpace(v.Config.Token) != "" {
 		client.SetToken(v.Config.Token)
 	}
 	v.Client = client
