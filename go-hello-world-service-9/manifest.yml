@@ -13,6 +13,10 @@ Infrastructure:
     Type: Cockroach
     Name: "helloworld"
 
+  Bus:
+    Type: kafka
+    Topics: [ "TEST_TOPIC" ]
+
 ConfigFiles:
   - Name: "helloworld.yml"
     MountTo:
