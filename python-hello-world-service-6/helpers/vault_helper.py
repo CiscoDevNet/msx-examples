@@ -12,7 +12,6 @@ from config import VaultConfig
 
 class VaultHelper(object):
     def __init__(self, config: VaultConfig):
-        # Assume Value Agent Sidecar if scheme is HTTPS.
         self._client = hvac.Client(
             url=config.scheme + "://" + config.host + ":" + config.port,
             token=config.token if config.token else None,
