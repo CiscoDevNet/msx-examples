@@ -10,12 +10,11 @@ import (
 	"strings"
 )
 
-
 // HelloWorld config options.
 type Config struct {
-	Consul      Consul
-	Vault       Vault
-	Cockroach   Cockroach
+	Consul    Consul
+	Vault     Vault
+	Cockroach Cockroach
 }
 
 // Cockroach config options.
@@ -31,13 +30,13 @@ type Cockroach struct {
 
 // Vault represents Vault config options.
 type Vault struct {
-	Scheme          string
-	Host            string
-	Port            string
-	Token           string
-	CACert          string
-	Insecure        bool
-	Prefix          string
+	Scheme   string
+	Host     string
+	Port     string
+	Token    string
+	CACert   string
+	Insecure bool
+	Prefix   string
 }
 
 // Consul represent the Consul config options.
@@ -59,7 +58,7 @@ func ReadConfig() *Config {
 	v.SetEnvKeyReplacer(strings.NewReplacer(".", "_"))
 	v.AutomaticEnv()
 	if err := v.ReadInConfig(); err != nil {
-		log.Printf("%s",err.Error())
+		log.Printf("%s", err.Error())
 		if _, ok := err.(viper.ConfigFileNotFoundError); ok {
 			log.Print("No config found.")
 		} else {
@@ -68,12 +67,13 @@ func ReadConfig() *Config {
 	}
 
 	// Bind config to environment based on expected injections.
-	bindConfig(v,"Consul.Host", "SPRING_CLOUD_CONSUL_HOST")
-	bindConfig(v,"Consul.Port", "SPRING_CLOUD_CONSUL_PORT")
-	bindConfig(v,"Vault.Scheme", "SPRING_CLOUD_VAULT_SCHEME")
-	bindConfig(v,"Vault.Host", "SPRING_CLOUD_VAULT_HOST")
-	bindConfig(v,"Vault.Port", "SPRING_CLOUD_VAULT_PORT")
-	bindConfig(v,"Vault.Token", "SPRING_CLOUD_VAULT_TOKEN")
+	v.AllowEmptyEnv(true)
+	bindConfig(v, "Consul.Host", "SPRING_CLOUD_CONSUL_HOST")
+	bindConfig(v, "Consul.Port", "SPRING_CLOUD_CONSUL_PORT")
+	bindConfig(v, "Vault.Scheme", "SPRING_CLOUD_VAULT_SCHEME")
+	bindConfig(v, "Vault.Host", "SPRING_CLOUD_VAULT_HOST")
+	bindConfig(v, "Vault.Port", "SPRING_CLOUD_VAULT_PORT")
+	bindConfig(v, "Vault.Token", "SPRING_CLOUD_VAULT_TOKEN")
 
 	var c Config
 	v.Unmarshal(&c)

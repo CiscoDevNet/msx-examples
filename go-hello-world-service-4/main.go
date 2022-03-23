@@ -49,17 +49,18 @@ func main() {
 func testConsul(config *config.Config, consul *consul.HelloWorldConsul) {
 	// Read our favourites from Consul and print them to the console.
 	// Do not leak config in production as it is a security violation.
-	favouriteColor, _:= consul.GetString(config.Consul.Prefix + "/helloworldservice/favourite.color", "UNKNOWN")
+	favouriteColor, _ := consul.GetString(config.Consul.Prefix+"/helloworldservice/favourite.color", "UNKNOWN")
 	log.Printf("My favourite color is %s.", favouriteColor)
-	favouriteFood, _ := consul.GetString(config.Consul.Prefix + "/helloworldservice/favourite.food", "UNKNOWN")
+	favouriteFood, _ := consul.GetString(config.Consul.Prefix+"/helloworldservice/favourite.food", "UNKNOWN")
 	log.Printf("My favourite food is %s.", favouriteFood)
-	favouriteDinosaur, _ := consul.GetString(config.Consul.Prefix + "/helloworldservice/favourite.dinosaur", "UNKNOWN")
+	favouriteDinosaur, _ := consul.GetString(config.Consul.Prefix+"/helloworldservice/favourite.dinosaur", "UNKNOWN")
 	log.Printf("My favourite dinosaur is %s.", favouriteDinosaur)
 }
+
 func testVault(config *config.Config, vault *vault.HelloWorldVault) {
 	// Read a secret from Vault  and it to the console.
 	// Do not leak secrets in production as it is a security violation.
-	secretSquirrelLocation, _ := vault.GetString(config.Vault.Prefix + "/helloworldservice/", "secret.squirrel.location", "UNKNOWN")
+	secretSquirrelLocation, _ := vault.GetString(config.Vault.Prefix+"/helloworldservice/", "secret.squirrel.location", "UNKNOWN")
 	log.Printf("Where are the acorns buried?")
 	log.Print(secretSquirrelLocation)
 }
