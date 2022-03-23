@@ -6,12 +6,11 @@ import http
 import logging
 
 import flask
-from flask_restplus import Resource
-from flask_restplus import reqparse
+from flask_restx import Resource
+from flask_restx import reqparse
 
 from models.error import Error
 from models.language import Language
-from config import Config
 from helpers.cockroach_helper import CockroachHelper
 
 LANGUAGE_INPUT_ARGUMENTS = ['name', 'description']

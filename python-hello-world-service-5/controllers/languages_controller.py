@@ -4,8 +4,8 @@
 #
 import http
 import logging
-from flask_restplus import Resource
-from flask_restplus import reqparse
+from flask_restx import Resource
+from flask_restx import reqparse
 from models.language import Language
 from helpers.cockroach_helper import CockroachHelper
 
@@ -16,6 +16,7 @@ LANGUAGE_NOT_FOUND = 'Language not found'
 
 class LanguagesApi(Resource):
     def __init__(self, *args, **kwargs):
+        Resource.__init__(self, *args)
         self._config = kwargs["config"]
         
     def get(self):
@@ -39,6 +40,7 @@ class LanguagesApi(Resource):
 
 class LanguageApi(Resource):
     def __init__(self, *args, **kwargs):
+        Resource.__init__(self, *args)
         self._config = kwargs["config"]
 
     def get(self, id):

@@ -1,0 +1,119 @@
+{
+	"services": [
+		{
+			"id": "c5860f17-9f91-4fb9-8121-09b292691326",
+			"name": "workflowexecutor",
+			"label": "workflowexecutor.service.property.name",
+			"active": true,
+			"version": 1,
+			"displayOrder": 1,
+			"description": "workflowexecutor.service.property.description",
+			"image": "data:image/svg+xml;base64,PHN2ZyB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgd2lkdGg9IjI0IiBoZWlnaHQ9IjI0IiB2aWV3Qm94PSIwIDAgMjQgMjQiPgoJPHBhdGggZD0iTTE4Ljc1IDIzLjc1bC01LjI1LTIuOTg1di01Ljk2N2w1LjI1LTIuOTg1IDUuMjUgMi45ODV2NS45Njd6TTYuNzUgOS4yMDN2LTUuOTY3bDUuMjUtMi45ODUgNS4yNSAyLjk4NXY1Ljk2N2wtNS4yNSAyLjk4NXpNMTAuNSAyMC43NjVsLTUuMjUgMi45ODUtNS4yNS0yLjk4NXYtNS45NjdsNS4yNS0yLjk4NSA1LjI1IDIuOTg1djUuOTY3eiI+PC9wYXRoPgo8L3N2Zz4K",
+			"orderLimit": 1,
+			"price": "0",
+			"orchestrator": "none",
+			"skipUsecaseValidation": true,
+			"configuration": {
+				"device": "false",
+				"showOffers": "true",
+				"validation": "none",
+				"orchestrator": "none"
+			},
+			"options": [
+				{
+					"name": "workflowexecutor_option1",
+					"label": "workflowexecutor.service.option1.label",
+					"header": null,
+					"description": "workflowexecutor.service.option1.description",
+					"hint": "workflowexecutor.service.option1.hint",
+					"supported": true
+				}
+			],
+			"properties": [],
+			"sections": [
+				{}
+			],
+			"slmUiConfig": {
+				"type": "ng2-extension",
+				"resources": [
+					{
+						"type": "ui-info",
+						"href": "/workflowexecutorui/ui-info.js"
+					},
+					{
+						"type": "css",
+						"href": "/workflowexecutorui/workflowexecutor.css"
+					},
+					{
+						"type": "routes",
+						"href": "/workflowexecutorui/routes.js"
+					},
+					{
+						"type": "i18n",
+						"href": "/workflowexecutorui/i18n/i18n.json"
+					},
+					{
+						"type": "tcui-hooks",
+						"href": "/workflowexecutorui/tcui-hooks.js"
+					},
+					{
+						"type": "app-main",
+						"href": "/workflowexecutorui/app.js"
+					},
+					{
+						"type": "online-help",
+						"href": "/workflowexecutorui/help/help.json"
+					}
+				]
+			},
+			"parentId": null,
+			"resource": false,
+			"offers": [
+				{
+					"name": "workflowexecutor_offer0",
+					"label": "workflowexecutor.service.offer0.label",
+					"version": 1,
+					"displayOrder": 1,
+					"uuid": "0a6c7455-e67a-4cc0-a652-3859189a9e3d",
+					"productId": "c5860f17-9f91-4fb9-8121-09b292691326",
+					"description": "workflowexecutor.service.offer0.description.label",
+					"image": "data:image/svg+xml;base64,PHN2ZyB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgd2lkdGg9IjI0IiBoZWlnaHQ9IjI0IiB2aWV3Qm94PSIwIDAgMjQgMjQiPgoJPHBhdGggZD0iTTE4Ljc1IDIzLjc1bC01LjI1LTIuOTg1di01Ljk2N2w1LjI1LTIuOTg1IDUuMjUgMi45ODV2NS45Njd6TTYuNzUgOS4yMDN2LTUuOTY3bDUuMjUtMi45ODUgNS4yNSAyLjk4NXY1Ljk2N2wtNS4yNSAyLjk4NXpNMTAuNSAyMC43NjVsLTUuMjUgMi45ODUtNS4yNS0yLjk4NXYtNS45NjdsNS4yNS0yLjk4NSA1LjI1IDIuOTg1djUuOTY3eiI+PC9wYXRoPgo8L3N2Zz4K",
+					"supportedProperties": [
+            "Basic-small"
+          ],
+					"supportedOptions": [
+						{
+							"name": "workflowexecutor_option1",
+							"value": "Yes"
+						}
+					],
+					"priceplans": [
+						{
+							"uuid": "ddd94bf3-86ee-44f3-8ef3-3b10c9b5b935",
+							"name": "12 Month",
+							"serviceId": "c5860f17-9f91-4fb9-8121-09b292691326",
+							"offerId": "0a6c7455-e67a-4cc0-a652-3859189a9e3d",
+							"version": 1,
+							"currentVersion": true,
+							"startDate": null,
+							"endDate": null,
+							"currency": "USD",
+							"oneTimePrice": 0,
+							"periodicPrice": 100,
+							"timePeriod": "monthly",
+							"pricePlanAttributes": []
+						}
+					],
+					"terms": [
+						{
+							"serviceId": "c5860f17-9f91-4fb9-8121-09b292691326",
+							"offerId": "0a6c7455-e67a-4cc0-a652-3859189a9e3d",
+							"id": "1dd14d87-4925-49e6-b2ac-cf5666ea64b6",
+							"htmlContent": "workflowexecutor.service.offer0.terms"
+						}
+					]
+				}
+			]
+		}
+	]
+}

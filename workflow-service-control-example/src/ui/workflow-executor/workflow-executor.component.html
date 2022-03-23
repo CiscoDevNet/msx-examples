@@ -1,0 +1,36 @@
+<h1 class="sk-font-page-title page-title-section"
+  msxResourceString="workflowexecutor.service_control.workflow_executor.name">
+</h1>
+
+<div class="wx-workflow-executor__panels">
+  <div class="vms-panel page-panel wx-workflow-executor__panel">
+    <msx-form [form]="form " fieldClass="wx-workflow-executor__field">
+    </msx-form>
+
+    <button class="button button--cta" (click)="execWorkflow()"
+      [disabled]="(!(form.onValidationChanged() | async)) || (isExecuting$ | async)"
+      msxResourceString="workflowexecutor.buttons.submit">
+    </button>
+    <button class="button button--primary" (click)="upload.open = true"
+      msxResourceString="workflowexecutor.buttons.prepopulate">
+    </button>
+    <div *ngIf="isExecuting$ | async" class="wx-workflow-executor__busy-container">
+      <msx-busy-indicator></msx-busy-indicator>
+    </div>
+  </div>
+
+  <div class="vms-panel page-panel wx-workflow-executor__panel">
+    <h2 class="sk-font-panel-header" msxResourceString="workflowexecutor.service_control.workflow_executor.results">
+    </h2>
+
+    <pre *ngIf="joinedOutput$ | async; else noResults"
+      class="wx-workflow-executor__output">{{joinedOutput$ | async}}</pre>
+
+    <ng-template #noResults>
+      <p msxResourceString="workflowexecutor.service_control.workflow_executor.no_results"></p>
+    </ng-template>
+  </div>
+</div>
+<ng-container *ngIf="upload.open">
+  <wx-upload *msxModalDialog (close)="populateForm($event)"></wx-upload>
+</ng-container>
