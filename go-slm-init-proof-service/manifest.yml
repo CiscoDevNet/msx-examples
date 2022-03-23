@@ -18,6 +18,7 @@ Containers:
       - "4.0.0"
       - "4.1.0"
       - "4.2.0"
+      - "4.3.0"
       - "name=SLM Init Init Proof Service"
       - "componentAttributes=serviceName:slminitproofservice~context:slminitproof~name:Hello World Service~description:Hello World service with support for multiple languages."
     Limits:

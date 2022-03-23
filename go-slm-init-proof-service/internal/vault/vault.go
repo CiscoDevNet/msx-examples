@@ -6,6 +6,7 @@ package vault
 
 import (
 	"errors"
+	"strings"
 
 	"github.com/CiscoDevNet/msx-examples/go-slm-init-proof-service/internal/config"
 	"github.com/hashicorp/vault/api"
@@ -34,7 +35,11 @@ func (v *HelloWorldVault) Connect() error {
 	if err != nil {
 		return err
 	}
-	client.SetToken(v.Config.Token)
+
+	// Ignore empty Vault tokens.
+	if strings.TrimSpace(v.Config.Token) != "" {
+		client.SetToken(v.Config.Token)
+	}
 	v.Client = client
 	return nil
 }
