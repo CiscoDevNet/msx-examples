@@ -10,10 +10,10 @@ consul:
   token:
 
 vault:
-  scheme: "http"                      # Bound to env var SPRING_CLOUD_VAULT_SCHEME at runtime.
-  host: "127.0.0.1"                   # Bound to env var SPRING_CLOUD_VAULT_HOST at runtime.
-  port: "8200"                        # Bound to env var SPRING_CLOUD_VAULT_PORT at port.
-  token: "s.erq0ll7pkPctres2fFpbjxZx" # Bound to env var SPRING_CLOUD_VAULT_TOKEN at port.
+  scheme: "http"     # Bound to env var SPRING_CLOUD_VAULT_SCHEME at runtime.
+  host: "127.0.0.1"  # Bound to env var SPRING_CLOUD_VAULT_HOST at runtime.
+  port: "8200"       # Bound to env var SPRING_CLOUD_VAULT_PORT at runtime.
+  token:             # Bound to env var SPRING_CLOUD_VAULT_TOKEN at runtime.
   cacert: "/etc/ssl/certs/ca-bundle.crt"
   insecure: false
 
@@ -24,14 +24,3 @@ cockroach:
   username: "root"
   sslmode: "disable"
   cacert: "/etc/ssl/certs/ca-bundle.crt" # Required by MSX.
-
-swagger:
-  secure: true                                # Required by MSX.
-  ssourl: "http://localhost:9515/idm"         # CONSUL {prefix}/defaultapplication/swagger.security.sso.baseUrl
-  clientid: "local-public-client"             # CONSUL {prefix}/helloworldservice/public.security.clientId
-  swaggerjsonpath: "HelloWorldService-1.json" # Required by MSX.
-
-security:
-  ssourl: "http://localhost:9515/idm"                              # CONSUL {prefix}/defaultapplication/swagger.security.sso.baseUrl
-  clientid: "local-private-client"                                 # CONSUL {prefix}/helloworldservice/integration.security.clientId
-  clientsecret: "make-up-a-private-client-secret-and-keep-it-safe" # Required by MSX.
