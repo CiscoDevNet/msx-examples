@@ -13,6 +13,9 @@ RUN sed -i -e 's/keystore.type=pkcs12/keystore.type=jks/' /etc/java-11-openjdk/s
     rm /etc/ssl/certs/java/cacerts &&\
     update-ca-certificates -f
 
+RUN apt-get update
+RUN apt-get install -y curl
+
 ENV SERVICE_JAR helloworldservice.jar
 
 COPY bin/dockerlaunch.sh /service/dockerlaunch.sh

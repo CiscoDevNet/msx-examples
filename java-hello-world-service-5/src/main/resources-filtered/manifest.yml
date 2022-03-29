@@ -34,6 +34,7 @@ Containers:
       - "4.0.0"
       - "4.1.0"
       - "4.2.0"
+      - "4.3.0"
       - "managedMicroservice"
       - "buildNumber=@project.version@"
       - "name=@project.artifactId@"
@@ -94,5 +95,5 @@ Infrastructure:
 # during startup and runtime.  The service configurations are in a sandbox with restricted access. Multiple name:value
 # pairs can be specified.
 ConsulKeys:
-  - Name: "public.security.clientId" # DO NOT CHANGE THIS
+  - Name: "public.security.clientId"
     Value: "hello-world-service-public-client"

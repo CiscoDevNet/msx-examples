@@ -69,7 +69,6 @@ func NewCockroachDB(c *config.Config) (*Cockroach, error) {
 			c.Cockroach.SSLMode,
 			c.Cockroach.CACert)
 	}
-	log.Printf("SlmInit CockroachDB connString =%s", connString)
 
 	conf, err := pgxpool.ParseConfig(connString)
 	if err != nil {

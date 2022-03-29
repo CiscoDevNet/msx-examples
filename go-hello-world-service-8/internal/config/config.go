@@ -86,6 +86,7 @@ func ReadConfig() *Config {
 	}
 
 	// Bind config to environment based on expected injections.
+	v.AllowEmptyEnv(true)
 	bindConfig(v, "Consul.Host", "SPRING_CLOUD_CONSUL_HOST")
 	bindConfig(v, "Consul.Port", "SPRING_CLOUD_CONSUL_PORT")
 	bindConfig(v, "Consul.Token", "SPRING_CLOUD_CONSUL_CONFIG_ACLTOKEN")

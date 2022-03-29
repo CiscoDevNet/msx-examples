@@ -6,11 +6,9 @@ package consul
 
 import (
 	"fmt"
-	"log"
-	"net/url"
-
 	"github.com/CiscoDevNet/msx-examples/go-slm-init-proof-service/internal/config"
 	"github.com/hashicorp/consul/api"
+	"net/url"
 )
 
 type HelloWorldConsul struct {
@@ -56,13 +54,10 @@ func (p *HelloWorldConsul) GetValue(key string) ([]byte, error) {
 }
 
 func (p *HelloWorldConsul) GetString(key string, defaultValue string) (string, error) {
-	log.Printf("Consul GetString  key=%s", key)
 	value, error := p.GetValue(key)
 	if error == nil {
-		log.Printf("Consul GetString value=%s", value)
 		return string(value), error
 	}
-	log.Printf("Consul failed to GetString Error=%s, defaultValue=%s", error.Error(), defaultValue)
 	return defaultValue, error
 }
 
@@ -81,10 +76,6 @@ func NewConsul(cfg *config.Config) (HelloWorldConsul, error) {
 	}
 	err := ic.Connect()
 	if err != nil {
-		log.Printf("NewConsul Failed to connect ic=%#v", ic)
-		log.Printf("NewConsul Failed to connect cfg=%#v", cfg)
-		log.Printf("NewConsul Connection Error=%s", err.Error())
-		// log.Fatal("NewConsul Failed to connect")
 		return ic, err
 	}
 	return ic, nil

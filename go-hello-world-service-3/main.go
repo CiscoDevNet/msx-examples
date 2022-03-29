@@ -17,8 +17,6 @@ func main() {
 	// Read the configuration.
 	config := config.ReadConfig()
 	log.Printf("Server started")
-	log.Printf("config.host=" + config.Consul.Host)
-	log.Printf("config.port=" + config.Consul.Port)
 
 	// Setup Consul.
 	consul, err := consul.NewConsul(config)
@@ -42,10 +40,10 @@ func main() {
 func testConsul(config *config.Config, consul *consul.HelloWorldConsul) {
 	// Read our favourites from Consul and print them to the console.
 	// Do not leak config in production as it is a security violation.
-	favouriteColor, _:= consul.GetString(config.Consul.Prefix + "/helloworldservice/favourite.color", "UNKNOWN")
+	favouriteColor, _ := consul.GetString(config.Consul.Prefix+"/helloworldservice/favourite.color", "UNKNOWN")
 	log.Printf("My favourite color is %s.", favouriteColor)
-	favouriteFood, _ := consul.GetString(config.Consul.Prefix + "/helloworldservice/favourite.food", "UNKNOWN")
+	favouriteFood, _ := consul.GetString(config.Consul.Prefix+"/helloworldservice/favourite.food", "UNKNOWN")
 	log.Printf("My favourite food is %s.", favouriteFood)
-	favouriteDinosaur, _ := consul.GetString(config.Consul.Prefix + "/helloworldservice/favourite.dinosaur", "UNKNOWN")
+	favouriteDinosaur, _ := consul.GetString(config.Consul.Prefix+"/helloworldservice/favourite.dinosaur", "UNKNOWN")
 	log.Printf("My favourite dinosaur is %s.", favouriteDinosaur)
 }
