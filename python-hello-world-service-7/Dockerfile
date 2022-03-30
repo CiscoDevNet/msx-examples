@@ -2,7 +2,7 @@
 # Copyright (c) 2021 Cisco Systems, Inc and its affiliates
 # All Rights reserved
 #
-FROM python:3.9.6-slim-buster
+FROM --platform=linux/amd64 python:3.9.6-slim-buster
 WORKDIR /app
 ADD . /app
 RUN apt-get update \
