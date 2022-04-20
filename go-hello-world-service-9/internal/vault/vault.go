@@ -6,6 +6,7 @@ package vault
 
 import (
 	"errors"
+	"strings"
 
 	"github.com/CiscoDevNet/msx-examples/go-hello-world-service-9/internal/config"
 	"github.com/hashicorp/vault/api"
@@ -34,7 +35,9 @@ func (v *HelloWorldVault) Connect() error {
 	if err != nil {
 		return err
 	}
-	client.SetToken(v.Config.Token)
+	if strings.TrimSpace(v.Config.Token) != "" {
+		client.SetToken(v.Config.Token)
+	}
 	v.Client = client
 	return nil
 }
