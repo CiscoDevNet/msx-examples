@@ -28,9 +28,7 @@ kafka:
   partitioner: "hash"
   topics:
     consume:
-      - NOTIFICATION_TOPIC
-    produce:
-      - HELLOWORLD_TOPIC
+      - AUDITING_GENERIC_TOPIC
   tls:
     clientCertificateKey: "/kafkatls/kafka-client.key"
     clientCertificate: "/kafkatls/kafka-client.cert"
