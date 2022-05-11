@@ -14,7 +14,7 @@ import java.util.Base64;
 
 public class Main {
     public static final String MY_SERVER_URL = "https://dev-plt-aio1.lab.ciscomsx.com";
-    public static final String MY_CLIENT_ID = "my-private-client";
+    public static final String MY_CLIENT_ID = "my-test-private-client";
     public static final String MY_CLIENT_SECRET = "there-are-no-secrets-that-time-does-not-reveal";
     public static final String MY_USERNAME = "jeff";
     public static final String MY_PASSWORD = "Password@1";

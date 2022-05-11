@@ -20,7 +20,7 @@ func main() {
 	// TODO - Replace these with values from your test MSX environment.
 	const (
 		myHostName     = "rtp-msxlite-10.lab.ciscomsx.com"
-		myClientId     = "go-test-private-client"
+		myClientId     = "my-test-private-client"
 		myClientSecret = "make-up-a-private-client-secret-and-keep-it-safe"
 		myUsername     = "superuser"
 		myPassword     = "4b=@TNydSshIuT$farMA^9alXT56Sb3."
