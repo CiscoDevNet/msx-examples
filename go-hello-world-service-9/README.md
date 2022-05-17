@@ -52,4 +52,9 @@ Topics available in MSX that you might find useful:
 
 There are many more topics available.
 
-To test the example, bring up kube-master console and tail the helloworldservice log. Triger Kafka message by adding a tenant; the log should show message sent to AUDITING_GENERIC_TOPIC
+To test the example, bring up kube-master console and make sure the helloworldservice log has similar line to:
+```
+2022/05/13 18:52:18 Kicking off consumer for topic AUDITING_GENERIC_TOPIC
+```
+
+Then tail the helloworldservice log. Triger Kafka message by adding a tenant; the log should show message sent to AUDITING_GENERIC_TOPIC topic.
