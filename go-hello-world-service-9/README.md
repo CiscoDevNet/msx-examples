@@ -50,4 +50,6 @@ Topics available in MSX that you might find useful:
 - COMPLIANCE_EVENT_TOPIC
   - Messages are about the changes/status to compliance of MD devices
 
-There are many more topics available
+There are many more topics available.
+
+To test the example, bring up kube-master console and tail the helloworldservice log. Triger Kafka message by adding a tenant; the log should show message sent to AUDITING_GENERIC_TOPIC
