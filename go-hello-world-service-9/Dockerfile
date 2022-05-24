@@ -1,4 +1,4 @@
-FROM golang:alpine as builder
+FROM --platform=linux/amd64 golang:alpine as builder
 RUN apk update && apk add ca-certificates upx git
 COPY go/ /go/src/github.com/CiscoDevNet/msx-examples/go-hello-world-service-9/go
 COPY go.mod go.sum main.go /go/src/github.com/CiscoDevNet/msx-examples/go-hello-world-service-9/
