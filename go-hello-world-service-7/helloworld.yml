@@ -28,10 +28,10 @@ cockroach:
 swagger:
   secure: true                                # Required by MSX.
   ssourl: "http://localhost:9515/idm"         # CONSUL {prefix}/defaultapplication/swagger.security.sso.baseUrl
-  clientid: "local-public-client"             # CONSUL {prefix}/helloworldservice/public.security.clientId
+  clientid:                                   # CONSUL {prefix}/helloworldservice/public.security.clientId
   swaggerjsonpath: "HelloWorldService-1.json" # Required by MSX.
 
 security:
-  ssourl: "http://localhost:9515/idm"                              # CONSUL {prefix}/defaultapplication/swagger.security.sso.baseUrl
-  clientid: "local-private-client"                                 # CONSUL {prefix}/helloworldservice/integration.security.clientId
-  clientsecret: "make-up-a-private-client-secret-and-keep-it-safe" # Required by MSX.
+  ssourl: "http://localhost:9515/idm"          # CONSUL {prefix}/defaultapplication/swagger.security.sso.baseUrl
+  clientid:                                    # CONSUL {prefix}/helloworldservice/integration.security.clientId
+  clientsecret:                                # Required by MSX.
