@@ -34,4 +34,4 @@ swagger:
 security:
   ssourl: "http://localhost:9515/idm"          # CONSUL {prefix}/defaultapplication/swagger.security.sso.baseUrl
   clientid:                                    # CONSUL {prefix}/helloworldservice/integration.security.clientId
-  clientsecret:                                # Required by MSX.
+  clientsecret:                                # VAULT {prefix}/helloworldservice/integration.security.clientSecret
