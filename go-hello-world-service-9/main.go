@@ -10,6 +10,7 @@ import (
 	"github.com/CiscoDevNet/msx-examples/go-hello-world-service-9/internal/config"
 	"github.com/CiscoDevNet/msx-examples/go-hello-world-service-9/internal/consul"
 	"github.com/CiscoDevNet/msx-examples/go-hello-world-service-9/internal/datastore"
+	"github.com/CiscoDevNet/msx-examples/go-hello-world-service-9/internal/security"
 	"github.com/CiscoDevNet/msx-examples/go-hello-world-service-9/internal/stream"
 	"github.com/CiscoDevNet/msx-examples/go-hello-world-service-9/internal/swagger"
 	"github.com/CiscoDevNet/msx-examples/go-hello-world-service-9/internal/vault"
@@ -56,17 +57,28 @@ func main() {
 		log.Fatalf("Could not setup Swagger: %s", err.Error())
 	}
 
+	// Setup Security.
+	security.UpdateConfig(config, &consul, &vault)
+	err = security.NewSecurity(config)
+	if err != nil {
+		log.Fatalf("Could not setup Security: %s", err.Error())
+	}
+
 	// Setup Controllers
 	ItemsApiController := openapi.NewItemsApiController(db)
 	LanguagesApiController := openapi.NewLanguagesApiController(db)
 
-	// Add insecure routes for Items and Languages.
-	router := openapi.NewRouter(ItemsApiController, LanguagesApiController)
+	// Add insecure routes for Items.
+	router := openapi.NewRouter(ItemsApiController)
+
+	// Add secure routes for Languages.
+	secureRouter := security.AddSecureRoutes(router, LanguagesApiController)
 
 	// Add route for Swagger.
 	router.PathPrefix("/helloworld/swagger").HandlerFunc(swagger.SwaggerRoutes)
+
 	listenToTopics(*config)
-	log.Fatal(http.ListenAndServe(":8080", router))
+	log.Fatal(http.ListenAndServe(":8080", secureRouter))
 }
 func listenToTopics(config config.Config) {
 	kafkaClient, error := stream.NewKafkaService(context.Background())
