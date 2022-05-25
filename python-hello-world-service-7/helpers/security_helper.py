@@ -3,7 +3,6 @@
 # All rights reserved
 #
 from msxsecurity import MSXSecurityConfig
-
 from config import Config
 from helpers.consul_helper import ConsulHelper
 from helpers.vault_helper import VaultHelper
@@ -30,6 +29,17 @@ class SecurityHelper(object):
             secret=f"{self._config.config_prefix}/helloworldservice",
             key="integration.security.sslVerify",
             default=self._config.security.sslverify)
+
+        # 20220524 - Temporary workaround for key issue.
+        if not client_id:
+            client_id = self._consul_helper.get_string(
+                key=f"{self._config.config_prefix}/helloworldservice/integration.security.client.clientId",
+                default=self._config.security.clientid)
+        if not client_secret:
+            client_secret = self._vault_helper.get_string(
+                secret=f"{self._config.config_prefix}/helloworldservice",
+                key="integration.security.client.clientSecret",
+                default=self._config.security.clientsecret)
 
         return MSXSecurityConfig(
             sso_url=sso_url,
