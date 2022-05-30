@@ -26,15 +26,23 @@ type EnsureAuth struct {
 
 // Override configuration with values from Consul and Vault.
 func UpdateConfig(c *config.Config, consul *consul.HelloWorldConsul, vault *vault.HelloWorldVault) error {
-	c.Security.SsoURL, _ = consul.GetString(c.Consul.Prefix + "/defaultapplication/swagger.security.sso.baseUrl", c.Security.SsoURL)
-	c.Security.ClientID, _ = consul.GetString(c.Consul.Prefix + "/helloworldservice/integration.security.clientId", c.Security.ClientID)
-	c.Security.ClientSecret, _ = vault.GetString(c.Vault.Prefix + "/helloworldservice", "integration.security.clientSecret", c.Security.ClientSecret)
+	c.Security.SsoURL, _ = consul.GetString(c.Consul.Prefix+"/defaultapplication/swagger.security.sso.baseUrl", c.Security.SsoURL)
+	c.Security.ClientID, _ = consul.GetString(c.Consul.Prefix+"/helloworldservice/integration.security.clientId", c.Security.ClientID)
+	c.Security.ClientSecret, _ = vault.GetString(c.Vault.Prefix+"/helloworldservice", "integration.security.clientSecret", c.Security.ClientSecret)
+
+	// 20220524 - Temporary workaround for key issue.
+	if c.Security.ClientID == "" {
+		c.Security.ClientID, _ = consul.GetString(c.Consul.Prefix+"/helloworldservice/integration.security.client.clientId", c.Security.ClientID)
+	}
+	if c.Security.ClientSecret == "" {
+		c.Security.ClientSecret, _ = vault.GetString(c.Vault.Prefix+"/helloworldservice", "integration.security.client.clientSecret", c.Security.ClientSecret)
+	}
 	return nil
 }
 
 // ServeHTTP will perform the auth on behalf of the embedded handlerfunc.
 func (ea *EnsureAuth) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	permitted, _ := Security.HasPermission(r,ea.permission)
+	permitted, _ := Security.HasPermission(r, ea.permission)
 	if permitted {
 		ea.handler.ServeHTTP(w, r)
 	} else {

@@ -30,6 +30,14 @@ func UpdateConfig(c *config.Config, consul *consul.HelloWorldConsul, vault *vaul
 	c.Security.SsoURL, _ = consul.GetString(c.Consul.Prefix+"/defaultapplication/swagger.security.sso.baseUrl", c.Security.SsoURL)
 	c.Security.ClientID, _ = consul.GetString(c.Consul.Prefix+"/helloworldservice/integration.security.clientId", c.Security.ClientID)
 	c.Security.ClientSecret, _ = vault.GetString(c.Vault.Prefix+"/helloworldservice", "integration.security.clientSecret", c.Security.ClientSecret)
+
+	// 20220524 - Temporary workaround for key issue.
+	if c.Security.ClientID == "" {
+		c.Security.ClientID, _ = consul.GetString(c.Consul.Prefix+"/helloworldservice/integration.security.client.clientId", c.Security.ClientID)
+	}
+	if c.Security.ClientSecret == "" {
+		c.Security.ClientSecret, _ = vault.GetString(c.Vault.Prefix+"/helloworldservice", "integration.security.client.clientSecret", c.Security.ClientSecret)
+	}
 	return nil
 }
 
