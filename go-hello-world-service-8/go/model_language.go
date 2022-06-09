@@ -10,10 +10,7 @@
 package openapi
 
 type Language struct {
-
-	Id string `json:"id,omitempty"`
-
-	Name string `json:"name"`
-
+	Id          string `json:"id,omitempty"`
+	Name        string `json:"name"`
 	Description string `json:"description,omitempty"`
 }
