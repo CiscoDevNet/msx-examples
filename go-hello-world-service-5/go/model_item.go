@@ -10,12 +10,8 @@
 package openapi
 
 type Item struct {
-
-	Id string `json:"id,omitempty"`
-
-	LanguageId string `json:"languageId"`
-
+	Id           string `json:"id,omitempty"`
+	LanguageId   string `json:"languageId"`
 	LanguageName string `json:"languageName,omitempty"`
-
-	Value string `json:"value"`
+	Value        string `json:"value"`
 }
