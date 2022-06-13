@@ -7,14 +7,14 @@ package datastore
 import (
 	"context"
 	"fmt"
-	"github.com/CiscoDevNet/msx-examples/go-hello-world-service-7/go"
+	"log"
+
 	"github.com/CiscoDevNet/msx-examples/go-hello-world-service-7/internal/config"
 	"github.com/CiscoDevNet/msx-examples/go-hello-world-service-7/internal/consul"
 	"github.com/CiscoDevNet/msx-examples/go-hello-world-service-7/internal/vault"
 	"github.com/google/uuid"
 	"github.com/jackc/pgx/v4"
 	"github.com/jackc/pgx/v4/pgxpool"
-	"log"
 )
 
 var schema = `
@@ -40,12 +40,12 @@ type Cockroach struct {
 }
 
 func UpdateConfig(c *config.Config, consul *consul.HelloWorldConsul, vault *vault.HelloWorldVault) error {
-	c.Cockroach.Host, _         = consul.GetString(c.Consul.Prefix + "/defaultapplication/db.cockroach.host", c.Cockroach.Host)
-	c.Cockroach.Port, _         = consul.GetString(c.Consul.Prefix + "/defaultapplication/db.cockroach.port", c.Cockroach.Port)
-	c.Cockroach.SSLMode, _      = consul.GetString(c.Consul.Prefix + "/defaultapplication/db.cockroach.sslmode", c.Cockroach.SSLMode)
-	c.Cockroach.DatabaseName, _ = consul.GetString(c.Consul.Prefix + "/helloworldservice/db.cockroach.databaseName", c.Cockroach.DatabaseName)
-	c.Cockroach.Username, _     = consul.GetString(c.Consul.Prefix + "/helloworldservice/db.cockroach.username", c.Cockroach.Username)
-	c.Cockroach.Password, _     = vault.GetString(c.Vault.Prefix + "/helloworldservice", "db.cockroach.password", c.Cockroach.Password)
+	c.Cockroach.Host, _ = consul.GetString(c.Consul.Prefix+"/defaultapplication/db.cockroach.host", c.Cockroach.Host)
+	c.Cockroach.Port, _ = consul.GetString(c.Consul.Prefix+"/defaultapplication/db.cockroach.port", c.Cockroach.Port)
+	c.Cockroach.SSLMode, _ = consul.GetString(c.Consul.Prefix+"/defaultapplication/db.cockroach.sslmode", c.Cockroach.SSLMode)
+	c.Cockroach.DatabaseName, _ = consul.GetString(c.Consul.Prefix+"/helloworldservice/db.cockroach.databaseName", c.Cockroach.DatabaseName)
+	c.Cockroach.Username, _ = consul.GetString(c.Consul.Prefix+"/helloworldservice/db.cockroach.username", c.Cockroach.Username)
+	c.Cockroach.Password, _ = vault.GetString(c.Vault.Prefix+"/helloworldservice", "db.cockroach.password", c.Cockroach.Password)
 	return nil
 }
 
@@ -92,7 +92,9 @@ func (c *Cockroach) CreateItem(ctx context.Context, i openapi.Item) (openapi.Imp
 	if err != nil {
 		return openapi.ImplResponse{}, fmt.Errorf("languageId not found")
 	}
-	i.Id = uuid.New().String()
+	if i.Id == "" {
+		i.Id = uuid.New().String()
+	}
 	defer func() {
 		err = tx.Rollback(context.Background())
 		if err != nil {
@@ -185,6 +187,7 @@ func (c *Cockroach) DeleteItem(ctx context.Context, id string) (openapi.ImplResp
 }
 
 func (c *Cockroach) UpdateItem(ctx context.Context, id string, item openapi.Item) (openapi.ImplResponse, error) {
+	item.Id = id
 	return c.CreateItem(ctx, item)
 }
 
@@ -194,7 +197,9 @@ func (c *Cockroach) CreateLanguage(ctx context.Context, l openapi.Language) (ope
 	if err != nil {
 		return openapi.ImplResponse{}, err
 	}
-	l.Id = uuid.New().String()
+	if l.Id == "" {
+		l.Id = uuid.New().String()
+	}
 	defer func() {
 		err = tx.Rollback(context.Background())
 		if err != nil {
@@ -283,6 +288,7 @@ func (c *Cockroach) DeleteLanguage(ctx context.Context, id string) (openapi.Impl
 	return openapi.ImplResponse{}, err
 }
 
-func (c *Cockroach) UpdateLanguage(ctx context.Context, id string , language openapi.Language) (openapi.ImplResponse, error) {
+func (c *Cockroach) UpdateLanguage(ctx context.Context, id string, language openapi.Language) (openapi.ImplResponse, error) {
+	language.Id = id
 	return c.CreateLanguage(ctx, language)
 }
