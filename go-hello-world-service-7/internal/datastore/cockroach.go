@@ -9,6 +9,7 @@ import (
 	"fmt"
 	"log"
 
+	openapi "github.com/CiscoDevNet/msx-examples/go-hello-world-service-7/go"
 	"github.com/CiscoDevNet/msx-examples/go-hello-world-service-7/internal/config"
 	"github.com/CiscoDevNet/msx-examples/go-hello-world-service-7/internal/consul"
 	"github.com/CiscoDevNet/msx-examples/go-hello-world-service-7/internal/vault"
