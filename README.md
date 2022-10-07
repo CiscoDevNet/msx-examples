@@ -27,6 +27,12 @@ Add Swagger document support.
 * go-hello-world-service-7:
 Integrate with MSX security to allow Tenants and RBAC.
 
+* go-hello-world-service-8:
+Include prepopulate container with component
+
+* go-hello-world-service-9:
+Integrate kafka messaging with MSX to allow producing and consuming topics
+
 * go-password-grant-demo:
 Get an MSX access token using the password grant.
   
