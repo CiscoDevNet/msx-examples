@@ -27,29 +27,10 @@ Add Swagger document support.
 * go-hello-world-service-7:
 Integrate with MSX security to allow Tenants and RBAC.
 
+* go-hello-world-service-8:
+Validates execution of initialization job prior to starting microservice via SLM.
+
 * go-password-grant-demo:
-Get an MSX access token using the password grant.
-  
-## Java
-* java-hello-world-service-1:
-Generate a Java server project from a Hello World OAS3 document.
-  
-* java-hello-world-service-2:
-Containerize the service and write an SLM manifest to the service can be deployed into MSX.
-  
-* java-hello-world-service-3:
-Write the Hello World service layer.
-  
-* java-hello-world-service-4:
-Persist domain specific data to CockroachDB.
-
-* java-hello-world-service-5:
-Add Swagger document support.
-
-* java-hello-world-service-6:
-Integrate with MSX security to allow Tenants and RBAC.
-
-* java-password-grant-demo:
 Get an MSX access token using the password grant.
 
 ## Python
@@ -73,6 +54,14 @@ Add Swagger document support.
 
 * python-hello-world-service-7:
 Integrate with MSX security to allow Tenants and RBAC.
+
+* python-password-grant-demo:
+Get an MSX access token using the password grant.
+
+## Workflow Backend Service Control
+
+* workflow-service-control-example: Add a new state to the UI
+router which renders an Angular component that can execute a workflow that is not bound to any service-pack.
   
 ## User Interface
 
